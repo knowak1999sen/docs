@@ -64,6 +64,27 @@
               "source": "specifications/split/authentication_openapi.json",
               "directory": "api-reference"
             }
+          },
+          {
+            "group": "Trading",
+            "openapi": {
+              "source": "specifications/split/trading_openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Market Data",
+            "openapi": {
+              "source": "specifications/split/market_data_openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Account Management",
+            "openapi": {
+              "source": "specifications/split/account_management_openapi.json",
+              "directory": "api-reference"
+            }
           }
         ]
       },

@@ -1,0 +1,4918 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Deribit API - Market Data",
+    "version": "2.1.1",
+    "description": "Deribit API specification for Market Data endpoints"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8082/api/v2",
+      "description": "local test server"
+    },
+    {
+      "url": "https://test.deribit.com/api/v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Market Data"
+    }
+  ],
+  "paths": {
+    "/public/get_order_book": {
+      "get": {
+        "parameters": [
+          {
+            "description": "The instrument name for which to retrieve the order book, see [`public/get_instruments`](#public-get_instruments) to obtain instrument names.",
+            "in": "query",
+            "name": "instrument_name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "BTC-PERPETUAL"
+            }
+          },
+          {
+            "description": "The number of entries to return for bids and asks, maximum - `10000`.",
+            "in": "query",
+            "name": "depth",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "enum": [
+                1,
+                5,
+                10,
+                20,
+                50,
+                100,
+                1000,
+                10000
+              ],
+              "example": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetOrderBookResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 8772,
+                      "result": {
+                        "timestamp": 1550757626706,
+                        "stats": {
+                          "volume": 93.35589552,
+                          "price_change": 0.6913,
+                          "low": 3940.75,
+                          "high": 3976.25
+                        },
+                        "state": "open",
+                        "settlement_price": 3925.85,
+                        "open_interest": 45.27600333464605,
+                        "min_price": 3932.22,
+                        "max_price": 3971.74,
+                        "mark_price": 3931.97,
+                        "last_price": 3955.75,
+                        "instrument_name": "BTC-PERPETUAL",
+                        "index_price": 3910.46,
+                        "funding_8h": 0.00455263,
+                        "current_funding": 0.00500063,
+                        "change_id": 474988,
+                        "bids": [
+                          [
+                            3955.75,
+                            30.0
+                          ],
+                          [
+                            3940.75,
+                            102020.0
+                          ],
+                          [
+                            3423.0,
+                            42840.0
+                          ]
+                        ],
+                        "best_bid_price": 3955.75,
+                        "best_bid_amount": 30.0,
+                        "best_ask_price": 0.0,
+                        "best_ask_amount": 0.0,
+                        "asks": []
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Retrieves the order book, along with other market values for a given instrument.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 8772,
+                    "method": "public/get_order_book",
+                    "params": {
+                      "instrument_name": "BTC-PERPETUAL",
+                      "depth": 5
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_order_book",
+            "og:title": "public/get_order_book"
+          },
+          "href": "/api-reference/market-data/public-get_order_book"
+        }
+      }
+    },
+    "/public/get_order_book_by_instrument_id": {
+      "get": {
+        "parameters": [
+          {
+            "description": "The instrument ID for which to retrieve the order book, see [`public/get_instruments`](#public-get_instruments) to obtain instrument IDs.",
+            "in": "query",
+            "name": "instrument_id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The number of entries to return for bids and asks, maximum - `10000`.",
+            "in": "query",
+            "name": "depth",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "enum": [
+                1,
+                5,
+                10,
+                20,
+                50,
+                100,
+                1000,
+                10000
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetOrderBookResponse"
+          }
+        },
+        "description": "Retrieves the order book, along with other market values for a given instrument ID.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_order_book_by_instrument_id",
+            "og:title": "public/get_order_book_by_instrument_id"
+          },
+          "href": "/api-reference/market-data/public-get_order_book_by_instrument_id"
+        }
+      }
+    },
+    "/public/get_last_settlements_by_currency": {
+      "get": {
+        "parameters": [
+          {
+            "name": "currency",
+            "description": "The currency symbol",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/currency"
+            }
+          },
+          {
+            "description": "Settlement type",
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/settlement_type"
+            }
+          },
+          {
+            "name": "count",
+            "description": "Number of requested items, default - `20`, maximum - `1000`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "continuation",
+            "description": "Continuation token for pagination",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "xY7T6cutS3t2B9YtaDkE6TS379oKnkzTvmEDUnEUP2Msa9xKWNNaT"
+            }
+          },
+          {
+            "description": "The latest timestamp to return result from (milliseconds since the UNIX epoch)",
+            "in": "query",
+            "name": "search_start_timestamp",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicSettlementResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 4497,
+                      "result": {
+                        "settlements": [
+                          {
+                            "type": "delivery",
+                            "timestamp": 1550242800013,
+                            "session_profit_loss": 4.703907906,
+                            "profit_loss": -0.427669766,
+                            "position": 64,
+                            "mark_price": 0.121679828,
+                            "instrument_name": "BTC-15FEB19-4000-P",
+                            "index_price": 3566.08
+                          },
+                          {
+                            "type": "delivery",
+                            "timestamp": 1550242800013,
+                            "session_profit_loss": 3.135938604,
+                            "profit_loss": -2.539278115,
+                            "position": 206,
+                            "mark_price": 0,
+                            "instrument_name": "BTC-15FEB19-4000-C",
+                            "index_price": 3566.08
+                          }
+                        ],
+                        "continuation": "29XjjMM7Zc6U4oytmV27f7a6YRb5aSdVijwfuYhHRTLphugjRf1edP8uGLo3w2mWKV23QgrxsmenRGqzucc7"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Retrieves historical settlement, delivery and bankruptcy events coming from all instruments within a given currency.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 4497,
+                    "method": "public/get_last_settlements_by_currency",
+                    "params": {
+                      "currency": "BTC",
+                      "type": "delivery",
+                      "count": 2
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_last_settlements_by_currency",
+            "og:title": "public/get_last_settlements_by_currency"
+          },
+          "href": "/api-reference/market-data/public-get_last_settlements_by_currency"
+        }
+      }
+    },
+    "/public/get_book_summary_by_currency": {
+      "get": {
+        "parameters": [
+          {
+            "name": "currency",
+            "description": "The currency symbol",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/currency"
+            }
+          },
+          {
+            "name": "kind",
+            "description": "Instrument kind, if not provided instruments of all kinds are considered",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/kind"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetBookSummaryResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 9344,
+                      "result": [
+                        {
+                          "volume_usd": 0,
+                          "volume": 0,
+                          "quote_currency": "USD",
+                          "price_change": -11.1896349,
+                          "open_interest": 0,
+                          "mid_price": null,
+                          "mark_price": 3579.73,
+                          "mark_iv": 80,
+                          "low": null,
+                          "last": null,
+                          "instrument_name": "BTC-22FEB19",
+                          "high": null,
+                          "estimated_delivery_price": 3579.73,
+                          "creation_timestamp": 1550230036440,
+                          "bid_price": null,
+                          "base_currency": "BTC",
+                          "ask_price": null
+                        },
+                        {
+                          "volume_usd": 22440,
+                          "volume": 6.24,
+                          "quote_currency": "USD",
+                          "price_change": -60.8183509,
+                          "open_interest": 183180,
+                          "mid_price": null,
+                          "mark_price": 3579.73,
+                          "mark_iv": 80,
+                          "low": 3591,
+                          "last": 3595,
+                          "instrument_name": "BTC-PERPETUAL",
+                          "high": 3595,
+                          "funding_8h": 0.0002574,
+                          "estimated_delivery_price": 3579.73,
+                          "current_funding": 0,
+                          "creation_timestamp": 1550230036440,
+                          "bid_price": null,
+                          "base_currency": "BTC",
+                          "ask_price": null
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Retrieves the summary information such as open interest, 24h volume, etc. for all instruments for the currency (optionally filtered by kind). **Note** - For real-time updates, we recommend using the WebSocket subscription to `ticker.{instrument_name}.{interval}` instead of polling this endpoint.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 9344,
+                    "method": "public/get_book_summary_by_currency",
+                    "params": {
+                      "currency": "BTC",
+                      "kind": "future"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_book_summary_by_currency",
+            "og:title": "public/get_book_summary_by_currency"
+          },
+          "href": "/api-reference/market-data/public-get_book_summary_by_currency"
+        }
+      }
+    },
+    "/public/get_book_summary_by_instrument": {
+      "get": {
+        "parameters": [
+          {
+            "name": "instrument_name",
+            "description": "Instrument name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/instrument_name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetBookSummaryResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 3659,
+                      "result": [
+                        {
+                          "volume": 0.55,
+                          "underlying_price": 121.38,
+                          "underlying_index": "index_price",
+                          "quote_currency": "USD",
+                          "price_change": -26.7793594,
+                          "open_interest": 0.55,
+                          "mid_price": 0.2444,
+                          "mark_price": 80,
+                          "low": 0.34,
+                          "last": 0.34,
+                          "interest_rate": 0.207,
+                          "instrument_name": "ETH-22FEB19-140-P",
+                          "high": 0.34,
+                          "creation_timestamp": 1550227952163,
+                          "bid_price": 0.1488,
+                          "base_currency": "ETH",
+                          "ask_price": 0.34
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Retrieves the summary information such as open interest, 24h volume, etc. for a specific instrument.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 3659,
+                    "method": "public/get_book_summary_by_instrument",
+                    "params": {
+                      "instrument_name": "ETH-22FEB19-140-P"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_book_summary_by_instrument",
+            "og:title": "public/get_book_summary_by_instrument"
+          },
+          "href": "/api-reference/market-data/public-get_book_summary_by_instrument"
+        }
+      }
+    },
+    "/public/get_last_settlements_by_instrument": {
+      "get": {
+        "parameters": [
+          {
+            "name": "instrument_name",
+            "description": "Instrument name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/instrument_name"
+            }
+          },
+          {
+            "description": "Settlement type",
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/settlement_type"
+            }
+          },
+          {
+            "name": "count",
+            "description": "Number of requested items, default - `20`, maximum - `1000`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "continuation",
+            "description": "Continuation token for pagination",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "xY7T6cutS3t2B9YtaDkE6TS379oKnkzTvmEDUnEUP2Msa9xKWNNaT"
+            }
+          },
+          {
+            "description": "The latest timestamp to return result from (milliseconds since the UNIX epoch)",
+            "in": "query",
+            "name": "search_start_timestamp",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicSettlementResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 5482,
+                      "result": {
+                        "settlements": [
+                          {
+                            "type": "settlement",
+                            "timestamp": 1550502000023,
+                            "session_profit_loss": 0.116509752,
+                            "profit_loss": -9.999999999886402e-10,
+                            "position": 240,
+                            "mark_price": 3578.16,
+                            "instrument_name": "BTC-22FEB19",
+                            "index_price": 3796.43
+                          }
+                        ],
+                        "continuation": "2Z7mdtavzYvfuyYcHkJXvPTr9ZSMsEzM3sLCH7AbYEDd1AzTXY2hnhegQDiaP1TtU4b5iSJZ4"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Retrieves historical public settlement, delivery and bankruptcy events filtered by instrument name.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 5482,
+                    "method": "public/get_last_settlements_by_instrument",
+                    "params": {
+                      "instrument_name": "BTC-22FEB19",
+                      "type": "settlement",
+                      "count": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_last_settlements_by_instrument",
+            "og:title": "public/get_last_settlements_by_instrument"
+          },
+          "href": "/api-reference/market-data/public-get_last_settlements_by_instrument"
+        }
+      }
+    },
+    "/public/get_contract_size": {
+      "get": {
+        "description": "Retrieves contract size of provided instrument.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "parameters": [
+          {
+            "name": "instrument_name",
+            "description": "Instrument name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/instrument_name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetContractSizeResponse"
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_contract_size",
+            "og:title": "public/get_contract_size"
+          },
+          "href": "/api-reference/market-data/public-get_contract_size"
+        }
+      }
+    },
+    "/public/get_trade_volumes": {
+      "get": {
+        "parameters": [
+          {
+            "name": "extended",
+            "description": "Request for extended statistics. Including also 7 and 30 days volumes (default false)",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetTradesVolumesResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 6387,
+                      "result": [
+                        {
+                          "puts_volume": 48,
+                          "futures_volume": 6.25578452,
+                          "currency": "BTC",
+                          "calls_volume": 145,
+                          "spot_volume": 11.1
+                        },
+                        {
+                          "puts_volume": 122.65,
+                          "futures_volume": 374.392173,
+                          "currency": "ETH",
+                          "calls_volume": 37.4,
+                          "spot_volume": 57.7
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Retrieves aggregated 24h trade volumes for different instrument types and currencies.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_trade_volumes",
+            "og:title": "public/get_trade_volumes"
+          },
+          "href": "/api-reference/market-data/public-get_trade_volumes"
+        }
+      }
+    },
+    "/public/get_index_price": {
+      "get": {
+        "parameters": [
+          {
+            "name": "index_name",
+            "required": true,
+            "in": "query",
+            "description": "Index identifier, matches (base) cryptocurrency with quote currency",
+            "schema": {
+              "$ref": "#/components/schemas/index_name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetIndexPriceResponse"
+          }
+        },
+        "description": "Retrieves the current index price value for given index name.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_index_price",
+            "og:title": "public/get_index_price"
+          },
+          "href": "/api-reference/market-data/public-get_index_price"
+        }
+      }
+    },
+    "/public/get_index_price_names": {
+      "get": {
+        "description": "Retrieves the identifiers of all supported Price Indexes",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "parameters": [
+          {
+            "name": "extended",
+            "description": "When set to `true`, returns additional information including `future_combo_creation_enabled` and `option_combo_creation_enabled` for each index",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "example": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetIndexPriceNamesResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 7617,
+                      "result": [
+                        {
+                          "name": "btc_usd",
+                          "future_combo_creation_enabled": true,
+                          "option_combo_creation_enabled": true
+                        },
+                        {
+                          "name": "bnb_usd"
+                        },
+                        {
+                          "name": "buidl_usd"
+                        },
+                        {
+                          "name": "usdc_usdt",
+                          "future_combo_creation_enabled": true,
+                          "option_combo_creation_enabled": true
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "public/get_index_price_names",
+                    "params": {
+                      "extended": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_index_price_names",
+            "og:title": "public/get_index_price_names"
+          },
+          "href": "/api-reference/market-data/public-get_index_price_names"
+        }
+      }
+    },
+    "/public/get_supported_index_names": {
+      "get": {
+        "parameters": [
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "description": "Type of a cryptocurrency price index",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "spot",
+                "derivative"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetIndexPriceNamesResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 25718,
+                      "result": [
+                        "btc_eth",
+                        "btc_usdc",
+                        "eth_usdc"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Retrieves the identifiers of all supported Price Indexes",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_supported_index_names",
+            "og:title": "public/get_supported_index_names"
+          },
+          "href": "/api-reference/market-data/public-get_supported_index_names"
+        }
+      }
+    },
+    "/public/get_instruments": {
+      "get": {
+        "description": "Retrieves available trading instruments. This method can be used to see which instruments are available for trading, or which instruments have recently expired. **Note - This endpoint has distinct API rate limiting requirements:** 1 request per 10 seconds, with a burst of 5. To avoid rate limits, we recommend using either the REST requests for server-cached data or the WebSocket subscription to [instrument_state.{kind}.{currency}](https://docs.deribit.com/#instrument-state-kind-currency) for real-time updates. For more information, see [Rate Limits](https://support.deribit.com/hc/en-us/articles/25944617523357-Rate-Limits).",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "description": "The currency symbol or `\"any\"` for all",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/currency_with_any"
+            }
+          },
+          {
+            "name": "kind",
+            "description": "Instrument kind, if not provided instruments of all kinds are considered",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/kind"
+            }
+          },
+          {
+            "name": "expired",
+            "description": "Set to true to show recently expired instruments instead of active ones.",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetInstrumentsResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": [
+                        {
+                          "tick_size": 2.5,
+                          "tick_size_steps": [],
+                          "taker_commission": 0.0005,
+                          "settlement_period": "month",
+                          "settlement_currency": "BTC",
+                          "quote_currency": "USD",
+                          "price_index": "btc_usd",
+                          "min_trade_amount": 10,
+                          "max_liquidation_commission": 0.0075,
+                          "max_leverage": 50,
+                          "maker_commission": 0,
+                          "kind": "future",
+                          "is_active": true,
+                          "instrument_name": "BTC-29SEP23",
+                          "instrument_id": 138583,
+                          "instrument_type": "reversed",
+                          "expiration_timestamp": 1695974400000,
+                          "creation_timestamp": 1664524802000,
+                          "counter_currency": "USD",
+                          "contract_size": 10,
+                          "block_trade_tick_size": 0.01,
+                          "block_trade_min_trade_amount": 200000,
+                          "block_trade_commission": 0.00025,
+                          "base_currency": "BTC"
+                        },
+                        {
+                          "tick_size": 0.5,
+                          "tick_size_steps": [],
+                          "taker_commission": 0.0005,
+                          "settlement_period": "perpetual",
+                          "settlement_currency": "BTC",
+                          "quote_currency": "USD",
+                          "price_index": "btc_usd",
+                          "min_trade_amount": 10,
+                          "max_liquidation_commission": 0.0075,
+                          "max_leverage": 50,
+                          "maker_commission": 0,
+                          "kind": "future",
+                          "is_active": true,
+                          "instrument_name": "BTC-PERPETUAL",
+                          "instrument_id": 124972,
+                          "instrument_type": "reversed",
+                          "expiration_timestamp": 32503708800000,
+                          "creation_timestamp": 1534167754000,
+                          "counter_currency": "USD",
+                          "contract_size": 10,
+                          "block_trade_tick_size": 0.01,
+                          "block_trade_min_trade_amount": 200000,
+                          "block_trade_commission": 0.00025,
+                          "base_currency": "BTC"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "public/get_instruments",
+                    "params": {
+                      "currency": "BTC",
+                      "kind": "future"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_instruments",
+            "og:title": "public/get_instruments"
+          },
+          "href": "/api-reference/market-data/public-get_instruments"
+        }
+      }
+    },
+    "/public/get_instrument": {
+      "get": {
+        "description": "Retrieves information about instrument",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "parameters": [
+          {
+            "name": "instrument_name",
+            "description": "Instrument name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/instrument_name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetInstrumentResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 2,
+                      "result": {
+                        "tick_size": 0.0005,
+                        "tick_size_steps": [
+                          {
+                            "above_price": 120,
+                            "tick_size": 0.001
+                          },
+                          {
+                            "above_price": 200,
+                            "tick_size": 0.003
+                          }
+                        ],
+                        "taker_commission": 0.0003,
+                        "strike": 16000,
+                        "settlement_period": "week",
+                        "settlement_currency": "BTC",
+                        "quote_currency": "BTC",
+                        "price_index": "btc_usd",
+                        "option_type": "put",
+                        "min_trade_amount": 0.1,
+                        "maker_commission": 0.0003,
+                        "kind": "option",
+                        "is_active": true,
+                        "instrument_name": "BTC-13JAN23-16000-P",
+                        "instrument_id": 144613,
+                        "expiration_timestamp": 1673596800000,
+                        "creation_timestamp": 1671696002000,
+                        "counter_currency": "USD",
+                        "contract_size": 1,
+                        "block_trade_tick_size": 0.0001,
+                        "block_trade_min_trade_amount": 25,
+                        "block_trade_commission": 0.00015,
+                        "base_currency": "BTC"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 2,
+                    "method": "public/get_instrument",
+                    "params": {
+                      "instrument_name": "BTC-13JAN23-16000-P"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_instrument",
+            "og:title": "public/get_instrument"
+          },
+          "href": "/api-reference/market-data/public-get_instrument"
+        }
+      }
+    },
+    "/public/get_historical_volatility": {
+      "get": {
+        "description": "Provides information about historical volatility for given cryptocurrency.",
+        "parameters": [
+          {
+            "name": "currency",
+            "description": "The currency symbol",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/currency"
+            }
+          }
+        ],
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetHistoricalVolatilityResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 8387,
+                      "result": [
+                        [
+                          1549720800000,
+                          14.747743607344217
+                        ],
+                        [
+                          1549720800000,
+                          14.747743607344217
+                        ],
+                        [
+                          1549724400000,
+                          14.74257778551467
+                        ],
+                        [
+                          1549728000000,
+                          14.73502799931767
+                        ],
+                        [
+                          1549731600000,
+                          14.73502799931767
+                        ],
+                        [
+                          1549735200000,
+                          14.73502799931767
+                        ],
+                        [
+                          1550228400000,
+                          46.371891307340015
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 8387,
+                    "method": "public/get_historical_volatility",
+                    "params": {
+                      "currency": "BTC"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_historical_volatility",
+            "og:title": "public/get_historical_volatility"
+          },
+          "href": "/api-reference/market-data/public-get_historical_volatility"
+        }
+      }
+    },
+    "/public/get_funding_rate_history": {
+      "get": {
+        "description": "Retrieves hourly historical interest rate for requested PERPETUAL instrument.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "parameters": [
+          {
+            "name": "instrument_name",
+            "description": "Instrument name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/instrument_name"
+            }
+          },
+          {
+            "name": "start_timestamp",
+            "description": "The earliest timestamp to return result from (milliseconds since the UNIX epoch)",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "description": "The most recent timestamp to return result from (milliseconds since the UNIX epoch)",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetFundingRateHistoryResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 7617,
+                      "result": [
+                        {
+                          "timestamp": 1569891600000,
+                          "index_price": 8222.87,
+                          "prev_index_price": 8305.72,
+                          "interest_8h": -9.234260068476106e-05,
+                          "interest_1h": -4.739622041017375e-07
+                        },
+                        {
+                          "timestamp": 1569895200000,
+                          "index_price": 8286.49,
+                          "prev_index_price": 8222.87,
+                          "interest_8h": -6.720918180255509e-05,
+                          "interest_1h": -2.8583510923267753e-07
+                        },
+                        {
+                          "timestamp": 1569898800000,
+                          "index_price": 8431.97,
+                          "prev_index_price": 8286.49,
+                          "interest_8h": -3.544496169694662e-05,
+                          "interest_1h": -3.815906848177951e-06
+                        },
+                        {
+                          "timestamp": 1569902400000,
+                          "index_price": 8422.36,
+                          "prev_index_price": 8431.97,
+                          "interest_8h": -1.404147515584998e-05,
+                          "interest_1h": 8.312033064379086e-07
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 7617,
+                    "method": "public/get_funding_rate_history",
+                    "params": {
+                      "instrument_name": "BTC-PERPETUAL",
+                      "start_timestamp": 1569888000000,
+                      "end_timestamp": 1569902400000
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_funding_rate_history",
+            "og:title": "public/get_funding_rate_history"
+          },
+          "href": "/api-reference/market-data/public-get_funding_rate_history"
+        }
+      }
+    },
+    "/public/get_funding_rate_value": {
+      "get": {
+        "description": "Retrieves interest rate value for requested period. Applicable only for PERPETUAL instruments.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "parameters": [
+          {
+            "name": "instrument_name",
+            "description": "Instrument name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/instrument_name"
+            }
+          },
+          {
+            "name": "start_timestamp",
+            "description": "The earliest timestamp to return result from (milliseconds since the UNIX epoch)",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "description": "The most recent timestamp to return result from (milliseconds since the UNIX epoch)",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetFundingRateValueResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 7617,
+                      "result": -0.00025056853702101664
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 7617,
+                    "method": "public/get_funding_rate_value",
+                    "params": {
+                      "instrument_name": "BTC-PERPETUAL",
+                      "start_timestamp": 1569888000000,
+                      "end_timestamp": 1569974400000
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_funding_rate_value",
+            "og:title": "public/get_funding_rate_value"
+          },
+          "href": "/api-reference/market-data/public-get_funding_rate_value"
+        }
+      }
+    },
+    "/public/get_mark_price_history": {
+      "get": {
+        "parameters": [
+          {
+            "name": "instrument_name",
+            "description": "Instrument name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/instrument_name"
+            }
+          },
+          {
+            "name": "start_timestamp",
+            "description": "The earliest timestamp to return result from (milliseconds since the UNIX epoch)",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "description": "The most recent timestamp to return result from (milliseconds since the UNIX epoch)",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetMarkPriceHistoryResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 25,
+                      "result": [
+                        [
+                          1608142381229,
+                          0.5165791606037885
+                        ],
+                        [
+                          1608142380231,
+                          0.5165737855432504
+                        ],
+                        [
+                          1608142379227,
+                          0.5165768236356326
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Public request for 5min history of markprice values for the instrument. For now the markprice history is available only for a subset of options which take part in the volatility index calculations. All other instruments, futures and perpetuals will return an empty list.",
+        "tags": [
+          "Market Data",
+          "Mark Price",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "public/get_mark_price_history",
+                    "params": {
+                      "instrument_name": "BTC-25JUN21-50000-C",
+                      "start_timestamp": 1609376800000,
+                      "end_timestamp": 1609376810000
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_mark_price_history",
+            "og:title": "public/get_mark_price_history"
+          },
+          "href": "/api-reference/market-data/public-get_mark_price_history"
+        }
+      }
+    },
+    "/public/get_expirations": {
+      "get": {
+        "description": "Retrieves expirations for instruments. This method can be used to see instruments's expirations.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "description": "The currency symbol or `\"any\"` for all or '\"grouped\"' for all grouped by currency",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/settlement_currency_with_any_and_grouped"
+            }
+          },
+          {
+            "name": "kind",
+            "description": "Instrument kind, `\"future\"` or `\"option\"` or `\"any\"`",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/kind_future_or_option_with_any"
+            }
+          },
+          {
+            "name": "currency_pair",
+            "description": "The currency pair symbol",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/index_name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetExpirationsResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "result": {
+                        "future": [
+                          "21SEP24",
+                          "22SEP24",
+                          "PERPETUAL"
+                        ],
+                        "option": [
+                          "21SEP24",
+                          "22SEP24",
+                          "23SEP24"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "public/get_expirations",
+                    "params": {
+                      "currency": "any",
+                      "kind": "any"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_expirations",
+            "og:title": "public/get_expirations"
+          },
+          "href": "/api-reference/market-data/public-get_expirations"
+        }
+      }
+    },
+    "/public/get_apr_history": {
+      "get": {
+        "description": "Retrieves historical APR data for specified currency. Only applicable to yield-generating tokens (`USDE`, `STETH`, `USDC`, `BUILD`). **📖 Related Support Article:** [Yield reward-bearing coins](https://support.deribit.com/hc/en-us/articles/26525792475677-Yield-reward-bearing-coins)",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "usde",
+                "steth",
+                "usdc",
+                "build"
+              ],
+              "example": "steth"
+            },
+            "description": "Currency for which to retrieve APR history"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 5
+            },
+            "description": "Number of days to retrieve (default `365`, maximum `365`)"
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Used to receive APR history before given epoch day"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetAprHistoryResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "data": [
+                          {
+                            "day": 20200,
+                            "apr": 2.814
+                          },
+                          {
+                            "day": 20199,
+                            "apr": 2.749
+                          },
+                          {
+                            "day": 20198,
+                            "apr": 2.684
+                          },
+                          {
+                            "day": 20197,
+                            "apr": 2.667
+                          },
+                          {
+                            "day": 20196,
+                            "apr": 2.722
+                          }
+                        ],
+                        "continuation": 20196
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "public/get_apr_history",
+                    "params": {
+                      "currency": "steth",
+                      "limit": 5
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_apr_history",
+            "og:title": "public/get_apr_history"
+          },
+          "href": "/api-reference/market-data/public-get_apr_history"
+        }
+      }
+    },
+    "/public/get_last_trades_by_instrument": {
+      "get": {
+        "parameters": [
+          {
+            "name": "instrument_name",
+            "description": "Instrument name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/instrument_name"
+            }
+          },
+          {
+            "name": "start_seq",
+            "description": "The sequence number of the first trade to be returned",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "end_seq",
+            "description": "The sequence number of the last trade to be returned",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "start_timestamp",
+            "description": "The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "description": "The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "count",
+            "description": "Number of requested items, default - `10`, maximum - `1000`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "sorting",
+            "description": "Direction of results sorting (`default` value means no sorting, results will be returned in order in which they left the database)",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/sorting"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicTradesHistoryResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 9267,
+                      "result": {
+                        "trades": [
+                          {
+                            "trade_seq": 36798,
+                            "trade_id": "277976",
+                            "timestamp": 1590476708320,
+                            "tick_direction": 2,
+                            "price": 8767.08,
+                            "mark_price": 8829.7,
+                            "instrument_name": "BTC-PERPETUAL",
+                            "index_price": 8878.53,
+                            "direction": "sell",
+                            "amount": 100
+                          }
+                        ],
+                        "has_more": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Retrieve the latest trades that have occurred for a specific instrument.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 9267,
+                    "method": "public/get_last_trades_by_instrument",
+                    "params": {
+                      "instrument_name": "BTC-PERPETUAL",
+                      "count": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_last_trades_by_instrument",
+            "og:title": "public/get_last_trades_by_instrument"
+          },
+          "href": "/api-reference/market-data/public-get_last_trades_by_instrument"
+        }
+      }
+    },
+    "/public/get_last_trades_by_instrument_and_time": {
+      "get": {
+        "parameters": [
+          {
+            "name": "instrument_name",
+            "description": "Instrument name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/instrument_name"
+            }
+          },
+          {
+            "name": "start_timestamp",
+            "description": "The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "description": "The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "count",
+            "description": "Number of requested items, default - `10`, maximum - `1000`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "sorting",
+            "description": "Direction of results sorting (`default` value means no sorting, results will be returned in order in which they left the database)",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/sorting"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicTradesHistoryResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 3983,
+                      "result": {
+                        "trades": [
+                          {
+                            "trade_seq": 1966031,
+                            "trade_id": "ETH-2696055",
+                            "timestamp": 1590479408216,
+                            "tick_direction": 0,
+                            "price": 203.6,
+                            "mark_price": 203.41,
+                            "instrument_name": "ETH-PERPETUAL",
+                            "index_price": 203.45,
+                            "direction": "buy",
+                            "amount": 10
+                          }
+                        ],
+                        "has_more": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Retrieve the latest trades that have occurred for a specific instrument and within a given time range.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 3983,
+                    "method": "public/get_last_trades_by_instrument_and_time",
+                    "params": {
+                      "instrument_name": "ETH-PERPETUAL",
+                      "end_timestamp": 1590480022768,
+                      "count": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_last_trades_by_instrument_and_time",
+            "og:title": "public/get_last_trades_by_instrument_and_time"
+          },
+          "href": "/api-reference/market-data/public-get_last_trades_by_instrument_and_time"
+        }
+      }
+    },
+    "/public/get_last_trades_by_currency": {
+      "get": {
+        "parameters": [
+          {
+            "name": "currency",
+            "description": "The currency symbol",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/currency"
+            }
+          },
+          {
+            "name": "kind",
+            "description": "Instrument kind, `\"combo\"` for any combo or `\"any\"` for all. If not provided instruments of all kinds are considered",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/kind_with_combo_all"
+            }
+          },
+          {
+            "name": "start_id",
+            "description": "The ID of the first trade to be returned. Number for BTC trades, or hyphen name in ex. `\"ETH-15\"` # `\"ETH_USDC-16\"`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/trade_id"
+            }
+          },
+          {
+            "name": "end_id",
+            "description": "The ID of the last trade to be returned. Number for BTC trades, or hyphen name in ex. `\"ETH-15\"` # `\"ETH_USDC-16\"`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/trade_id"
+            }
+          },
+          {
+            "name": "start_timestamp",
+            "description": "The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "description": "The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "count",
+            "description": "Number of requested items, default - `10`, maximum - `1000`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "sorting",
+            "description": "Direction of results sorting (`default` value means no sorting, results will be returned in order in which they left the database)",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/sorting"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicTradesHistoryResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 9290,
+                      "result": {
+                        "trades": [
+                          {
+                            "trade_seq": 36798,
+                            "trade_id": "277976",
+                            "timestamp": 1590476708320,
+                            "tick_direction": 2,
+                            "price": 8767.08,
+                            "mark_price": 8829.7,
+                            "instrument_name": "BTC-PERPETUAL",
+                            "index_price": 8878.53,
+                            "direction": "sell",
+                            "amount": 100
+                          }
+                        ],
+                        "has_more": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Retrieve the latest trades that have occurred for instruments in a specific currency symbol.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 9290,
+                    "method": "public/get_last_trades_by_currency",
+                    "params": {
+                      "currency": "BTC",
+                      "count": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_last_trades_by_currency",
+            "og:title": "public/get_last_trades_by_currency"
+          },
+          "href": "/api-reference/market-data/public-get_last_trades_by_currency"
+        }
+      }
+    },
+    "/public/get_last_trades_by_currency_and_time": {
+      "get": {
+        "parameters": [
+          {
+            "name": "currency",
+            "description": "The currency symbol",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/currency"
+            }
+          },
+          {
+            "name": "kind",
+            "description": "Instrument kind, `\"combo\"` for any combo or `\"any\"` for all. If not provided instruments of all kinds are considered",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/kind_with_combo_all"
+            }
+          },
+          {
+            "name": "start_timestamp",
+            "description": "The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "description": "The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "count",
+            "description": "Number of requested items, default - `10`, maximum - `1000`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "sorting",
+            "description": "Direction of results sorting (`default` value means no sorting, results will be returned in order in which they left the database)",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/sorting"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicTradesHistoryResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1469,
+                      "result": {
+                        "trades": [
+                          {
+                            "trade_seq": 3471,
+                            "trade_id": "48077291",
+                            "timestamp": 1590470616101,
+                            "tick_direction": 2,
+                            "price": 0.032,
+                            "mark_price": 0.04070324,
+                            "iv": 74.74,
+                            "instrument_name": "BTC-25SEP20-6000-P",
+                            "index_price": 8899.93,
+                            "direction": "sell",
+                            "amount": 0.5
+                          }
+                        ],
+                        "has_more": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Retrieve the latest trades that have occurred for instruments in a specific currency symbol and within a given time range.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1469,
+                    "method": "public/get_last_trades_by_currency_and_time",
+                    "params": {
+                      "currency": "BTC",
+                      "start_timestamp": 1590470022768,
+                      "end_timestamp": 1590480022768,
+                      "count": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_last_trades_by_currency_and_time",
+            "og:title": "public/get_last_trades_by_currency_and_time"
+          },
+          "href": "/api-reference/market-data/public-get_last_trades_by_currency_and_time"
+        }
+      }
+    },
+    "/public/get_currencies": {
+      "get": {
+        "description": "Retrieves all cryptocurrencies supported by the API.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetCurrenciesResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 7538,
+                      "result": [
+                        {
+                          "coin_type": "ETHER",
+                          "currency": "ETH",
+                          "currency_long": "Ethereum",
+                          "min_confirmations": 1,
+                          "min_withdrawal_fee": 0.0001,
+                          "withdrawal_fee": 0.0006,
+                          "withdrawal_priorities": [],
+                          "network_currency": "ETH",
+                          "network_fee": 0.0006,
+                          "decimals": 6
+                        },
+                        {
+                          "coin_type": "BITCOIN",
+                          "currency": "BTC",
+                          "currency_long": "Bitcoin",
+                          "min_confirmations": 1,
+                          "min_withdrawal_fee": 0.0001,
+                          "withdrawal_fee": 0.0001,
+                          "withdrawal_priorities": [
+                            {
+                              "value": 0.15,
+                              "name": "very_low"
+                            },
+                            {
+                              "value": 1.5,
+                              "name": "very_high"
+                            }
+                          ],
+                          "network_currency": "BTC",
+                          "network_fee": 0.0001,
+                          "decimals": 8
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 7538,
+                    "method": "public/get_currencies",
+                    "params": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_currencies",
+            "og:title": "public/get_currencies"
+          },
+          "href": "/api-reference/market-data/public-get_currencies"
+        }
+      }
+    },
+    "/public/get_funding_chart_data": {
+      "get": {
+        "parameters": [
+          {
+            "name": "instrument_name",
+            "description": "Instrument name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/instrument_name"
+            }
+          },
+          {
+            "name": "length",
+            "description": "Specifies time period. `8h` - 8 hours, `24h` - 24 hours, `1m` - 1 month",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "8h",
+                "24h",
+                "1m"
+              ]
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetFundingChartDataResponse"
+          }
+        },
+        "description": "Retrieve the list of the latest PERPETUAL funding chart points within a given time period.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_funding_chart_data",
+            "og:title": "public/get_funding_chart_data"
+          },
+          "href": "/api-reference/market-data/public-get_funding_chart_data"
+        }
+      }
+    },
+    "/public/get_tradingview_chart_data": {
+      "get": {
+        "parameters": [
+          {
+            "name": "instrument_name",
+            "description": "Instrument name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/instrument_name"
+            }
+          },
+          {
+            "name": "start_timestamp",
+            "description": "The earliest timestamp to return result from (milliseconds since the UNIX epoch)",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "description": "The most recent timestamp to return result from (milliseconds since the UNIX epoch)",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "resolution",
+            "description": "Chart bars resolution given in full minutes or keyword `1D` (only some specific resolutions are supported)",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                1,
+                3,
+                5,
+                10,
+                15,
+                30,
+                60,
+                120,
+                180,
+                360,
+                720,
+                "1D"
+              ]
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetTradingviewChartDataResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 833,
+                      "result": {
+                        "volume": [
+                          19.007942601,
+                          20.095877981
+                        ],
+                        "cost": [
+                          19000.0,
+                          23400.0
+                        ],
+                        "ticks": [
+                          1554373800000,
+                          1554375600000
+                        ],
+                        "status": "ok",
+                        "open": [
+                          4963.42,
+                          4986.29
+                        ],
+                        "low": [
+                          4728.94,
+                          4726.6
+                        ],
+                        "high": [
+                          5185.45,
+                          5250.87
+                        ],
+                        "close": [
+                          5052.95,
+                          5013.59
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Publicly available market data used to generate a TradingView candle chart.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 833,
+                    "method": "public/get_tradingview_chart_data",
+                    "params": {
+                      "instrument_name": "BTC-5APR19",
+                      "start_timestamp": 1554373800000,
+                      "end_timestamp": 1554376800000,
+                      "resolution": "30"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_tradingview_chart_data",
+            "og:title": "public/get_tradingview_chart_data"
+          },
+          "href": "/api-reference/market-data/public-get_tradingview_chart_data"
+        }
+      }
+    },
+    "/public/get_volatility_index_data": {
+      "get": {
+        "parameters": [
+          {
+            "name": "currency",
+            "description": "The currency symbol",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/currency"
+            }
+          },
+          {
+            "name": "start_timestamp",
+            "description": "The earliest timestamp to return result from (milliseconds since the UNIX epoch)",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "end_timestamp",
+            "description": "The most recent timestamp to return result from (milliseconds since the UNIX epoch)",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "name": "resolution",
+            "description": "Time resolution given in full seconds or keyword `1D` (only some specific resolutions are supported)",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                1,
+                60,
+                3600,
+                43200,
+                "1D"
+              ]
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetVolatilityIndexDataResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 5,
+                      "result": {
+                        "data": [
+                          [
+                            1598019300000,
+                            0.210084879,
+                            0.212860821,
+                            0.210084879,
+                            0.212860821
+                          ],
+                          [
+                            1598019360000,
+                            0.212869011,
+                            0.212987527,
+                            0.212869011,
+                            0.212987527
+                          ],
+                          [
+                            1598019420000,
+                            0.212987723,
+                            0.212992597,
+                            0.212987723,
+                            0.212992597
+                          ]
+                        ],
+                        "continuation": null
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Public market data request for volatility index candles.",
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 833,
+                    "method": "public/get_volatility_index_data",
+                    "params": {
+                      "currency": "BTC",
+                      "start_timestamp": 1599373800000,
+                      "end_timestamp": 1599376800000,
+                      "resolution": "60"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_volatility_index_data",
+            "og:title": "public/get_volatility_index_data"
+          },
+          "href": "/api-reference/market-data/public-get_volatility_index_data"
+        }
+      }
+    },
+    "/public/ticker": {
+      "get": {
+        "tags": [
+          "Market Data",
+          "Public"
+        ],
+        "description": "Get ticker for an instrument.",
+        "parameters": [
+          {
+            "name": "instrument_name",
+            "description": "Instrument name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/instrument_name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicTickerResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 8106,
+                      "result": {
+                        "best_ask_amount": 53040,
+                        "best_ask_price": 36290,
+                        "best_bid_amount": 4600,
+                        "best_bid_price": 36289.5,
+                        "current_funding": 0,
+                        "estimated_delivery_price": 36297.02,
+                        "funding_8h": 2.203e-05,
+                        "index_price": 36297.02,
+                        "instrument_name": "BTC-PERPETUAL",
+                        "interest_value": 1.7362511643080387,
+                        "last_price": 36289.5,
+                        "mark_price": 36288.31,
+                        "max_price": 36833.4,
+                        "min_price": 35744.73,
+                        "open_interest": 502231260,
+                        "settlement_price": 36169.49,
+                        "state": "open",
+                        "stats": {
+                          "high": 36824.5,
+                          "low": 35213.5,
+                          "price_change": 0.2362,
+                          "volume": 7831.26548117,
+                          "volume_usd": 282615600
+                        },
+                        "timestamp": 1623059681955
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 8106,
+                    "method": "public/ticker",
+                    "params": {
+                      "instrument_name": "BTC-PERPETUAL"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/ticker",
+            "og:title": "public/ticker"
+          },
+          "href": "/api-reference/market-data/public-ticker"
+        }
+      }
+    },
+    "/public/get_delivery_prices": {
+      "get": {
+        "parameters": [
+          {
+            "name": "index_name",
+            "required": true,
+            "in": "query",
+            "description": "Index identifier, matches (base) cryptocurrency with quote currency",
+            "schema": {
+              "$ref": "#/components/schemas/index_name"
+            }
+          },
+          {
+            "name": "offset",
+            "description": "The offset for pagination, default - `0`",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "example": 10,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "count",
+            "description": "Number of requested items, default - `10`, maximum - `1000`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1
+            }
+          }
+        ],
+        "description": "Retrieves delivery prices for then given index",
+        "tags": [
+          "Market Data"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetDeliveryPricesResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 3601,
+                      "result": {
+                        "data": [
+                          {
+                            "date": "2020-01-02",
+                            "delivery_price": 7131.214606410254
+                          },
+                          {
+                            "date": "2019-12-21",
+                            "delivery_price": 7150.943217777777
+                          },
+                          {
+                            "date": "2019-12-20",
+                            "delivery_price": 7175.988445532345
+                          },
+                          {
+                            "date": "2019-12-19",
+                            "delivery_price": 7189.540776143791
+                          },
+                          {
+                            "date": "2019-12-18",
+                            "delivery_price": 6698.353743857118
+                          }
+                        ],
+                        "records_total": 58
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 3601,
+                    "method": "public/get_delivery_prices",
+                    "params": {
+                      "index_name": "btc_usd",
+                      "offset": 0,
+                      "count": 5
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_delivery_prices",
+            "og:title": "public/get_delivery_prices"
+          },
+          "href": "/api-reference/market-data/public-get_delivery_prices"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "kind_with_combo_all": {
+        "description": "Instrument kind: `\"future\"`, `\"option\"`, `\"spot\"`, `\"future_combo\"`, `\"option_combo\"`, `\"combo\"` for any combo or `\"any\"` for all",
+        "enum": [
+          "future",
+          "option",
+          "spot",
+          "future_combo",
+          "option_combo",
+          "combo",
+          "any"
+        ],
+        "type": "string"
+      },
+      "currency_with_any": {
+        "description": "Currency name or `\"any\"` if don't care",
+        "enum": [
+          "BTC",
+          "ETH",
+          "USDC",
+          "USDT",
+          "EURR",
+          "any"
+        ],
+        "type": "string"
+      },
+      "kind_future_or_option_with_any": {
+        "description": "Instrument kind: `\"future\"`, `\"option\"` or `\"any\"` for all",
+        "enum": [
+          "future",
+          "option",
+          "any"
+        ],
+        "type": "string"
+      },
+      "currency": {
+        "description": "Currency, i.e `\"BTC\"`, `\"ETH\"`, `\"USDC\"`",
+        "enum": [
+          "BTC",
+          "ETH",
+          "USDC",
+          "USDT",
+          "EURR"
+        ],
+        "type": "string"
+      },
+      "settlement_currency_with_any_and_grouped": {
+        "description": "Currency name or `\"any\"` if don't care or `\"grouped\"` if grouped by currencies",
+        "enum": [
+          "BTC",
+          "ETH",
+          "USDC",
+          "USDT",
+          "any",
+          "grouped"
+        ],
+        "type": "string"
+      },
+      "sorting": {
+        "enum": [
+          "asc",
+          "desc",
+          "default"
+        ],
+        "type": "string"
+      },
+      "trade_id": {
+        "description": "Unique (per currency) trade identifier",
+        "type": "string"
+      },
+      "timestamp": {
+        "example": 1536569522277,
+        "description": "The timestamp (milliseconds since the Unix epoch)",
+        "type": "integer"
+      },
+      "settlement_type": {
+        "description": "The type of settlement. `settlement`, `delivery` or `bankruptcy`.",
+        "enum": [
+          "settlement",
+          "delivery",
+          "bankruptcy"
+        ],
+        "type": "string"
+      },
+      "instrument_name": {
+        "description": "Unique instrument identifier",
+        "example": "BTC-PERPETUAL",
+        "type": "string"
+      },
+      "kind": {
+        "description": "Instrument kind: `\"future\"`, `\"option\"`, `\"spot\"`, `\"future_combo\"`, `\"option_combo\"`",
+        "enum": [
+          "future",
+          "option",
+          "spot",
+          "future_combo",
+          "option_combo"
+        ],
+        "type": "string"
+      },
+      "index_name": {
+        "description": "Index identifier, matches (base) cryptocurrency with quote currency",
+        "enum": [
+          "btc_usd",
+          "eth_usd",
+          "ada_usdc",
+          "algo_usdc",
+          "avax_usdc",
+          "bch_usdc",
+          "bnb_usdc",
+          "btc_usdc",
+          "btcdvol_usdc",
+          "buidl_usdc",
+          "doge_usdc",
+          "dot_usdc",
+          "eurr_usdc",
+          "eth_usdc",
+          "ethdvol_usdc",
+          "link_usdc",
+          "ltc_usdc",
+          "near_usdc",
+          "paxg_usdc",
+          "shib_usdc",
+          "sol_usdc",
+          "steth_usdc",
+          "ton_usdc",
+          "trump_usdc",
+          "trx_usdc",
+          "uni_usdc",
+          "usde_usdc",
+          "usyc_usdc",
+          "xrp_usdc",
+          "btc_usdt",
+          "eth_usdt",
+          "eurr_usdt",
+          "sol_usdt",
+          "steth_usdt",
+          "usdc_usdt",
+          "usde_usdt",
+          "btc_eurr",
+          "btc_usde",
+          "btc_usyc",
+          "eth_btc",
+          "eth_eurr",
+          "eth_usde",
+          "eth_usyc",
+          "steth_eth",
+          "paxg_btc",
+          "drbfix-btc_usdc",
+          "drbfix-eth_usdc"
+        ],
+        "type": "string"
+      },
+      "PublicGetInstrumentsResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "$ref": "#/components/schemas/instrument"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetInstrumentResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "$ref": "#/components/schemas/instrument"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetCurrenciesResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "$ref": "#/components/schemas/currency_with_apr"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetIndexPriceNamesResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "properties": {
+                "name": {
+                  "description": "Index name",
+                  "type": "string"
+                },
+                "future_combo_creation_enabled": {
+                  "description": "Whether future combo creation is enabled for this index (only present when `extended`=`true`)",
+                  "type": "boolean"
+                },
+                "option_combo_creation_enabled": {
+                  "description": "Whether option combo creation is enabled for this index (only present when `extended`=`true`)",
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetFundingRateHistoryResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "properties": {
+                "timestamp": {
+                  "$ref": "#/components/schemas/timestamp"
+                },
+                "prev_index_price": {
+                  "$ref": "#/components/schemas/price"
+                },
+                "index_price": {
+                  "$ref": "#/components/schemas/price"
+                },
+                "interest_1h": {
+                  "description": "1hour interest rate",
+                  "type": "number"
+                },
+                "interest_8h": {
+                  "description": "8hour interest rate",
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetFundingRateValueResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicTradesHistoryResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "trades": {
+                "items": {
+                  "$ref": "#/components/schemas/public_trade"
+                },
+                "type": "array"
+              },
+              "has_more": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "trades",
+              "has_more"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetIndexPriceResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "index_price": {
+                "description": "Value of requested index",
+                "example": 11628.81,
+                "type": "number"
+              },
+              "estimated_delivery_price": {
+                "description": "Estimated delivery price for the market. For more details, see Documentation > General > Expiration Price",
+                "example": 11628.81,
+                "type": "number"
+              }
+            },
+            "required": [
+              "index_price",
+              "estimated_delivery_price"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetVolatilityIndexDataResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "description": "Volatility index candles.",
+            "properties": {
+              "data": {
+                "description": "Candles as an array of arrays with 5 values each. The inner values correspond to the timestamp in ms, open, high, low, and close values of the volatility index correspondingly.",
+                "type": "array"
+              },
+              "continuation": {
+                "description": "Continuation - to be used as the `end_timestamp` parameter on the next request. `NULL` when no continuation.",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetTradesVolumesResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "$ref": "#/components/schemas/trades_volumes"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetOrderBookResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "$ref": "#/components/schemas/ErrorResponse"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetAprHistoryResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "continuation": {
+                "$ref": "#/components/schemas/continuation"
+              },
+              "data": {
+                "items": {
+                  "properties": {
+                    "day": {
+                      "description": "The full epoch day",
+                      "type": "integer"
+                    },
+                    "apr": {
+                      "description": "The APR of the day",
+                      "type": "number"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "data"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetContractSizeResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "contract_size": {
+                "$ref": "#/components/schemas/contract_size"
+              }
+            },
+            "required": [
+              "contract_size"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetBookSummaryResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "$ref": "#/components/schemas/book_summary"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicSettlementResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "continuation": {
+                "$ref": "#/components/schemas/continuation"
+              },
+              "settlements": {
+                "items": {
+                  "$ref": "#/components/schemas/settlement"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "continuation",
+              "settlements"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetMarkPriceHistoryResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "description": "Markprice history values as an array of arrays with 2 values each. The inner values correspond to the timestamp in ms and the markprice itself.",
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetTradingviewChartDataResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "status": {
+                "description": "Status of the query: `ok` or `no_data`",
+                "enum": [
+                  "ok",
+                  "no_data"
+                ],
+                "type": "string"
+              },
+              "ticks": {
+                "description": "Values of the time axis given in milliseconds since UNIX epoch",
+                "items": {
+                  "$ref": "#/components/schemas/timestamp"
+                },
+                "type": "array"
+              },
+              "volume": {
+                "description": "List of volume bars (in base currency, one per candle)",
+                "items": {
+                  "$ref": "#/components/schemas/chart_volume"
+                },
+                "type": "array"
+              },
+              "cost": {
+                "description": "List of cost bars (volume in quote currency, one per candle)",
+                "items": {
+                  "$ref": "#/components/schemas/chart_volume"
+                },
+                "type": "array"
+              },
+              "open": {
+                "description": "List of prices at open (one per candle)",
+                "items": {
+                  "$ref": "#/components/schemas/quote_price"
+                },
+                "type": "array"
+              },
+              "close": {
+                "description": "List of prices at close (one per candle)",
+                "items": {
+                  "$ref": "#/components/schemas/quote_price"
+                },
+                "type": "array"
+              },
+              "high": {
+                "description": "List of highest price levels (one per candle)",
+                "items": {
+                  "$ref": "#/components/schemas/quote_price"
+                },
+                "type": "array"
+              },
+              "low": {
+                "description": "List of lowest price levels (one per candle)",
+                "items": {
+                  "$ref": "#/components/schemas/quote_price"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetHistoricalVolatilityResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "integer"
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "timestamp",
+                "value"
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicTickerResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "$ref": "#/components/schemas/ErrorResponse"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetDeliveryPricesResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "records_total": {
+                "description": "Available delivery prices",
+                "example": 120,
+                "type": "number"
+              },
+              "data": {
+                "items": {
+                  "properties": {
+                    "date": {
+                      "$ref": "#/components/schemas/date"
+                    },
+                    "delivery_price": {
+                      "$ref": "#/components/schemas/delivery_price"
+                    }
+                  },
+                  "required": [
+                    "date",
+                    "delivery_price"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "records_total",
+              "data"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetExpirationsResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "$ref": "#/components/schemas/expirations"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetFundingChartDataResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "current_interest": {
+                "description": "Current interest",
+                "example": 0.005000670552845,
+                "type": "number"
+              },
+              "interest_8h": {
+                "description": "Current interest 8h",
+                "example": 0.0040080896931,
+                "type": "number"
+              },
+              "data": {
+                "items": {
+                  "properties": {
+                    "timestamp": {
+                      "$ref": "#/components/schemas/timestamp"
+                    },
+                    "index_price": {
+                      "$ref": "#/components/schemas/index_price"
+                    },
+                    "interest_8h": {
+                      "description": "Historical interest 8h value",
+                      "example": 0.004999511380756577,
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "timestamp",
+                    "index_price",
+                    "interest_8h"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "current_interest",
+              "data",
+              "interest_8h"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "trades_volumes": {
+        "properties": {
+          "currency": {
+            "$ref": "#/components/schemas/currency"
+          },
+          "calls_volume": {
+            "description": "Total 24h trade volume for call options.",
+            "example": 20.1,
+            "type": "number"
+          },
+          "puts_volume": {
+            "description": "Total 24h trade volume for put options.",
+            "example": 60.2,
+            "type": "number"
+          },
+          "futures_volume": {
+            "description": "Total 24h trade volume for futures.",
+            "example": 30.5178,
+            "type": "number"
+          },
+          "spot_volume": {
+            "description": "Total 24h trade for spot.",
+            "example": 11.6,
+            "type": "number"
+          },
+          "calls_volume_7d": {
+            "description": "Total 7d trade volume for call options.",
+            "example": 75.6,
+            "type": "number"
+          },
+          "puts_volume_7d": {
+            "description": "Total 7d trade volume for put options.",
+            "example": 356.9,
+            "type": "number"
+          },
+          "futures_volume_7d": {
+            "description": "Total 7d trade volume for futures.",
+            "example": 213.8841,
+            "type": "number"
+          },
+          "spot_volume_7d": {
+            "description": "Total 7d trade for spot.",
+            "example": 64.8,
+            "type": "number"
+          },
+          "calls_volume_30d": {
+            "description": "Total 30d trade volume for call options.",
+            "example": 547.3,
+            "type": "number"
+          },
+          "puts_volume_30d": {
+            "description": "Total 30d trade volume for put options.",
+            "example": 785.5,
+            "type": "number"
+          },
+          "futures_volume_30d": {
+            "description": "Total 30d trade volume for futures.",
+            "example": 998.2128,
+            "type": "number"
+          },
+          "spot_volume_30d": {
+            "description": "Total 30d trade for spot.",
+            "example": 310.5,
+            "type": "number"
+          }
+        },
+        "required": [
+          "currency",
+          "futures_volume",
+          "puts_volume",
+          "calls_volume"
+        ],
+        "type": "object"
+      },
+      "continuation": {
+        "description": "Continuation token for pagination.",
+        "example": "xY7T6cutS3t2B9YtaDkE6TS379oKnkzTvmEDUnEUP2Msa9xKWNNaT",
+        "type": "string"
+      },
+      "contract_size": {
+        "description": "Contract size, for futures in USD, for options in base currency of the instrument (BTC, ETH, ...)",
+        "example": 10,
+        "type": "integer"
+      },
+      "date": {
+        "example": "2019-11-24",
+        "description": "The event date with year, month and day",
+        "type": "string"
+      },
+      "settlement": {
+        "properties": {
+          "funding": {
+            "description": "funding (in base currency ; settlement for perpetual product only)",
+            "example": -2.511e-06,
+            "type": "number"
+          },
+          "funded": {
+            "description": "funded amount (bankruptcy only)",
+            "example": 0,
+            "type": "number"
+          },
+          "index_price": {
+            "description": "underlying index price at time of event (in quote currency; settlement and delivery only)",
+            "example": 11008.37,
+            "type": "number"
+          },
+          "instrument_name": {
+            "description": "instrument name (settlement and delivery only)",
+            "example": "BTC-30MAR18",
+            "type": "string"
+          },
+          "mark_price": {
+            "description": "mark price for at the settlement time (in quote currency; settlement and delivery only)",
+            "example": 11000,
+            "type": "number"
+          },
+          "position": {
+            "description": "position size (in quote currency; settlement and delivery only)",
+            "example": 1000,
+            "type": "number"
+          },
+          "profit_loss": {
+            "description": "profit and loss (in base currency; settlement and delivery only)",
+            "example": 0,
+            "type": "number"
+          },
+          "session_bankruptcy": {
+            "description": "value of session bankruptcy (in base currency; bankruptcy only)",
+            "example": 0.001160788,
+            "type": "number"
+          },
+          "session_profit_loss": {
+            "description": "total value of session profit and losses (in base currency)",
+            "example": 0.001160788,
+            "type": "number"
+          },
+          "session_tax": {
+            "description": "total amount of paid taxes/fees (in base currency; bankruptcy only)",
+            "example": -0.001160788,
+            "type": "number"
+          },
+          "session_tax_rate": {
+            "description": "rate of paid taxes/fees (in base currency; bankruptcy only)",
+            "example": 0.000103333,
+            "type": "number"
+          },
+          "socialized": {
+            "description": "the amount of the socialized losses (in base currency; bankruptcy only)",
+            "example": -0.001160788,
+            "type": "number"
+          },
+          "timestamp": {
+            "$ref": "#/components/schemas/timestamp"
+          }
+        },
+        "required": [
+          "timestamp",
+          "session_profit_loss",
+          "position",
+          "instrument_name",
+          "index_price",
+          "funding"
+        ],
+        "type": "object"
+      },
+      "chart_volume": {
+        "description": "// todo",
+        "type": "number"
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Generic error response for broken references",
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "enum": [
+              "2.0"
+            ]
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "description": "Error code"
+              },
+              "message": {
+                "type": "string",
+                "description": "Error message"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          }
+        },
+        "required": [
+          "jsonrpc",
+          "error"
+        ]
+      },
+      "instrument": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/kind"
+          },
+          "settlement_currency": {
+            "description": "Optional (not added for spot). Settlement currency for the instrument.",
+            "enum": [
+              "BTC",
+              "ETH"
+            ],
+            "type": "string"
+          },
+          "counter_currency": {
+            "description": "Counter currency for the instrument.",
+            "enum": [
+              "USD",
+              "USDC"
+            ],
+            "type": "string"
+          },
+          "base_currency": {
+            "description": "The underlying currency being traded.",
+            "enum": [
+              "BTC",
+              "ETH"
+            ],
+            "type": "string"
+          },
+          "quote_currency": {
+            "description": "The currency in which the instrument prices are quoted.",
+            "enum": [
+              "USD"
+            ],
+            "type": "string"
+          },
+          "min_trade_amount": {
+            "description": "Minimum amount for trading. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+            "example": 0.1,
+            "type": "number"
+          },
+          "instrument_name": {
+            "$ref": "#/components/schemas/instrument_name"
+          },
+          "instrument_id": {
+            "$ref": "#/components/schemas/instrument_id"
+          },
+          "is_active": {
+            "description": "Indicates if the instrument can currently be traded.",
+            "type": "boolean"
+          },
+          "settlement_period": {
+            "description": "Optional (not added for spot). The settlement period.",
+            "enum": [
+              "month",
+              "week",
+              "perpetual"
+            ],
+            "type": "string"
+          },
+          "creation_timestamp": {
+            "description": "The time when the instrument was first created (milliseconds since the UNIX epoch).",
+            "example": 1536569522277,
+            "type": "integer"
+          },
+          "tick_size": {
+            "example": 0.0001,
+            "description": "Specifies minimal price change and, as follows, the number of decimal places for instrument prices.",
+            "type": "number"
+          },
+          "tick_size_steps": {
+            "$ref": "#/components/schemas/tick_size_step"
+          },
+          "expiration_timestamp": {
+            "description": "The time when the instrument will expire (milliseconds since the UNIX epoch).",
+            "type": "integer"
+          },
+          "strike": {
+            "description": "The strike value (only for options).",
+            "type": "number"
+          },
+          "option_type": {
+            "description": "The option type (only for options).",
+            "enum": [
+              "call",
+              "put"
+            ],
+            "type": "string"
+          },
+          "future_type": {
+            "description": "Future type (only for futures)(field is deprecated and will be removed in the future, `instrument_type` should be used instead).",
+            "enum": [
+              "linear",
+              "reversed"
+            ],
+            "type": "string"
+          },
+          "instrument_type": {
+            "description": "Type of the instrument. `linear` or `reversed`",
+            "type": "string"
+          },
+          "contract_size": {
+            "description": "Contract size for instrument.",
+            "example": 1,
+            "type": "integer"
+          },
+          "maker_commission": {
+            "description": "Maker commission for instrument.",
+            "example": 0.0001,
+            "type": "number"
+          },
+          "taker_commission": {
+            "description": "Taker commission for instrument.",
+            "example": 0.0005,
+            "type": "number"
+          },
+          "max_liquidation_commission": {
+            "description": "Maximal liquidation trade commission for instrument (only for futures).",
+            "example": 0.001,
+            "type": "number"
+          },
+          "block_trade_commission": {
+            "description": "Block Trade commission for instrument.",
+            "example": 0.0005,
+            "type": "number"
+          },
+          "block_trade_tick_size": {
+            "description": "Specifies minimal price change for block trading.",
+            "example": 0.01,
+            "type": "number"
+          },
+          "block_trade_min_trade_amount": {
+            "description": "Minimum amount for block trading.",
+            "example": 25,
+            "type": "number"
+          },
+          "max_leverage": {
+            "description": "Maximal leverage for instrument (only for futures).",
+            "example": 100,
+            "type": "integer"
+          },
+          "price_index": {
+            "$ref": "#/components/schemas/price_index"
+          }
+        },
+        "required": [
+          "kind",
+          "base_currency",
+          "quote_currency",
+          "min_trade_amount",
+          "instrument_name",
+          "is_active",
+          "settlement_period",
+          "creation_timestamp",
+          "tick_size",
+          "expiration_timestamp",
+          "contract_size",
+          "price_index"
+        ],
+        "type": "object"
+      },
+      "public_trade": {
+        "properties": {
+          "trade_id": {
+            "$ref": "#/components/schemas/trade_id"
+          },
+          "trade_seq": {
+            "$ref": "#/components/schemas/trade_seq"
+          },
+          "instrument_name": {
+            "$ref": "#/components/schemas/instrument_name"
+          },
+          "timestamp": {
+            "$ref": "#/components/schemas/trade_timestamp"
+          },
+          "direction": {
+            "description": "Trade direction of the taker",
+            "$ref": "#/components/schemas/direction"
+          },
+          "tick_direction": {
+            "$ref": "#/components/schemas/tick_direction"
+          },
+          "index_price": {
+            "description": "Index Price at the moment of trade",
+            "type": "number"
+          },
+          "price": {
+            "description": "The price of the trade",
+            "$ref": "#/components/schemas/price"
+          },
+          "amount": {
+            "description": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+            "type": "number"
+          },
+          "contracts": {
+            "description": "Trade size in contract units (optional, may be absent in historical trades)",
+            "type": "number"
+          },
+          "iv": {
+            "description": "Option implied volatility for the price (Option only)",
+            "type": "number"
+          },
+          "liquidation": {
+            "description": "Optional field (only for trades caused by liquidation): `\"M\"` when maker side of trade was under liquidation, `\"T\"` when taker side was under liquidation, `\"MT\"` when both sides of trade were under liquidation",
+            "enum": [
+              "M",
+              "T",
+              "MT"
+            ],
+            "type": "string"
+          },
+          "mark_price": {
+            "description": "Mark Price at the moment of trade",
+            "type": "number"
+          },
+          "block_trade_id": {
+            "$ref": "#/components/schemas/block_trade_id_in_result"
+          },
+          "block_trade_leg_count": {
+            "$ref": "#/components/schemas/block_trade_leg_count"
+          },
+          "combo_id": {
+            "description": "Optional field containing combo instrument name if the trade is a combo trade",
+            "type": "string"
+          },
+          "combo_trade_id": {
+            "description": "Optional field containing combo trade identifier if the trade is a combo trade",
+            "type": "number"
+          },
+          "block_rfq_id": {
+            "description": "ID of the Block RFQ - when trade was part of the Block RFQ",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "trade_id",
+          "instrument_name",
+          "timestamp",
+          "trade_seq",
+          "direction",
+          "tick_direction",
+          "index_price",
+          "price",
+          "amount",
+          "mark_price"
+        ],
+        "type": "object"
+      },
+      "quote_price": {
+        "description": "Price in quote currency",
+        "type": "number"
+      },
+      "delivery_price": {
+        "description": "The settlement price for the instrument. Only when `state = closed`",
+        "type": "number"
+      },
+      "expirations": {
+        "description": "A map where each key is valid currency (e.g. btc, eth, usdc), and the value is a list of expirations or a map where each key is a valid kind (future or options) and value is a list of expirations from every instrument",
+        "properties": {
+          "currency": {
+            "$ref": "#/components/schemas/currency_with_any_and_grouped"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/kind_future_or_option_with_any"
+          }
+        },
+        "type": "object"
+      },
+      "currency_with_apr": {
+        "properties": {
+          "withdrawal_fee": {
+            "description": "The total transaction fee paid for withdrawals",
+            "example": 0.0001,
+            "type": "number"
+          },
+          "withdrawal_priorities": {
+            "items": {
+              "$ref": "#/components/schemas/key_number_pair"
+            },
+            "type": "array"
+          },
+          "min_withdrawal_fee": {
+            "description": "The minimum transaction fee paid for withdrawals",
+            "example": 0.0001,
+            "type": "number"
+          },
+          "currency": {
+            "description": "The abbreviation of the currency. This abbreviation is used elsewhere in the API to identify the currency.",
+            "example": "BTC",
+            "type": "string"
+          },
+          "currency_long": {
+            "description": "The full name for the currency.",
+            "example": "Bitcoin",
+            "type": "string"
+          },
+          "min_confirmations": {
+            "description": "Minimum number of block chain confirmations before deposit is accepted.",
+            "example": 2,
+            "type": "integer"
+          },
+          "coin_type": {
+            "description": "The type of the currency.",
+            "enum": [
+              "BITCOIN",
+              "ETHER"
+            ],
+            "type": "string"
+          },
+          "in_cross_collateral_pool": {
+            "description": "`true` if the currency is part of the cross collateral pool",
+            "type": "boolean"
+          },
+          "apr": {
+            "description": "Simple Moving Average (SMA) of the last 7 days of rewards. If fewer than 7 days of reward data are available, the APR is calculated as the average of the available rewards. Only applicable to yield-generating tokens (`USDE`, `STETH`, `USDC`, `BUILD`).",
+            "type": "number"
+          },
+          "network_fee": {
+            "description": "The network fee",
+            "example": 0.0001,
+            "type": "number"
+          },
+          "network_currency": {
+            "description": "The currency of the network",
+            "example": "BTC",
+            "type": "string"
+          },
+          "decimals": {
+            "description": "The number of decimal places for the currency",
+            "example": 6,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "currency",
+          "currency_long",
+          "withdrawal_fee",
+          "coin_type",
+          "in_cross_collateral_pool"
+        ],
+        "type": "object"
+      },
+      "book_summary": {
+        "properties": {
+          "instrument_name": {
+            "$ref": "#/components/schemas/instrument_name"
+          },
+          "high": {
+            "description": "Price of the 24h highest trade",
+            "example": 7022.89,
+            "type": "number"
+          },
+          "low": {
+            "description": "Price of the 24h lowest trade, `null` if there weren't any trades",
+            "example": 7022.89,
+            "type": "number"
+          },
+          "base_currency": {
+            "description": "Base currency",
+            "example": "ETH",
+            "type": "string"
+          },
+          "quote_currency": {
+            "description": "Quote currency",
+            "example": "USD",
+            "type": "string"
+          },
+          "volume": {
+            "description": "The total 24h traded volume (in base currency)",
+            "example": 223,
+            "type": "number"
+          },
+          "bid_price": {
+            "description": "The current best bid price, `null` if there aren't any bids",
+            "example": 7022.89,
+            "type": "number"
+          },
+          "ask_price": {
+            "description": "The current best ask price, `null` if there aren't any asks",
+            "example": 7022.89,
+            "type": "number"
+          },
+          "mid_price": {
+            "description": "The average of the best bid and ask, `null` if there aren't any asks or bids",
+            "example": 7022.89,
+            "type": "number"
+          },
+          "mark_price": {
+            "description": "The current instrument market price",
+            "example": 7022.89,
+            "type": "number"
+          },
+          "last": {
+            "description": "The price of the latest trade, `null` if there weren't any trades",
+            "example": 7022.89,
+            "type": "number"
+          },
+          "open_interest": {
+            "description": "Optional (only for derivatives). The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+            "example": 0.5,
+            "type": "number"
+          },
+          "creation_timestamp": {
+            "$ref": "#/components/schemas/timestamp"
+          },
+          "estimated_delivery_price": {
+            "description": "Optional (only for derivatives). Estimated delivery price for the market. For more details, see Contract Specification > General Documentation > Expiration Price.",
+            "example": 11628.81,
+            "type": "number"
+          },
+          "volume_usd": {
+            "description": "Volume in USD",
+            "type": "number"
+          },
+          "volume_notional": {
+            "description": "Volume in quote currency (futures and spots only)",
+            "type": "number"
+          },
+          "current_funding": {
+            "description": "Current funding (perpetual only)",
+            "type": "number",
+            "example": 0.12344
+          },
+          "funding_8h": {
+            "description": "Funding 8h (perpetual only)",
+            "type": "number"
+          },
+          "mark_iv": {
+            "$ref": "#/components/schemas/mark_iv"
+          },
+          "interest_rate": {
+            "description": "Interest rate used in implied volatility calculations (options only)",
+            "example": 0,
+            "type": "number"
+          },
+          "underlying_index": {
+            "description": "Name of the underlying future, or `'index_price'` (options only)",
+            "example": "index_price",
+            "type": "string"
+          },
+          "underlying_price": {
+            "description": "underlying price for implied volatility calculations (options only)",
+            "example": 6745.34,
+            "type": "number"
+          },
+          "price_change": {
+            "description": "24-hour price change expressed as a percentage, `null` if there weren't any trades",
+            "example": 10.23,
+            "type": "number"
+          }
+        },
+        "required": [
+          "instrument_name",
+          "high",
+          "low",
+          "base_currency",
+          "quote_currency",
+          "volume",
+          "bid_price",
+          "ask_price",
+          "mid_price",
+          "mark_price",
+          "last",
+          "open_interest",
+          "creation_timestamp"
+        ],
+        "type": "object"
+      },
+      "index_price": {
+        "description": "Current index price",
+        "example": 8247.27,
+        "type": "number"
+      },
+      "price": {
+        "description": "Price in base currency",
+        "type": "number"
+      },
+      "trade_timestamp": {
+        "description": "The timestamp of the trade (milliseconds since the UNIX epoch)",
+        "example": 1517329113791,
+        "type": "integer"
+      },
+      "currency_with_any_and_grouped": {
+        "description": "Currency name or `\"any\"` if don't care or `\"grouped\"` if grouped by currencies",
+        "enum": [
+          "BTC",
+          "ETH",
+          "USDC",
+          "SOL",
+          "USDT",
+          "EURR",
+          "XRP",
+          "STETH",
+          "USYC",
+          "PAXG",
+          "BNB",
+          "USDE",
+          "any",
+          "grouped"
+        ],
+        "type": "string"
+      },
+      "price_index": {
+        "example": "btc_usdc",
+        "description": "Name of price index that is used for this instrument",
+        "type": "string"
+      },
+      "trade_seq": {
+        "description": "The sequence number of the trade within instrument",
+        "type": "integer"
+      },
+      "key_number_pair": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "type": "object"
+      },
+      "block_trade_id_in_result": {
+        "description": "Block trade id - when trade was part of a block trade",
+        "example": "154",
+        "type": "string"
+      },
+      "instrument_id": {
+        "description": "Instrument ID",
+        "type": "integer"
+      },
+      "tick_size_step": {
+        "properties": {
+          "above_price": {
+            "description": "The price from which the increased tick size applies",
+            "type": "number"
+          },
+          "tick_size": {
+            "description": "Tick size to be used above the price. It must be multiple of the minimum tick size.",
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "tick_direction": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "description": "Direction of the \"tick\" (`0` = Plus Tick, `1` = Zero-Plus Tick, `2` = Minus Tick, `3` = Zero-Minus Tick).",
+        "type": "integer"
+      },
+      "mark_iv": {
+        "description": "(Only for option) implied volatility for mark price",
+        "type": "number"
+      },
+      "direction": {
+        "description": "Direction: `buy`, or `sell`",
+        "enum": [
+          "buy",
+          "sell"
+        ],
+        "type": "string"
+      },
+      "block_trade_leg_count": {
+        "description": "Block trade leg count - when trade was part of a block trade",
+        "example": 3,
+        "type": "integer"
+      },
+      "OkResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "description": "Result of method execution. `ok` in case of success",
+            "enum": [
+              "ok"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      }
+    },
+    "parameters": {},
+    "responses": {
+      "PublicGetInstrumentsResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetInstrumentsResponse"
+            }
+          }
+        }
+      },
+      "PublicGetMarkPriceHistoryResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetMarkPriceHistoryResponse"
+            }
+          }
+        }
+      },
+      "PublicGetFundingRateHistoryResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetFundingRateHistoryResponse"
+            }
+          }
+        }
+      },
+      "PublicGetIndexPriceNamesResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetIndexPriceNamesResponse"
+            }
+          }
+        }
+      },
+      "PublicGetFundingChartDataResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetFundingChartDataResponse"
+            }
+          }
+        }
+      },
+      "PublicGetTradingviewChartDataResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetTradingviewChartDataResponse"
+            }
+          }
+        }
+      },
+      "PublicGetIndexPriceResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetIndexPriceResponse"
+            }
+          }
+        }
+      },
+      "PublicGetCurrenciesResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetCurrenciesResponse"
+            }
+          }
+        }
+      },
+      "PublicGetFundingRateValueResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetFundingRateValueResponse"
+            }
+          }
+        }
+      },
+      "PublicGetHistoricalVolatilityResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetHistoricalVolatilityResponse"
+            }
+          }
+        }
+      },
+      "PublicGetContractSizeResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetContractSizeResponse"
+            }
+          }
+        }
+      },
+      "PublicTickerResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicTickerResponse"
+            }
+          }
+        }
+      },
+      "PublicGetDeliveryPricesResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetDeliveryPricesResponse"
+            }
+          }
+        }
+      },
+      "PublicGetTradesVolumesResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetTradesVolumesResponse"
+            }
+          }
+        }
+      },
+      "PublicGetOrderBookResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetOrderBookResponse"
+            }
+          }
+        }
+      },
+      "PublicGetInstrumentResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetInstrumentResponse"
+            }
+          }
+        }
+      },
+      "PublicTradesHistoryResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicTradesHistoryResponse"
+            }
+          }
+        }
+      },
+      "PublicGetAprHistoryResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetAprHistoryResponse"
+            }
+          }
+        }
+      },
+      "PublicSettlementResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicSettlementResponse"
+            }
+          }
+        }
+      },
+      "PublicGetExpirationsResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetExpirationsResponse"
+            }
+          }
+        }
+      },
+      "PublicGetBookSummaryResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetBookSummaryResponse"
+            }
+          }
+        }
+      },
+      "PublicGetVolatilityIndexDataResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetVolatilityIndexDataResponse"
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "description": "Error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "OkResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/OkResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}
