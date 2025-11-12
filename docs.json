@@ -33,7 +33,6 @@
             "group": "Introduction",
             "expanded": false,
             "pages": [
-              "mdfx_files/welcome",
               "mdfx_files/deribit-quickstart"
             ]
           },
