@@ -3,89 +3,102 @@
   "theme": "mint",
   "name": "Mint Starter Kit",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#0052FF",
+    "light": "#FFFFFF",
+    "dark": "#0A0B0D"
   },
-  "favicon": "/favicon.svg",
+  "customCss": [
+    "/public/style.css"
+  ],
+  "headTags": [
+    {
+      "tag": "script",
+      "attributes": {
+        "src": "/public/replace-query-params.js",
+        "type": "text/javascript"
+      }
+    }
+  ],
+  "api": {
+    "playground": {
+      "display": "none"
+    }
+  },
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "API Overview",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Introduction",
+            "expanded": false,
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "mdfx_files/welcome",
+              "mdfx_files/deribit-quickstart"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Authentication",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "mdfx_files/api-keys",
+              "mdfx_files/oauth"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "JSON-RPC Protocol",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "mdfx_files/overview",
+              "mdfx_files/request-format",
+              "mdfx_files/response-format",
+              "mdfx_files/errors"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Methods",
         "groups": [
           {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
+            "group": "Authentication",
+            "openapi": {
+              "source": "specifications/split/authentication_openapi.json",
+              "directory": "api-reference"
+            }
+          }
+        ]
+      },
+      {
+        "tab": "Subscription Channels",
+        "asyncapi": "specifications/deribit_asyncapi.json"
+      },
+      {
+        "tab": "FIX API",
+        "groups": [
           {
-            "group": "Endpoint examples",
+            "group": "FIX API Documentation",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "mdfx_files/fix-api"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Best Practices",
+        "groups": [
+          {
+            "group": "Connection Management",
+            "expanded": true,
+            "pages": [
+              "mdfx_files/connection-management-best-practices"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logos/deribit_cb_logo_main_black_rgb.svg",
+    "dark": "/logos/deribit_cb_logo_main_white_rgb.svg"
   },
   "navbar": {
     "links": [
@@ -102,15 +115,15 @@
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "footer": {
     "socials": {

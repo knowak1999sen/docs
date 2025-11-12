@@ -1,0 +1,655 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Deribit API - Authentication",
+    "version": "2.1.1",
+    "description": "Deribit API specification for Authentication endpoints"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8082/api/v2",
+      "description": "local test server"
+    },
+    {
+      "url": "https://test.deribit.com/api/v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication"
+    }
+  ],
+  "paths": {
+    "/public/auth": {
+      "get": {
+        "description": "Retrieve an Oauth access token, to be used for authentication of 'private' requests. Three methods of authentication are supported: - `client_credentials` - using the client id and client secret that can be found on the API page on the website - `client_signature` - using the client id that can be found on the API page on the website and user generated signature. The signature is calculated using some fields provided in the request, using formula described here [Deribit signature credentials](#additional-authorization-method-signature-credentials-websocket-api) - `refresh_token` - using a refresh token that was received from an earlier invocation The response will contain an access token, expiration period (number of seconds that the token is valid) and a refresh token that can be used to get a new set of tokens. **📖 Related Support Article:** [API Authentication Guide](https://support.deribit.com/hc/en-us/articles/29748629634205-API-Authentication-Guide)",
+        "tags": [
+          "Authentication",
+          "Public"
+        ],
+        "parameters": [
+          {
+            "name": "grant_type",
+            "description": "Method of authentication",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "client_credentials",
+                "client_signature",
+                "refresh_token"
+              ],
+              "example": "client_credentials"
+            },
+            "required": true
+          },
+          {
+            "name": "client_id",
+            "description": "Required for grant type `client_credentials` and `client_signature`",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "fo7WAPRm4P"
+            },
+            "required": true
+          },
+          {
+            "name": "client_secret",
+            "description": "Required for grant type `client_credentials`",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "W0H6FJW4IRPZ1MOQ8FP6KMC5RZDUUKXS"
+            },
+            "required": true
+          },
+          {
+            "name": "refresh_token",
+            "description": "Required for grant type `refresh_token`",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "timestamp",
+            "description": "Required for grant type `client_signature`, provides time when request has been generated (milliseconds since the UNIX epoch)",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          },
+          {
+            "name": "signature",
+            "description": "Required for grant type `client_signature`; it's a cryptographic signature calculated over provided fields using user **secret key**. The signature should be calculated as an HMAC (Hash-based Message Authentication Code) with `SHA256` hash algorithm",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "nonce",
+            "description": "Optional for grant type `client_signature`; delivers user generated initialization vector for the server token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "data",
+            "description": "Optional for grant type `client_signature`; contains any user specific value",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "state",
+            "description": "Will be passed back in the response",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "scope",
+            "description": "Describes type of the access for assigned token, possible values: `connection`, `session:name`, `trade:[read, read_write, none]`, `wallet:[read, read_write, none]`, `account:[read, read_write, none]`, `expires:NUMBER`, `ip:ADDR`. Details are elucidated in [Access scope](#access-scope)",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "connection"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicAuthResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 9929,
+                      "result": {
+                        "access_token": "1582628593469.1MbQ-J_4.CBP-OqOwm_FBdMYj4cRK2dMXyHPfBtXGpzLxhWg31nHu3H_Q60FpE5_vqUBEQGSiMrIGzw3nC37NMb9d1tpBNqBOM_Ql9pXOmgtV9Yj3Pq1c6BqC6dU6eTxHMFO67x8GpJxqw_QcKP5IepwGBD-gfKSHfAv9AEnLJkNu3JkMJBdLToY1lrBnuedF3dU_uARm",
+                        "expires_in": 31536000,
+                        "refresh_token": "1582628593469.1GP4rQd0.A9Wa78o5kFRIUP49mScaD1CqHgiK50HOl2VA6kCtWa8BQZU5Dr03BhcbXPNvEh3I_MVixKZXnyoBeKJwLl8LXnfo180ckAiPj3zOclcUu4zkXuF3NNP3sTPcDf1B3C1CwMKkJ1NOcf1yPmRbsrd7hbgQ-hLa40tfx6Oa-85ymm_3Z65LZcnCeLrqlj_A9jM",
+                        "scope": "connection mainaccount",
+                        "enabled_features": [],
+                        "token_type": "bearer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/ErrorMessageResponse"
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 9929,
+                    "method": "public/auth",
+                    "params": {
+                      "grant_type": "client_credentials",
+                      "client_id": "fo7WAPRm4P",
+                      "client_secret": "W0H6FJW4IRPZ1MOQ8FP6KMC5RZDUUKXS"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/auth",
+            "og:title": "public/auth"
+          },
+          "href": "/api-reference/authentication/public-auth"
+        }
+      }
+    },
+    "/public/exchange_token": {
+      "get": {
+        "description": "Generates a token for a new subject id. This method can be used to switch between subaccounts.",
+        "tags": [
+          "Authentication",
+          "Public"
+        ],
+        "parameters": [
+          {
+            "name": "refresh_token",
+            "description": "Refresh token",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "1568800656974.1CWcuzUS.MGy49NK4hpTwvR1OYWfpqMEkH4T4oDg4tNIcrM7KdeyxXRcSFqiGzA_D4Cn7mqWocHmlS89FFmUYcmaN2H7lNKKTnhRg5EtrzsFCCiuyN0Wv9y-LbGLV3-Ojv_kbD50FoScQ8BDXS5b_w6Ir1MqEdQ3qFZ3MLcvlPiIgG2BqyJX3ybYnVpIlrVrrdYD1-lkjLcjxOBNJvvUKNUAzkQ"
+            },
+            "required": true
+          },
+          {
+            "name": "subject_id",
+            "description": "New subject id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            },
+            "required": true
+          },
+          {
+            "name": "scope",
+            "description": "Optional scope override for the new session. Cannot exceed caller's permissions. Supports `session` scope for direct session creation during token exchange.",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicTokenResponse"
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 7619,
+                    "method": "public/exchange_token",
+                    "params": {
+                      "refresh_token": "1568800656974.1CWcuzUS.MGy49NK4hpTwvR1OYWfpqMEkH4T4oDg4tNIcrM7KdeyxXRcSFqiGzA_D4Cn7mqWocHmlS89FFmUYcmaN2H7lNKKTnhRg5EtrzsFCCiuyN0Wv9y-LbGLV3-Ojv_kbD50FoScQ8BDXS5b_w6Ir1MqEdQ3qFZ3MLcvlPiIgG2BqyJX3ybYnVpIlrVrrdYD1-lkjLcjxOBNJvvUKNUAzkQ",
+                      "subject_id": 10
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/exchange_token",
+            "og:title": "public/exchange_token"
+          },
+          "href": "/api-reference/authentication/public-exchange_token"
+        }
+      }
+    },
+    "/public/fork_token": {
+      "get": {
+        "description": "Generates a token for a new named session. This method can be used only with session scoped tokens.",
+        "tags": [
+          "Authentication",
+          "Public"
+        ],
+        "parameters": [
+          {
+            "name": "refresh_token",
+            "description": "Refresh token",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "1568800656974.1CWcuzUS.MGy49NK4hpTwvR1OYWfpqMEkH4T4oDg4tNIcrM7KdeyxXRcSFqiGzA_D4Cn7mqWocHmlS89FFmUYcmaN2H7lNKKTnhRg5EtrzsFCCiuyN0Wv9y-LbGLV3-Ojv_kbD50FoScQ8BDXS5b_w6Ir1MqEdQ3qFZ3MLcvlPiIgG2BqyJX3ybYnVpIlrVrrdYD1-lkjLcjxOBNJvvUKNUAzkQ"
+            },
+            "required": true
+          },
+          {
+            "name": "session_name",
+            "description": "New session name",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "forked_session_name"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicTokenResponse"
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 7620,
+                    "method": "public/fork_token",
+                    "params": {
+                      "refresh_token": "1568800656974.1CWcuzUS.MGy49NK4hpTwvR1OYWfpqMEkH4T4oDg4tNIcrM7KdeyxXRcSFqiGzA_D4Cn7mqWocHmlS89FFmUYcmaN2H7lNKKTnhRg5EtrzsFCCiuyN0Wv9y-LbGLV3-Ojv_kbD50FoScQ8BDXS5b_w6Ir1MqEdQ3qFZ3MLcvlPiIgG2BqyJX3ybYnVpIlrVrrdYD1-lkjLcjxOBNJvvUKNUAzkQ",
+                      "session_name": "forked_session_name"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/fork_token",
+            "og:title": "public/fork_token"
+          },
+          "href": "/api-reference/authentication/public-fork_token"
+        }
+      }
+    },
+    "/private/logout": {
+      "get": {
+        "parameters": [
+          {
+            "name": "invalidate_token",
+            "description": "If value is `true` all tokens created in current session are invalidated, default: `true`",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "description": "Gracefully close websocket connection, when COD (Cancel On Disconnect) is enabled orders are not cancelled",
+        "tags": [
+          "Authentication",
+          "WebSocket Only",
+          "Private"
+        ],
+        "responses": {
+          "200": {
+            "description": "closes WS connection"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorMessageResponse"
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/logout",
+            "og:title": "private/logout"
+          },
+          "href": "/api-reference/authentication/private-logout"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PublicAuthResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "access_token": {
+                "example": "843SehgeX5n6XxEU4XbABx4Cny5Akai5iHiJePTsvUw7",
+                "type": "string"
+              },
+              "token_type": {
+                "description": "Authorization type, allowed value - `bearer`",
+                "enum": [
+                  "bearer"
+                ],
+                "type": "string"
+              },
+              "expires_in": {
+                "description": "Token lifetime in seconds",
+                "example": 315360000,
+                "type": "integer"
+              },
+              "refresh_token": {
+                "description": "Can be used to request a new token (with a new lifetime)",
+                "example": "6faf8L36JdaSqsjCEEiwqifPpj6JB18RWwiWHrsGTZ91",
+                "type": "string"
+              },
+              "scope": {
+                "description": "Type of the access for assigned token",
+                "type": "string"
+              },
+              "state": {
+                "description": "Copied from the input (if applicable)",
+                "type": "string"
+              },
+              "sid": {
+                "description": "Optional Session id",
+                "type": "string"
+              },
+              "enabled_features": {
+                "$ref": "#/components/schemas/api_key_features"
+              },
+              "mandatory_tfa_status": {
+                "description": "2FA is required for privileged methods",
+                "example": "enabled",
+                "type": "string"
+              },
+              "google_login": {
+                "description": "The access token was acquired by logging in through Google.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "access_token",
+              "token_type",
+              "expires_in",
+              "refresh_token",
+              "scope"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicTokenResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "access_token": {
+                "example": "843SehgeX5n6XxEU4XbABx4Cny5Akai5iHiJePTsvUw7",
+                "type": "string"
+              },
+              "token_type": {
+                "description": "Authorization type, allowed value - `bearer`",
+                "enum": [
+                  "bearer"
+                ],
+                "type": "string"
+              },
+              "expires_in": {
+                "description": "Token lifetime in seconds",
+                "example": 315360000,
+                "type": "integer"
+              },
+              "refresh_token": {
+                "description": "Can be used to request a new token (with a new lifetime)",
+                "example": "6faf8L36JdaSqsjCEEiwqifPpj6JB18RWwiWHrsGTZ91",
+                "type": "string"
+              },
+              "scope": {
+                "description": "Type of the access for assigned token",
+                "type": "string"
+              },
+              "sid": {
+                "description": "Optional Session id",
+                "type": "string"
+              }
+            },
+            "required": [
+              "access_token",
+              "token_type",
+              "expires_in",
+              "refresh_token",
+              "scope"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "ErrorMessageResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "message",
+          "jsonrpc",
+          "error"
+        ],
+        "type": "object"
+      },
+      "api_key_features": {
+        "description": "List of enabled advanced on-key features. Available options: - `restricted_block_trades`: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key - `block_trade_approval`: Block trades created using this API key require additional user approval. Methods that use `block_rfq` scope are not affected by Block Trade approval feature",
+        "items": {
+          "description": "Name of the feature",
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Generic error response for broken references",
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "enum": [
+              "2.0"
+            ]
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "description": "Error code"
+              },
+              "message": {
+                "type": "string",
+                "description": "Error message"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          }
+        },
+        "required": [
+          "jsonrpc",
+          "error"
+        ]
+      },
+      "OkResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "description": "Result of method execution. `ok` in case of success",
+            "enum": [
+              "ok"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      }
+    },
+    "parameters": {},
+    "responses": {
+      "PublicAuthResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicAuthResponse"
+            }
+          }
+        }
+      },
+      "PublicTokenResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicTokenResponse"
+            }
+          }
+        }
+      },
+      "ErrorMessageResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorMessageResponse"
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "description": "Error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "OkResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/OkResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}
