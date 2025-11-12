@@ -25,7 +25,7 @@
     },
     {
       "name": "Private",
-      "description": "Private methods require authentication. All requests must include a valid OAuth2 token. A token can be requested using the [/public/auth](#public-auth) method. When using the websockets protocol, the token must be included as a parameter `access_token` in the message. When using REST (HTTP GET), the token may also be passed in the `Authorization` header."
+      "description": "Private methods require authentication. All requests must include a valid OAuth2 token.\n\nA token can be requested using the [/public/auth](#public-auth) method.\n\nWhen using the websockets protocol, the token must be included as a parameter `access_token` in the message. When using REST (HTTP GET), the token may also be passed in the `Authorization` header."
     },
     {
       "name": "Authentication"
@@ -1189,7 +1189,7 @@
             }
           }
         },
-        "description": "Enables affiliate program for user **📖 Related Support Article:** [Affiliate Program](https://support.deribit.com/hc/en-us/articles/25944777728797-Affiliate-Program)",
+        "description": "Enables affiliate program for user\n\n**📖 Related Support Article:** [Affiliate Program](https://support.deribit.com/hc/en-us/articles/25944777728797-Affiliate-Program)",
         "tags": [
           "Account Management",
           "Private"
@@ -1452,7 +1452,7 @@
             "$ref": "#/components/responses/OkResponse"
           }
         },
-        "description": "Configure self trading behavior **📖 Related Support Article:** [Account settings page](https://support.deribit.com/hc/en-us/articles/25944634289693-Account-settings-page#heading-4)",
+        "description": "Configure self trading behavior\n\n**📖 Related Support Article:** [Account settings page](https://support.deribit.com/hc/en-us/articles/25944634289693-Account-settings-page#heading-4)",
         "tags": [
           "Account Management",
           "Private"
@@ -1527,7 +1527,7 @@
             "$ref": "#/components/responses/OkResponse"
           }
         },
-        "description": "Configure disabled trading products for subaccounts. Only main accounts can modify this for subaccounts. **[TFA required](#security-keys)**",
+        "description": "Configure disabled trading products for subaccounts. Only main accounts can modify this for subaccounts.\n**[TFA required](#security-keys)**",
         "tags": [
           "Account Management",
           "Private"
@@ -1719,17 +1719,17 @@
             "name": "public_key",
             "in": "query",
             "required": false,
-            "description": "ED25519 or RSA PEM Encoded public key that should be used to create asymmetric API Key for signing requests/authentication requests with user's private key. **📖 Related Support Article:** [Asymmetric API keys](https://support.deribit.com/hc/en-us/articles/25944616699165-Asymmetric-API-keys)",
+            "description": "ED25519 or RSA PEM Encoded public key that should be used to create asymmetric API Key for signing requests/authentication requests with user's private key.\n **📖 Related Support Article:** [Asymmetric API keys](https://support.deribit.com/hc/en-us/articles/25944616699165-Asymmetric-API-keys)",
             "schema": {
               "type": "string",
-              "example": "-----BEGIN PUBLIC KEY----- MCowBQYDK2VwAyEAM7FWhKquNqLmTOV4hfYT5r3AjrYiORTT6Tn5HIfFNV8= -----END PUBLIC KEY-----"
+              "example": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAM7FWhKquNqLmTOV4hfYT5r3AjrYiORTT6Tn5HIfFNV8=\n-----END PUBLIC KEY-----"
             }
           },
           {
             "name": "enabled_features",
             "in": "query",
             "required": false,
-            "description": "List of enabled advanced on-key features. Available options: - `restricted_block_trades`: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key - `block_trade_approval`: Block trades created using this API key require additional user approval. Methods that use `block_rfq` scope are not affected by Block Trade approval feature",
+            "description": "List of enabled advanced on-key features. Available options:\n\n - `restricted_block_trades`: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key\n - `block_trade_approval`: Block trades created using this API key require additional user approval. Methods that use `block_rfq` scope are not affected by Block Trade approval feature",
             "schema": {
               "type": "array",
               "items": {
@@ -1772,7 +1772,7 @@
             }
           }
         },
-        "description": "Creates a new api key with a given scope. [Important notes](#creating-editing-removing-api-keys) **[TFA required](#security-keys)** **Note:** You can display the created API key using the [private/list_api_keys](https://docs.deribit.com/#private-list_api_keys) method. **📖 Related Support Article:** [Creating new API key on Deribit](https://support.deribit.com/hc/en-us/articles/26268257333661-Creating-new-API-key-on-Deribit)",
+        "description": "Creates a new api key with a given scope. [Important notes](#creating-editing-removing-api-keys)\n**[TFA required](#security-keys)**\n\n**Note:** You can display the created API key using the [private/list_api_keys](https://docs.deribit.com/#private-list_api_keys) method.\n\n**📖 Related Support Article:** [Creating new API key on Deribit](https://support.deribit.com/hc/en-us/articles/26268257333661-Creating-new-API-key-on-Deribit)",
         "tags": [
           "Account Management",
           "Private"
@@ -1859,7 +1859,7 @@
             }
           }
         },
-        "description": "Changes scope for key with given id. [Important notes](#creating-editing-removing-api-keys). **[TFA required](#security-keys)**",
+        "description": "Changes scope for key with given id. [Important notes](#creating-editing-removing-api-keys).\n**[TFA required](#security-keys)**",
         "tags": [
           "Account Management",
           "Private"
@@ -2026,7 +2026,7 @@
             }
           }
         },
-        "description": "Retrieves list of api keys. [Important notes](#creating-editing-removing-api-keys). **[TFA required](#security-keys)**",
+        "description": "Retrieves list of api keys. [Important notes](#creating-editing-removing-api-keys).\n **[TFA required](#security-keys)**",
         "tags": [
           "Account Management",
           "Private"
@@ -2228,7 +2228,7 @@
             "name": "enabled_features",
             "in": "query",
             "required": false,
-            "description": "List of enabled advanced on-key features. Available options: - `restricted_block_trades`: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key - `block_trade_approval`: Block trades created using this API key require additional user approval. Methods that use `block_rfq` scope are not affected by Block Trade approval feature",
+            "description": "List of enabled advanced on-key features. Available options:\n\n - `restricted_block_trades`: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key\n - `block_trade_approval`: Block trades created using this API key require additional user approval. Methods that use `block_rfq` scope are not affected by Block Trade approval feature",
             "schema": {
               "type": "array",
               "items": {
@@ -2281,7 +2281,7 @@
             }
           }
         },
-        "description": "Edits existing API key. At least one parameter is required. [Important notes](#creating-editing-removing-api-keys) **[TFA required](#security-keys)**",
+        "description": "Edits existing API key. At least one parameter is required. [Important notes](#creating-editing-removing-api-keys)\n**[TFA required](#security-keys)**",
         "tags": [
           "Account Management",
           "Private"
@@ -2588,7 +2588,7 @@
     },
     "/private/create_subaccount": {
       "get": {
-        "description": "Create a new subaccount **📖 Related Support Article:** [Subaccounts](https://support.deribit.com/hc/en-us/articles/25944616386973-Subaccounts)",
+        "description": "Create a new subaccount\n\n**📖 Related Support Article:** [Subaccounts](https://support.deribit.com/hc/en-us/articles/25944616386973-Subaccounts)",
         "tags": [
           "Account Management",
           "Private"
@@ -2818,7 +2818,7 @@
     },
     "/private/set_email_for_subaccount": {
       "get": {
-        "description": "Assign an email address to a subaccount. User will receive an email with a confirmation link. **[TFA required](#security-keys)**",
+        "description": "Assign an email address to a subaccount. User will receive an email with a confirmation link.\n**[TFA required](#security-keys)**",
         "tags": [
           "Account Management",
           "Private"
@@ -2896,7 +2896,7 @@
     },
     "/private/toggle_subaccount_login": {
       "get": {
-        "description": "Enable or disable login for a subaccount. If login is disabled and a session for the subaccount exists, this session will be terminated. **[TFA required](#security-keys)**",
+        "description": "Enable or disable login for a subaccount. If login is disabled and a session for the subaccount exists, this session will be terminated.\n**[TFA required](#security-keys)**",
         "tags": [
           "Account Management",
           "Private"
@@ -2978,7 +2978,7 @@
     },
     "/private/toggle_notifications_from_subaccount": {
       "get": {
-        "description": "Enable or disable sending of notifications for the subaccount. **[TFA required](#security-keys)**",
+        "description": "Enable or disable sending of notifications for the subaccount.\n**[TFA required](#security-keys)**",
         "tags": [
           "Account Management",
           "Private"
@@ -3334,7 +3334,7 @@
     },
     "/private/remove_subaccount": {
       "get": {
-        "description": "Remove empty subaccount. **[TFA required](#security-keys)**",
+        "description": "Remove empty subaccount.\n**[TFA required](#security-keys)**",
         "tags": [
           "Account Management",
           "Private"
@@ -3631,7 +3631,7 @@
             }
           }
         },
-        "description": "Retrieve the latest user trades that have occurred for a specific instrument and within a given time range. **📖 Related Support Article:** [Transaction log](https://support.deribit.com/hc/en-us/articles/25944587269021-Transaction-log)",
+        "description": "Retrieve the latest user trades that have occurred for a specific instrument and within a given time range.\n\n**📖 Related Support Article:** [Transaction log](https://support.deribit.com/hc/en-us/articles/25944587269021-Transaction-log)",
         "tags": [
           "Account Management",
           "Private"
@@ -3711,7 +3711,7 @@
             }
           }
         },
-        "description": "Retrieves user custody accounts list. **📖 Related Support Article:** [Custody Options](https://support.deribit.com/hc/en-us/articles/26533163120413-Custody-Options)",
+        "description": "Retrieves user custody accounts list.\n\n**📖 Related Support Article:** [Custody Options](https://support.deribit.com/hc/en-us/articles/26533163120413-Custody-Options)",
         "tags": [
           "Account Management",
           "Private"
@@ -3747,7 +3747,7 @@
     },
     "/public/auth": {
       "get": {
-        "description": "Retrieve an Oauth access token, to be used for authentication of 'private' requests. Three methods of authentication are supported: - `client_credentials` - using the client id and client secret that can be found on the API page on the website - `client_signature` - using the client id that can be found on the API page on the website and user generated signature. The signature is calculated using some fields provided in the request, using formula described here [Deribit signature credentials](#additional-authorization-method-signature-credentials-websocket-api) - `refresh_token` - using a refresh token that was received from an earlier invocation The response will contain an access token, expiration period (number of seconds that the token is valid) and a refresh token that can be used to get a new set of tokens. **📖 Related Support Article:** [API Authentication Guide](https://support.deribit.com/hc/en-us/articles/29748629634205-API-Authentication-Guide)",
+        "description": "Retrieve an Oauth access token, to be used for authentication of 'private' requests.\n\nThree methods of authentication are supported:\n\n- `client_credentials` - using the client id and client secret that can be found on the API page on the website\n- `client_signature` - using the client id that can be found on the API page on the website and user generated signature. The signature is calculated using some fields provided in the request, using formula described here [Deribit signature credentials](#additional-authorization-method-signature-credentials-websocket-api)\n- `refresh_token` - using a refresh token that was received from an earlier invocation\n\nThe response will contain an access token, expiration period (number of seconds that the token is valid) and a refresh token that can\nbe used to get a new set of tokens.\n\n**📖 Related Support Article:** [API Authentication Guide](https://support.deribit.com/hc/en-us/articles/29748629634205-API-Authentication-Guide)",
         "tags": [
           "Authentication",
           "Public"
@@ -4351,7 +4351,7 @@
             }
           }
         },
-        "description": "**Taker method** This method creates a new Block RFQ. **Block RFQ pre-allocation:** The taker can split the total amount between different (sub)accounts using the `trade_allocations` parameter. The taker can also allocate to himself. Each allocation must specify either `user_id` (for direct allocation) or `client_info` object (for broker allocation), and `amount`. **📖 Related Support Article:** [Deribit Block RFQ API walkthrough](https://support.deribit.com/hc/en-us/articles/25951393746589-Deribit-Block-RFQ-API-walkthrough)",
+        "description": "**Taker method**\n\nThis method creates a new Block RFQ.\n\n**Block RFQ pre-allocation:** The taker can split the total amount between different (sub)accounts using the `trade_allocations` parameter. The taker can also allocate to himself. Each allocation must specify either `user_id` (for direct allocation) or `client_info` object (for broker allocation), and `amount`.\n\n**📖 Related Support Article:** [Deribit Block RFQ API walkthrough](https://support.deribit.com/hc/en-us/articles/25951393746589-Deribit-Block-RFQ-API-walkthrough)",
         "tags": [
           "Block RFQ",
           "Private"
@@ -4457,7 +4457,7 @@
             }
           }
         },
-        "description": "**Taker method** This method cancels a Block RFQ using the specified `block_rfq_id`.",
+        "description": "**Taker method**\n\nThis method cancels a Block RFQ using the specified `block_rfq_id`.",
         "tags": [
           "Block RFQ",
           "Private"
@@ -4655,7 +4655,7 @@
             }
           }
         },
-        "description": "**Taker method** This method allows Block RFQ taker to accept the response by sending a single crossing price. The order can be either filled immediately (`fill_or_kill`) or remain active until cancelled (`good_til_cancelled`). Please note that after Block RFQ creation, a grace period of 5 seconds begins, during which the taker cannot see quotes or trade the Block RFQ.",
+        "description": "**Taker method**\n\nThis method allows Block RFQ taker to accept the response by sending a single crossing price. The order can be either filled immediately (`fill_or_kill`) or remain active until cancelled (`good_til_cancelled`). Please note that after Block RFQ creation, a grace period of 5 seconds begins, during which the taker cannot see quotes or trade the Block RFQ.",
         "tags": [
           "Block RFQ",
           "Private"
@@ -4771,7 +4771,7 @@
             }
           }
         },
-        "description": "**Taker method** This method allows Block RFQ taker to cancel an active trigger for a Block RFQ. The response includes the full Block RFQ object with the trade trigger state set to cancelled.",
+        "description": "**Taker method**\n\nThis method allows Block RFQ taker to cancel an active trigger for a Block RFQ. The response includes the full Block RFQ object with the trade trigger state set to cancelled.",
         "tags": [
           "Block RFQ",
           "Private"
@@ -4882,7 +4882,7 @@
             }
           }
         },
-        "description": "**Maker method** This method retrieves all open quotes for Block RFQs. When a `block_rfq_id` is specified, only the open quotes for that particular Block RFQ will be returned. When a `label` is specified, all quotes with this label are returned. `block_rfq_quote_id` returns one specific quote.",
+        "description": "**Maker method**\n\nThis method retrieves all open quotes for Block RFQs. When a `block_rfq_id` is specified, only the open quotes for that particular Block RFQ will be returned. When a `label` is specified, all quotes with this label are returned. `block_rfq_quote_id` returns one specific quote.",
         "tags": [
           "Block RFQ",
           "Private"
@@ -4979,7 +4979,7 @@
             "name": "execution_instruction",
             "required": false,
             "in": "query",
-            "description": "Execution instruction of the quote. Default - `any_part_of` - `\"all_or_none (AON)\"` - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, 'all_or_none' quotes have priority over 'any_part_of' quotes at the same price level. - `\"any_part_of (APO)\"` - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount.",
+            "description": "Execution instruction of the quote. Default - `any_part_of`\n\n - `\"all_or_none (AON)\"` - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, 'all_or_none' quotes have priority over 'any_part_of' quotes at the same price level.\n - `\"any_part_of (APO)\"` - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount.",
             "schema": {
               "type": "string",
               "enum": [
@@ -5053,7 +5053,7 @@
             }
           }
         },
-        "description": "**Maker method** This method adds quote to the existing Block RFQ. To calculate individual leg prices, the `private/get_leg_prices` endpoint can be utilized.",
+        "description": "**Maker method**\n\nThis method adds quote to the existing Block RFQ. To calculate individual leg prices, the `private/get_leg_prices` endpoint can be utilized.",
         "tags": [
           "Block RFQ",
           "Private"
@@ -5220,7 +5220,7 @@
             }
           }
         },
-        "description": "**Maker method** This method edits a Block RFQ quote using the specified `block_rfq_quote_id`. Alternatively, user can use a combination of `block_rfq_id` and `label` to edit the quote.",
+        "description": "**Maker method**\n\nThis method edits a Block RFQ quote using the specified `block_rfq_quote_id`. Alternatively, user can use a combination of `block_rfq_id` and `label` to edit the quote.",
         "tags": [
           "Block RFQ",
           "Private"
@@ -5348,7 +5348,7 @@
             }
           }
         },
-        "description": "**Maker method** This method cancels a single Block RFQ quote. You can identify the quote to cancel using either: - `block_rfq_quote_id` - the unique ID of the quote - `block_rfq_id` + `label` - the Block RFQ ID and the quote label **Note:** Mass cancellation by label is not supported. This method cancels only one quote at a time.",
+        "description": "**Maker method**\n\nThis method cancels a single Block RFQ quote. You can identify the quote to cancel using either:\n\n - `block_rfq_quote_id` - the unique ID of the quote\n - `block_rfq_id` + `label` - the Block RFQ ID and the quote label\n\n**Note:** Mass cancellation by label is not supported. This method cancels only one quote at a time.",
         "tags": [
           "Block RFQ",
           "Private"
@@ -5423,7 +5423,7 @@
             }
           }
         },
-        "description": "**Maker method** This method cancels all user quotes in all Block RFQs. Optionally cancels all quotes in a specific RFQ if the `block_rfq_id` is provided. **Note:** Mass cancellation by label is not supported. This method will cancel all quotes regardless of their labels.",
+        "description": "**Maker method**\n\nThis method cancels all user quotes in all Block RFQs. Optionally cancels all quotes in a specific RFQ if the `block_rfq_id` is provided.\n\n**Note:** Mass cancellation by label is not supported. This method will cancel all quotes regardless of their labels.",
         "tags": [
           "Block RFQ",
           "Private"
@@ -5936,7 +5936,7 @@
             }
           }
         },
-        "description": "Verifies and creates block trade signature **Note:** In the API, the `direction` field is always expressed from the maker's perspective. This means that when you accept a block trade as a taker, the direction shown in the API represents the opposite side of your trade. For example, if you are buying puts as a taker, the API will show the operation as a \"sell put\" (maker's perspective), and you will be verifying and accepting a \"sell put\" block trade. **📖 Related Support Article:** [Block Trading](https://support.deribit.com/hc/en-us/articles/25944688627229-Block-Trading)",
+        "description": "Verifies and creates block trade signature\n\n**Note:** In the API, the `direction` field is always expressed from the maker's perspective. This means that when you accept a block trade as a taker, the direction shown in the API represents the opposite side of your trade. For example, if you are buying puts as a taker, the API will show the operation as a \"sell put\" (maker's perspective), and you will be verifying and accepting a \"sell put\" block trade.\n\n**📖 Related Support Article:** [Block Trading](https://support.deribit.com/hc/en-us/articles/25944688627229-Block-Trading)",
         "tags": [
           "Block Trade",
           "Matching Engine",
@@ -6106,7 +6106,7 @@
             }
           }
         },
-        "description": "Creates block trade The whole request have to be exact the same as in `private/verify_block_trade`, only `role` field should be set appropriately - it basically means that both sides have to agree on the same `timestamp`, `nonce`, `trades` fields and server will assure that `role` field is different between sides (each party accepted own role). Using the same `timestamp` and `nonce` by both sides in `private/verify_block_trade` assures that even if unintentionally both sides execute given block trade with valid `counterparty_signature`, the given block trade will be executed only once. **Note:** In the API, the `direction` field is always expressed from the maker's perspective. This means that when you accept a block trade as a taker, the direction shown in the API represents the opposite side of your trade. For example, if you are buying puts as a taker, the API will show the operation as a \"sell put\" (maker's perspective), and you will be verifying and accepting a \"sell put\" block trade. **📖 Related Support Article:** [Block Trading](https://support.deribit.com/hc/en-us/articles/25944688627229-Block-Trading)",
+        "description": "Creates block trade\n\nThe whole request have to be exact the same as in `private/verify_block_trade`, only `role` field should be set appropriately - it basically means that both sides have to agree on the same `timestamp`, `nonce`, `trades` fields and server will assure that `role` field is different between sides (each party accepted own role).\n\nUsing the same `timestamp` and `nonce` by both sides in `private/verify_block_trade` assures that even if unintentionally both sides execute given block trade with valid `counterparty_signature`, the given block trade will be executed only once.\n\n**Note:** In the API, the `direction` field is always expressed from the maker's perspective. This means that when you accept a block trade as a taker, the direction shown in the API represents the opposite side of your trade. For example, if you are buying puts as a taker, the API will show the operation as a \"sell put\" (maker's perspective), and you will be verifying and accepting a \"sell put\" block trade.\n\n**📖 Related Support Article:** [Block Trading](https://support.deribit.com/hc/en-us/articles/25944688627229-Block-Trading)",
         "tags": [
           "Block Trade",
           "Matching Engine",
@@ -6533,7 +6533,7 @@
             }
           }
         },
-        "description": "**DEPRECATED**: This method is deprecated. Please use `private/get_block_trade_requests` instead. Provides a list of pending block trade approvals. `timestamp` and `nonce` received in response can be used to approve or reject the pending block trade. To use a block trade approval feature the additional API key setting feature called: `enabled_features: block_trade_approval` is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn't have this feature enabled.",
+        "description": "**DEPRECATED**: This method is deprecated. Please use `private/get_block_trade_requests` instead.\n\nProvides a list of pending block trade approvals. `timestamp` and `nonce` received in response can be used to approve or reject the pending block trade.\n\n To use a block trade approval feature the additional API key setting feature called: `enabled_features: block_trade_approval` is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn't have this feature enabled.",
         "tags": [
           "Block Trade",
           "Private"
@@ -6624,7 +6624,7 @@
             }
           }
         },
-        "description": "Provides a list of block trade requests including pending approvals, declined trades, and expired trades. `timestamp` and `nonce` received in response can be used to approve or reject the pending block trade. To use a block trade approval feature the additional API key setting feature called: `enabled_features: block_trade_approval` is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn't have this feature enabled. Only broker clients can use `broker_code` to query for their broker block trade requests.",
+        "description": "Provides a list of block trade requests including pending approvals, declined trades, and expired trades. `timestamp` and `nonce` received in response can be used to approve or reject the pending block trade.\n\n To use a block trade approval feature the additional API key setting feature called: `enabled_features: block_trade_approval` is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn't have this feature enabled.\n\n Only broker clients can use `broker_code` to query for their broker block trade requests.",
         "tags": [
           "Block Trade",
           "Private"
@@ -6694,7 +6694,7 @@
             "$ref": "#/components/responses/OkResponse"
           }
         },
-        "description": "Used to approve a pending block trade. `nonce` and `timestamp` are used to identify the block trade while `role` should be opposite to the trading counterparty. To use a block trade approval feature the additional API key setting feature called: `enabled_features: block_trade_approval` is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn't have this feature enabled.",
+        "description": "Used to approve a pending block trade. `nonce` and `timestamp` are used to identify the block trade while `role` should be opposite to the trading counterparty.\n\n To use a block trade approval feature the additional API key setting feature called: `enabled_features: block_trade_approval` is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn't have this feature enabled.",
         "tags": [
           "Block Trade",
           "Private"
@@ -6766,7 +6766,7 @@
             "$ref": "#/components/responses/OkResponse"
           }
         },
-        "description": "Used to reject a pending block trade. `nonce` and `timestamp` are used to identify the block trade while `role` should be opposite to the trading counterparty. To use a block trade approval feature the additional API key setting feature called: `enabled_features: block_trade_approval` is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn't have this feature enabled.",
+        "description": "Used to reject a pending block trade. `nonce` and `timestamp` are used to identify the block trade while `role` should be opposite to the trading counterparty.\n\n To use a block trade approval feature the additional API key setting feature called: `enabled_features: block_trade_approval` is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn't have this feature enabled.",
         "tags": [
           "Block Trade",
           "Private"
@@ -7901,7 +7901,7 @@
             }
           }
         },
-        "description": "Retrieves the summary information such as open interest, 24h volume, etc. for all instruments for the currency (optionally filtered by kind). **Note** - For real-time updates, we recommend using the WebSocket subscription to `ticker.{instrument_name}.{interval}` instead of polling this endpoint.",
+        "description": "Retrieves the summary information such as open interest, 24h volume, etc. for all instruments for the currency (optionally filtered by kind).\n**Note** - For real-time updates, we recommend using the WebSocket subscription to `ticker.{instrument_name}.{interval}` instead of polling this endpoint.",
         "tags": [
           "Market Data",
           "Public"
@@ -8410,7 +8410,7 @@
     },
     "/public/get_instruments": {
       "get": {
-        "description": "Retrieves available trading instruments. This method can be used to see which instruments are available for trading, or which instruments have recently expired. **Note - This endpoint has distinct API rate limiting requirements:** 1 request per 10 seconds, with a burst of 5. To avoid rate limits, we recommend using either the REST requests for server-cached data or the WebSocket subscription to [instrument_state.{kind}.{currency}](https://docs.deribit.com/#instrument-state-kind-currency) for real-time updates. For more information, see [Rate Limits](https://support.deribit.com/hc/en-us/articles/25944617523357-Rate-Limits).",
+        "description": "Retrieves available trading instruments. This method can be used to see which instruments are available for trading, or which instruments have recently expired.\n**Note - This endpoint has distinct API rate limiting requirements:** 1 request per 10 seconds, with a burst of 5. To avoid rate limits, we recommend using either the REST requests for server-cached data or the WebSocket subscription to [instrument_state.{kind}.{currency}](https://docs.deribit.com/#instrument-state-kind-currency) for real-time updates. For more information, see [Rate Limits](https://support.deribit.com/hc/en-us/articles/25944617523357-Rate-Limits).",
         "tags": [
           "Market Data",
           "Public"
@@ -9139,7 +9139,7 @@
     },
     "/public/get_apr_history": {
       "get": {
-        "description": "Retrieves historical APR data for specified currency. Only applicable to yield-generating tokens (`USDE`, `STETH`, `USDC`, `BUILD`). **📖 Related Support Article:** [Yield reward-bearing coins](https://support.deribit.com/hc/en-us/articles/26525792475677-Yield-reward-bearing-coins)",
+        "description": "Retrieves historical APR data for specified currency. Only applicable to yield-generating tokens (`USDE`, `STETH`, `USDC`, `BUILD`).\n\n**📖 Related Support Article:** [Yield reward-bearing coins](https://support.deribit.com/hc/en-us/articles/26525792475677-Yield-reward-bearing-coins)",
         "tags": [
           "Market Data",
           "Public"
@@ -10492,7 +10492,7 @@
             }
           }
         },
-        "description": "Signals the Websocket connection to send and request heartbeats. Heartbeats can be used to detect stale connections. When heartbeats have been set up, the API server will send `heartbeat` messages and `test_request` messages. Your software should respond to `test_request` messages by sending a `/api/v2/public/test` request. If your software fails to do so, the API server will immediately close the connection. If your account is configured to cancel on disconnect, any orders opened over the connection will be cancelled.",
+        "description": "Signals the Websocket connection to send and request heartbeats. Heartbeats can be used to detect stale connections.\nWhen heartbeats have been set up, the API server will send `heartbeat` messages and `test_request` messages. Your software should respond to `test_request` messages by sending a `/api/v2/public/test` request. If your software fails to do so, the API server will immediately close the connection. If your account is configured to cancel on disconnect, any orders opened over the connection will be cancelled.",
         "tags": [
           "Session Management",
           "Public",
@@ -10586,7 +10586,7 @@
     },
     "/private/enable_cancel_on_disconnect": {
       "get": {
-        "description": "Enable Cancel On Disconnect for the connection. After enabling, all orders created via this connection will be automatically cancelled when the connection is closed. Cancel is triggered in the following cases: when the TCP connection is properly terminated, when the connection is closed due to 10 minutes of inactivity, or when a heartbeat detects a disconnection. To reduce the inactivity timeout, consider using [public/set_heartbeat](https://docs.deribit.com/#public-set_heartbeat). **Note**: If the connection is gracefully closed using [private/logout](https://docs.deribit.com/#private-logout), cancel-on-disconnect will **not** be triggered. **Notice**: Cancel-on-Disconnect does not affect orders created by other connections - they will remain active! When change is applied on the `account` scope, then every newly opened connection will start with **active** Cancel on Disconnect.",
+        "description": "Enable Cancel On Disconnect for the connection. After enabling, all orders created via this connection will be automatically cancelled when the connection is closed.\nCancel is triggered in the following cases: when the TCP connection is properly terminated, when the connection is closed due to 10 minutes of inactivity, or when a heartbeat detects a disconnection. To reduce the inactivity timeout, consider using [public/set_heartbeat](https://docs.deribit.com/#public-set_heartbeat).\n **Note**: If the connection is gracefully closed using [private/logout](https://docs.deribit.com/#private-logout), cancel-on-disconnect will **not** be triggered.\n **Notice**: Cancel-on-Disconnect does not affect orders created by other connections - they will remain active! When change is applied on the `account` scope, then every newly opened connection will start with **active** Cancel on Disconnect.",
         "tags": [
           "Session Management",
           "Private"
@@ -10594,7 +10594,7 @@
         "parameters": [
           {
             "name": "scope",
-            "description": "Specifies if Cancel On Disconnect change should be applied/checked for the current connection or the account (default - `connection`) **NOTICE:** Scope `connection` can be used only when working via Websocket.",
+            "description": "Specifies if Cancel On Disconnect change should be applied/checked for the current connection or the account (default - `connection`)\n\n **NOTICE:** Scope `connection` can be used only when working via Websocket.",
             "in": "query",
             "required": false,
             "schema": {
@@ -10667,7 +10667,7 @@
         "parameters": [
           {
             "name": "scope",
-            "description": "Specifies if Cancel On Disconnect change should be applied/checked for the current connection or the account (default - `connection`) **NOTICE:** Scope `connection` can be used only when working via Websocket.",
+            "description": "Specifies if Cancel On Disconnect change should be applied/checked for the current connection or the account (default - `connection`)\n\n **NOTICE:** Scope `connection` can be used only when working via Websocket.",
             "in": "query",
             "required": false,
             "schema": {
@@ -10740,7 +10740,7 @@
         "parameters": [
           {
             "name": "scope",
-            "description": "Specifies if Cancel On Disconnect change should be applied/checked for the current connection or the account (default - `connection`) **NOTICE:** Scope `connection` can be used only when working via Websocket.",
+            "description": "Specifies if Cancel On Disconnect change should be applied/checked for the current connection or the account (default - `connection`)\n\n **NOTICE:** Scope `connection` can be used only when working via Websocket.",
             "in": "query",
             "required": false,
             "schema": {
@@ -10813,7 +10813,7 @@
           "Public",
           "WebSocket Only"
         ],
-        "description": "Subscribe to one or more channels. This is the same method as [/private/subscribe](#private_subscribe), but it can only be used for 'public' channels. **📖 Related Support Article:** [Market Data Collection Best Practices](https://support.deribit.com/hc/en-us/articles/29592500256669-Market-Data-Collection-Best-Practices)",
+        "description": "Subscribe to one or more channels.\n\nThis is the same method as [/private/subscribe](#private_subscribe), but it can only\nbe used for 'public' channels.\n\n**📖 Related Support Article:** [Market Data Collection Best Practices](https://support.deribit.com/hc/en-us/articles/29592500256669-Market-Data-Collection-Best-Practices)",
         "parameters": [
           {
             "name": "channels",
@@ -10889,7 +10889,7 @@
     },
     "/public/unsubscribe": {
       "get": {
-        "description": "Unsubscribe from one or more channels. The response contains only the channels that were successfully unsubscribed in this request. **Note:** The `result` field in the response contains only the channels that were successfully processed and unsubscribed from this specific request. It does not include all previously subscribed topics. If a channel in the request is invalid, not subscribed, or fails validation, it will not appear in the result.",
+        "description": "Unsubscribe from one or more channels. The response contains only the channels that were successfully unsubscribed in this request.\n **Note:** The `result` field in the response contains only the channels that were successfully processed and unsubscribed from this specific request. It does not include all previously subscribed topics. If a channel in the request is invalid, not subscribed, or fails validation, it will not appear in the result.",
         "tags": [
           "Subscription Management",
           "Public",
@@ -11024,7 +11024,7 @@
     },
     "/private/subscribe": {
       "get": {
-        "description": "Subscribe to one or more channels. The name of the channel determines what information will be provided, and in what form. **📖 Related Support Article:** [Market Data Collection Best Practices](https://support.deribit.com/hc/en-us/articles/29592500256669-Market-Data-Collection-Best-Practices)",
+        "description": "Subscribe to one or more channels.\n\nThe name of the channel determines what information will be provided, and\nin what form.\n\n**📖 Related Support Article:** [Market Data Collection Best Practices](https://support.deribit.com/hc/en-us/articles/29592500256669-Market-Data-Collection-Best-Practices)",
         "tags": [
           "Subscription Management",
           "Private",
@@ -11828,7 +11828,7 @@
           },
           {
             "name": "historical",
-            "description": "Determines whether historical trade and order records should be retrieved. - `false` (default): Returns recent records: orders for 30 min, trades for 24h. - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included. **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
+            "description": "Determines whether historical trade and order records should be retrieved.\n\n - `false` (default): Returns recent records: orders for 30 min, trades for 24h.\n - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included.\n\n **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
             "in": "query",
             "required": false,
             "schema": {
@@ -11995,7 +11995,7 @@
           },
           {
             "name": "historical",
-            "description": "Determines whether historical trade and order records should be retrieved. - `false` (default): Returns recent records: orders for 30 min, trades for 24h. - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included. **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
+            "description": "Determines whether historical trade and order records should be retrieved.\n\n - `false` (default): Returns recent records: orders for 30 min, trades for 24h.\n - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included.\n\n **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
             "in": "query",
             "required": false,
             "schema": {
@@ -12082,7 +12082,7 @@
     },
     "/private/get_order_state": {
       "get": {
-        "description": "Retrieve the current state of an order. **Important Note for Mass Quotes:** Quote orders are order-like structures that don't fully translate to normal orders. When checking order state for quotes, the `amount` field represents the remaining amount, not the original order amount.",
+        "description": "Retrieve the current state of an order.\n\n**Important Note for Mass Quotes:** Quote orders are order-like structures that don't fully translate to normal orders. When checking order state for quotes, the `amount` field represents the remaining amount, not the original order amount.",
         "tags": [
           "Trading",
           "Private"
@@ -12901,7 +12901,7 @@
           },
           {
             "name": "historical",
-            "description": "Determines whether historical trade and order records should be retrieved. - `false` (default): Returns recent records: orders for 30 min, trades for 24h. - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included. **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
+            "description": "Determines whether historical trade and order records should be retrieved.\n\n - `false` (default): Returns recent records: orders for 30 min, trades for 24h.\n - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included.\n\n **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
             "in": "query",
             "required": false,
             "schema": {
@@ -13071,7 +13071,7 @@
           },
           {
             "name": "historical",
-            "description": "Determines whether historical trade and order records should be retrieved. - `false` (default): Returns recent records: orders for 30 min, trades for 24h. - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included. **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
+            "description": "Determines whether historical trade and order records should be retrieved.\n\n - `false` (default): Returns recent records: orders for 30 min, trades for 24h.\n - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included.\n\n **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
             "in": "query",
             "required": false,
             "schema": {
@@ -13260,7 +13260,7 @@
           },
           {
             "name": "historical",
-            "description": "Determines whether historical trade and order records should be retrieved. - `false` (default): Returns recent records: orders for 30 min, trades for 24h. - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included. **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
+            "description": "Determines whether historical trade and order records should be retrieved.\n\n - `false` (default): Returns recent records: orders for 30 min, trades for 24h.\n - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included.\n\n **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
             "in": "query",
             "required": false,
             "schema": {
@@ -13443,7 +13443,7 @@
           },
           {
             "name": "historical",
-            "description": "Determines whether historical trade and order records should be retrieved. - `false` (default): Returns recent records: orders for 30 min, trades for 24h. - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included. **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
+            "description": "Determines whether historical trade and order records should be retrieved.\n\n - `false` (default): Returns recent records: orders for 30 min, trades for 24h.\n - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included.\n\n **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
             "in": "query",
             "required": false,
             "schema": {
@@ -13578,7 +13578,7 @@
           },
           {
             "name": "historical",
-            "description": "Determines whether historical trade and order records should be retrieved. - `false` (default): Returns recent records: orders for 30 min, trades for 24h. - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included. **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
+            "description": "Determines whether historical trade and order records should be retrieved.\n\n - `false` (default): Returns recent records: orders for 30 min, trades for 24h.\n - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included.\n\n **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
             "in": "query",
             "required": false,
             "schema": {
@@ -14468,7 +14468,7 @@
     },
     "/private/buy": {
       "get": {
-        "description": "Places a buy order for an instrument. **📖 Related Support Article:** [Order Management Best Practices](https://support.deribit.com/hc/en-us/articles/29514039279773-Order-Management-Best-Practices)",
+        "description": "Places a buy order for an instrument.\n\n**📖 Related Support Article:** [Order Management Best Practices](https://support.deribit.com/hc/en-us/articles/29514039279773-Order-Management-Best-Practices)",
         "tags": [
           "Trading",
           "Matching Engine",
@@ -14532,7 +14532,7 @@
           },
           {
             "name": "price",
-            "description": "The order price in base currency (Only for limit and stop_limit orders) When adding an order with advanced=usd, the field price should be the option price value in USD. When adding an order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%",
+            "description": "The order price in base currency (Only for limit and stop_limit orders)\n\nWhen adding an order with advanced=usd, the field price should be the option price value in USD.\n\nWhen adding an order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%",
             "in": "query",
             "schema": {
               "type": "number"
@@ -14541,7 +14541,7 @@
           },
           {
             "name": "time_in_force",
-            "description": "Specifies how long the order remains in effect. Default `\"good_til_cancelled\"` - `\"good_til_cancelled\"` - unfilled order remains in order book until cancelled - `\"good_til_day\"` - unfilled order remains in order book till the end of the trading session - `\"fill_or_kill\"` - execute a transaction immediately and completely or not at all - `\"immediate_or_cancel\"` - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled",
+            "description": "Specifies how long the order remains in effect. Default `\"good_til_cancelled\"`\n\n - `\"good_til_cancelled\"` - unfilled order remains in order book until cancelled\n - `\"good_til_day\"` - unfilled order remains in order book till the end of the trading session\n - `\"fill_or_kill\"` - execute a transaction immediately and completely or not at all\n - `\"immediate_or_cancel\"` - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled",
             "in": "query",
             "schema": {
               "type": "string",
@@ -14567,7 +14567,7 @@
           },
           {
             "name": "post_only",
-            "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below the spread. Only valid in combination with time_in_force=`\"good_til_cancelled\"`",
+            "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below the spread.\n\nOnly valid in combination with time_in_force=`\"good_til_cancelled\"`",
             "in": "query",
             "schema": {
               "type": "boolean",
@@ -14577,7 +14577,7 @@
           },
           {
             "name": "reject_post_only",
-            "description": "If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected. Only valid in combination with `\"post_only\"` set to true",
+            "description": "If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected.\n\nOnly valid in combination with `\"post_only\"` set to true",
             "in": "query",
             "schema": {
               "type": "boolean",
@@ -14652,7 +14652,7 @@
           },
           {
             "name": "linked_order_type",
-            "description": "The type of the linked order. - `\"one_triggers_other\"` - Execution of primary order triggers the placement of one or more secondary orders. - `\"one_cancels_other\"` - The execution of one order in a pair automatically cancels the other, typically used to set a stop-loss and take-profit simultaneously. - `\"one_triggers_one_cancels_other\"` - The execution of a primary order triggers two secondary orders (a stop-loss and take-profit pair), where the execution of one secondary order cancels the other.",
+            "description": "The type of the linked order.\n\n - `\"one_triggers_other\"` - Execution of primary order triggers the placement of one or more secondary orders.\n - `\"one_cancels_other\"` - The execution of one order in a pair automatically cancels the other, typically used to set a stop-loss and take-profit simultaneously.\n - `\"one_triggers_one_cancels_other\"` - The execution of a primary order triggers two secondary orders (a stop-loss and take-profit pair), where the execution of one secondary order cancels the other.",
             "in": "query",
             "schema": {
               "type": "string",
@@ -14666,7 +14666,7 @@
           },
           {
             "name": "trigger_fill_condition",
-            "description": "The fill condition of the linked order (Only for linked order types), default: `first_hit`. - `\"first_hit\"` - any execution of the primary order will fully cancel/place all secondary orders. - `\"complete_fill\"` - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders. - `\"incremental\"` - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.",
+            "description": "The fill condition of the linked order (Only for linked order types), default: `first_hit`.\n\n - `\"first_hit\"` - any execution of the primary order will fully cancel/place all secondary orders.\n - `\"complete_fill\"` - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders.\n - `\"incremental\"` - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.",
             "in": "query",
             "schema": {
               "type": "string",
@@ -14791,7 +14791,7 @@
     },
     "/private/sell": {
       "get": {
-        "description": "Places a sell order for an instrument. **📖 Related Support Article:** [Order Management Best Practices](https://support.deribit.com/hc/en-us/articles/29514039279773-Order-Management-Best-Practices)",
+        "description": "Places a sell order for an instrument.\n\n**📖 Related Support Article:** [Order Management Best Practices](https://support.deribit.com/hc/en-us/articles/29514039279773-Order-Management-Best-Practices)",
         "tags": [
           "Trading",
           "Matching Engine",
@@ -14855,7 +14855,7 @@
           },
           {
             "name": "price",
-            "description": "The order price in base currency (Only for limit and stop_limit orders) When adding an order with advanced=usd, the field price should be the option price value in USD. When adding an order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%",
+            "description": "The order price in base currency (Only for limit and stop_limit orders)\n\nWhen adding an order with advanced=usd, the field price should be the option price value in USD.\n\nWhen adding an order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%",
             "in": "query",
             "schema": {
               "type": "number"
@@ -14864,7 +14864,7 @@
           },
           {
             "name": "time_in_force",
-            "description": "Specifies how long the order remains in effect. Default `\"good_til_cancelled\"` - `\"good_til_cancelled\"` - unfilled order remains in order book until cancelled - `\"good_til_day\"` - unfilled order remains in order book till the end of the trading session - `\"fill_or_kill\"` - execute a transaction immediately and completely or not at all - `\"immediate_or_cancel\"` - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled",
+            "description": "Specifies how long the order remains in effect. Default `\"good_til_cancelled\"`\n\n - `\"good_til_cancelled\"` - unfilled order remains in order book until cancelled\n - `\"good_til_day\"` - unfilled order remains in order book till the end of the trading session\n - `\"fill_or_kill\"` - execute a transaction immediately and completely or not at all\n - `\"immediate_or_cancel\"` - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled",
             "in": "query",
             "schema": {
               "type": "string",
@@ -14890,7 +14890,7 @@
           },
           {
             "name": "post_only",
-            "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just above the spread. Only valid in combination with time_in_force=`\"good_til_cancelled\"`",
+            "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just above the spread.\n\nOnly valid in combination with time_in_force=`\"good_til_cancelled\"`",
             "in": "query",
             "schema": {
               "type": "boolean",
@@ -14900,7 +14900,7 @@
           },
           {
             "name": "reject_post_only",
-            "description": "If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected. Only valid in combination with `\"post_only\"` set to true",
+            "description": "If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected.\n\nOnly valid in combination with `\"post_only\"` set to true",
             "in": "query",
             "schema": {
               "type": "boolean",
@@ -14975,7 +14975,7 @@
           },
           {
             "name": "linked_order_type",
-            "description": "The type of the linked order. - `\"one_triggers_other\"` - Execution of primary order triggers the placement of one or more secondary orders. - `\"one_cancels_other\"` - The execution of one order in a pair automatically cancels the other, typically used to set a stop-loss and take-profit simultaneously. - `\"one_triggers_one_cancels_other\"` - The execution of a primary order triggers two secondary orders (a stop-loss and take-profit pair), where the execution of one secondary order cancels the other.",
+            "description": "The type of the linked order.\n\n - `\"one_triggers_other\"` - Execution of primary order triggers the placement of one or more secondary orders.\n - `\"one_cancels_other\"` - The execution of one order in a pair automatically cancels the other, typically used to set a stop-loss and take-profit simultaneously.\n - `\"one_triggers_one_cancels_other\"` - The execution of a primary order triggers two secondary orders (a stop-loss and take-profit pair), where the execution of one secondary order cancels the other.",
             "in": "query",
             "schema": {
               "type": "string",
@@ -14989,7 +14989,7 @@
           },
           {
             "name": "trigger_fill_condition",
-            "description": "The fill condition of the linked order (Only for linked order types), default: `first_hit`. - `\"first_hit\"` - any execution of the primary order will fully cancel/place all secondary orders. - `\"complete_fill\"` - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders. - `\"incremental\"` - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.",
+            "description": "The fill condition of the linked order (Only for linked order types), default: `first_hit`.\n\n - `\"first_hit\"` - any execution of the primary order will fully cancel/place all secondary orders.\n - `\"complete_fill\"` - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders.\n - `\"incremental\"` - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.",
             "in": "query",
             "schema": {
               "type": "string",
@@ -15122,7 +15122,7 @@
           },
           {
             "name": "price",
-            "description": "The order price in base currency. When editing an option order with advanced=usd, the field price should be the option price value in USD. When editing an option order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%",
+            "description": "The order price in base currency.\n\nWhen editing an option order with advanced=usd, the field price should be the option price value in USD.\n\nWhen editing an option order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%",
             "in": "query",
             "schema": {
               "type": "number"
@@ -15131,7 +15131,7 @@
           },
           {
             "name": "post_only",
-            "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below or above the spread (accordingly to the original order type). Only valid in combination with time_in_force=`\"good_til_cancelled\"`",
+            "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below or above the spread (accordingly to the original order type).\n\nOnly valid in combination with time_in_force=`\"good_til_cancelled\"`",
             "in": "query",
             "schema": {
               "type": "boolean",
@@ -15151,7 +15151,7 @@
           },
           {
             "name": "reject_post_only",
-            "description": "If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected. Only valid in combination with `\"post_only\"` set to true",
+            "description": "If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected.\n\nOnly valid in combination with `\"post_only\"` set to true",
             "in": "query",
             "schema": {
               "type": "boolean",
@@ -15260,7 +15260,7 @@
             }
           }
         },
-        "description": "Change price, amount and/or other properties of an order. **📖 Related Support Article:** [Order Management Best Practices](https://support.deribit.com/hc/en-us/articles/29514039279773-Order-Management-Best-Practices)",
+        "description": "Change price, amount and/or other properties of an order.\n\n**📖 Related Support Article:** [Order Management Best Practices](https://support.deribit.com/hc/en-us/articles/29514039279773-Order-Management-Best-Practices)",
         "tags": [
           "Trading",
           "Matching Engine",
@@ -15339,7 +15339,7 @@
           },
           {
             "name": "price",
-            "description": "The order price in base currency. When editing an option order with advanced=usd, the field price should be the option price value in USD. When editing an option order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%",
+            "description": "The order price in base currency.\n\nWhen editing an option order with advanced=usd, the field price should be the option price value in USD.\n\nWhen editing an option order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%",
             "in": "query",
             "schema": {
               "type": "number"
@@ -15348,7 +15348,7 @@
           },
           {
             "name": "post_only",
-            "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below or above the spread (accordingly to the original order type). Only valid in combination with time_in_force=`\"good_til_cancelled\"`",
+            "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below or above the spread (accordingly to the original order type).\n\nOnly valid in combination with time_in_force=`\"good_til_cancelled\"`",
             "in": "query",
             "schema": {
               "type": "boolean",
@@ -15368,7 +15368,7 @@
           },
           {
             "name": "reject_post_only",
-            "description": "If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected. Only valid in combination with `\"post_only\"` set to true",
+            "description": "If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected.\n\nOnly valid in combination with `\"post_only\"` set to true",
             "in": "query",
             "schema": {
               "type": "boolean",
@@ -15746,7 +15746,7 @@
           },
           {
             "name": "mmp_group",
-            "description": "Specifies the MMP group for which the configuration is being retrieved. MMP groups are used for Mass Quotes. If MMP group is not provided, the method returns the configuration for the MMP settings for regular orders. The `index_name` must be specified before using this parameter. **📖 Related Support Article:** [Mass Quotes Specifications](https://support.deribit.com/hc/en-us/articles/26302715576989-Mass-Quotes-Specifications)",
+            "description": "Specifies the MMP group for which the configuration is being retrieved. MMP groups are used for Mass Quotes. If MMP group is not provided, the method returns the configuration for the MMP settings for regular orders. The `index_name` must be specified before using this parameter.\n\n **📖 Related Support Article:** [Mass Quotes Specifications](https://support.deribit.com/hc/en-us/articles/26302715576989-Mass-Quotes-Specifications)",
             "required": false,
             "in": "query",
             "schema": {
@@ -15845,7 +15845,7 @@
           },
           {
             "name": "mmp_group",
-            "description": "Specifies the MMP group for which the status is being retrieved. The `index_name` must be specified before using this parameter. **📖 Related Support Article:** [Mass Quotes Specifications](https://support.deribit.com/hc/en-us/articles/26302715576989-Mass-Quotes-Specifications)",
+            "description": "Specifies the MMP group for which the status is being retrieved. The `index_name` must be specified before using this parameter.\n\n **📖 Related Support Article:** [Mass Quotes Specifications](https://support.deribit.com/hc/en-us/articles/26302715576989-Mass-Quotes-Specifications)",
             "required": false,
             "in": "query",
             "schema": {
@@ -15921,7 +15921,7 @@
     },
     "/private/set_mmp_config": {
       "get": {
-        "description": "Set config for MMP - triggers MMP reset **Max Quote Quantity (MQQ):** The `max_quote_quantity` parameter determines the total combined size of open MMP orders per side, per order book, that cannot be exceeded (measured in base currency). **Important Notes:** - **MQQ limits cumulative size, not order count:** For example, with MQQ of 3 BTC, you can place multiple orders (three orders of 1 BTC each, or one order of 2.5 BTC plus one of 0.5 BTC) as long as the total size per side per instrument does not exceed 3 BTC - **Base currency:** MQQ is specified and enforced in base currency - **Inverse futures:** Size is calculated as Amount / Price to convert to base currency - **Inverse future spreads:** Size is calculated as Amount / IndexPrice - **SM accounts:** MMP orders and quotes on options and option_combos are not supported for SM accounts - **Rejections:** Individual quotes and MMP orders above `max_quote_quantity` are rejected - **Precision:** All MMP configuration values support maximum 4 decimal places - **Current margin calculation:** Currently, `quantity_limit` is used for margin calculation (will switch to `max_quote_quantity` in December 2025) **Coming in December 2025 Release:** - **Margin calculation:** Will switch completely from `quantity_limit` to `max_quote_quantity` (3% of MQQ) - **Inverse future spreads:** Size calculation will switch from IndexPrice to minimum mark price of legs - **Quote rejection:** If one side of a quote is rejected, the other side will also be rejected **📖 Related Support Article:** [Market Maker Protection API Configuration](https://support.deribit.com/hc/en-us/articles/27308287203357-Market-Maker-Protection-API-Configuration)",
+        "description": "Set config for MMP - triggers MMP reset\n\n**Max Quote Quantity (MQQ):** The `max_quote_quantity` parameter determines the total combined size of open MMP orders per side, per order book, that cannot be exceeded (measured in base currency).\n\n**Important Notes:**\n\n- **MQQ limits cumulative size, not order count:** For example, with MQQ of 3 BTC, you can place multiple orders (three orders of 1 BTC each, or one order of 2.5 BTC plus one of 0.5 BTC) as long as the total size per side per instrument does not exceed 3 BTC\n- **Base currency:** MQQ is specified and enforced in base currency\n- **Inverse futures:** Size is calculated as Amount / Price to convert to base currency\n- **Inverse future spreads:** Size is calculated as Amount / IndexPrice\n- **SM accounts:** MMP orders and quotes on options and option_combos are not supported for SM accounts\n- **Rejections:** Individual quotes and MMP orders above `max_quote_quantity` are rejected\n- **Precision:** All MMP configuration values support maximum 4 decimal places\n- **Current margin calculation:** Currently, `quantity_limit` is used for margin calculation (will switch to `max_quote_quantity` in December 2025)\n\n**Coming in December 2025 Release:**\n\n- **Margin calculation:** Will switch completely from `quantity_limit` to `max_quote_quantity` (3% of MQQ)\n- **Inverse future spreads:** Size calculation will switch from IndexPrice to minimum mark price of legs\n- **Quote rejection:** If one side of a quote is rejected, the other side will also be rejected\n\n**📖 Related Support Article:** [Market Maker Protection API Configuration](https://support.deribit.com/hc/en-us/articles/27308287203357-Market-Maker-Protection-API-Configuration)",
         "tags": [
           "Trading",
           "Matching Engine",
@@ -15959,7 +15959,7 @@
           },
           {
             "name": "mmp_group",
-            "description": "Designates the MMP group for which the configuration is being set. If the specified group is already associated with a different `index_name`, an error is returned. This parameter enables distinct configurations for each MMP group, linked to particular `index_name`. Maximum 64 characters. Case sensitive. Cannot be empty string. **📖 Related Support Article:** [Mass Quotes Specifications](https://support.deribit.com/hc/en-us/articles/26302715576989-Mass-Quotes-Specifications)",
+            "description": "Designates the MMP group for which the configuration is being set. If the specified group is already associated with a different `index_name`, an error is returned. This parameter enables distinct configurations for each MMP group, linked to particular `index_name`. Maximum 64 characters. Case sensitive. Cannot be empty string.\n\n **📖 Related Support Article:** [Mass Quotes Specifications](https://support.deribit.com/hc/en-us/articles/26302715576989-Mass-Quotes-Specifications)",
             "required": false,
             "in": "query",
             "schema": {
@@ -15997,7 +15997,7 @@
           },
           {
             "name": "max_quote_quantity",
-            "description": "Maximum Quote Quantity (MQQ) determines the total combined size of open MMP orders per side, per order book, that cannot be exceeded. **Key Points:** - MQQ is specified in **base currency** and limits cumulative order **size**, not the number of orders - Example: With MQQ of 3 BTC, you can place three orders of 1 BTC each, or one order of 2.5 BTC plus one of 0.5 BTC, etc. - For **inverse futures**: size is calculated as `Amount / Price` - For **inverse future spreads**: size is calculated as `Amount / IndexPrice` - Individual MMP orders and quotes above Max Quote Quantity are **rejected** - Positive value with **maximum 4 decimal places** **Note:** Starting December 2025 release: 1. MQQ will also be used for **Initial Margin calculation** (3% of MQQ will be taken as Initial Margin for MMP orders and quotes; currently `quantity_limit` is used for margin) 2. For inverse future spreads, size calculation will switch from `IndexPrice` to **minimum mark price of legs**",
+            "description": "Maximum Quote Quantity (MQQ) determines the total combined size of open MMP orders per side, per order book, that cannot be exceeded.\n\n**Key Points:**\n\n- MQQ is specified in **base currency** and limits cumulative order **size**, not the number of orders\n- Example: With MQQ of 3 BTC, you can place three orders of 1 BTC each, or one order of 2.5 BTC plus one of 0.5 BTC, etc.\n- For **inverse futures**: size is calculated as `Amount / Price`\n- For **inverse future spreads**: size is calculated as `Amount / IndexPrice`\n- Individual MMP orders and quotes above Max Quote Quantity are **rejected**\n- Positive value with **maximum 4 decimal places**\n\n**Note:** Starting December 2025 release:\n\n1. MQQ will also be used for **Initial Margin calculation** (3% of MQQ will be taken as Initial Margin for MMP orders and quotes; currently `quantity_limit` is used for margin)\n2. For inverse future spreads, size calculation will switch from `IndexPrice` to **minimum mark price of legs**",
             "required": false,
             "in": "query",
             "schema": {
@@ -16090,7 +16090,7 @@
     },
     "/private/reset_mmp": {
       "get": {
-        "description": "Reset Market Maker Protection (MMP) limits for the specified currency pair or group. **📖 Related Support Article:** [Market Maker Protection API Configuration](https://support.deribit.com/hc/en-us/articles/27308287203357-Market-Maker-Protection-API-Configuration)",
+        "description": "Reset Market Maker Protection (MMP) limits for the specified currency pair or group.\n\n**📖 Related Support Article:** [Market Maker Protection API Configuration](https://support.deribit.com/hc/en-us/articles/27308287203357-Market-Maker-Protection-API-Configuration)",
         "tags": [
           "Trading",
           "Matching Engine",
@@ -16099,7 +16099,7 @@
         "parameters": [
           {
             "name": "index_name",
-            "description": "Currency pair for which to reset MMP limits. **For regular MMP (`block_rfq = false`):** Must be a specific currency pair (e.g., \"btc_usd\", \"eth_usd\"). The value `\"all\"` is not allowed. **For Block RFQ MMP (`block_rfq = true`):** Can be either a specific currency pair or `\"all\"` to reset MMP limits across all currency pairs.",
+            "description": "Currency pair for which to reset MMP limits.\n **For regular MMP (`block_rfq = false`):** Must be a specific currency pair (e.g., \"btc_usd\", \"eth_usd\"). The value `\"all\"` is not allowed.\n **For Block RFQ MMP (`block_rfq = true`):** Can be either a specific currency pair or `\"all\"` to reset MMP limits across all currency pairs.",
             "required": true,
             "in": "query",
             "schema": {
@@ -16109,7 +16109,7 @@
           },
           {
             "name": "mmp_group",
-            "description": "Specifies the MMP group for which limits are being reset. If this parameter is omitted, the method resets the traditional (no group) MMP limits. **📖 Related Support Article:** [Mass Quotes Specifications](https://support.deribit.com/hc/en-us/articles/26302715576989-Mass-Quotes-Specifications)",
+            "description": "Specifies the MMP group for which limits are being reset. If this parameter is omitted, the method resets the traditional (no group) MMP limits.\n\n **📖 Related Support Article:** [Mass Quotes Specifications](https://support.deribit.com/hc/en-us/articles/26302715576989-Mass-Quotes-Specifications)",
             "required": false,
             "in": "query",
             "schema": {
@@ -16342,7 +16342,7 @@
             }
           }
         },
-        "description": "Place buy and/or sell orders on one or more instruments. Cancel-on-Disconnect must be enabled (see [private/enable_cancel_on_disconnect](https://docs.deribit.com/#private-enable_cancel_on_disconnect)), otherwise the request will return an error. This endpoint can only be used after approval from the administrators. **📖 Related Support Article:** [Mass Quotes Specifications](https://support.deribit.com/hc/en-us/articles/26302715576989-Mass-Quotes-Specifications)",
+        "description": "Place buy and/or sell orders on one or more instruments. Cancel-on-Disconnect must be enabled (see [private/enable_cancel_on_disconnect](https://docs.deribit.com/#private-enable_cancel_on_disconnect)), otherwise the request will return an error. This endpoint can only be used after approval from the administrators.\n\n**📖 Related Support Article:** [Mass Quotes Specifications](https://support.deribit.com/hc/en-us/articles/26302715576989-Mass-Quotes-Specifications)",
         "tags": [
           "Trading",
           "Matching Engine",
@@ -16484,7 +16484,7 @@
             }
           }
         },
-        "description": "Moves positions from source subaccount to target subaccount **Note:** In rare cases, the request may return an `internal_server_error`. This does not necessarily mean the operation failed entirely. Part or all of the position transfer might have still been processed successfully.",
+        "description": "Moves positions from source subaccount to target subaccount\n\n**Note:**\nIn rare cases, the request may return an `internal_server_error`. This does not necessarily mean the operation failed entirely. Part or all of the position transfer might have still been processed successfully.",
         "tags": [
           "Trading",
           "Matching Engine",
@@ -16598,7 +16598,7 @@
             }
           }
         },
-        "description": "Retrieve the latest users deposits **📖 Related Support Article:** [Deposits](https://support.deribit.com/hc/en-us/articles/25944616988957-Deposits)",
+        "description": "Retrieve the latest users deposits\n\n**📖 Related Support Article:** [Deposits](https://support.deribit.com/hc/en-us/articles/25944616988957-Deposits)",
         "tags": [
           "Wallet",
           "Private"
@@ -16856,7 +16856,7 @@
             }
           }
         },
-        "description": "Creates a new withdrawal request **📖 Related Support Article:** [Withdrawals](https://support.deribit.com/hc/en-us/articles/25944635205021-Withdrawals)",
+        "description": "Creates a new withdrawal request\n\n**📖 Related Support Article:** [Withdrawals](https://support.deribit.com/hc/en-us/articles/25944635205021-Withdrawals)",
         "tags": [
           "Wallet",
           "Private"
@@ -18775,7 +18775,7 @@
     },
     "/private/get_reward_eligibility": {
       "get": {
-        "description": "Returns reward eligibility status and APR data for all supported currencies. **📖 Related Support Article:** [Yield reward-bearing coins](https://support.deribit.com/hc/en-us/articles/26525792475677-Yield-reward-bearing-coins)",
+        "description": "Returns reward eligibility status and APR data for all supported currencies.\n\n**📖 Related Support Article:** [Yield reward-bearing coins](https://support.deribit.com/hc/en-us/articles/26525792475677-Yield-reward-bearing-coins)",
         "tags": [
           "Wallet",
           "Private"
@@ -19777,7 +19777,7 @@
       },
       "edit_order_price": {
         "name": "price",
-        "description": "The order price in base currency. When editing an option order with advanced=usd, the field price should be the option price value in USD. When editing an option order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%",
+        "description": "The order price in base currency.\n\nWhen editing an option order with advanced=usd, the field price should be the option price value in USD.\n\nWhen editing an option order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%",
         "in": "query",
         "schema": {
           "type": "number"
@@ -19786,7 +19786,7 @@
       },
       "order_price": {
         "name": "price",
-        "description": "The order price in base currency (Only for limit and stop_limit orders) When adding an order with advanced=usd, the field price should be the option price value in USD. When adding an order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%",
+        "description": "The order price in base currency (Only for limit and stop_limit orders)\n\nWhen adding an order with advanced=usd, the field price should be the option price value in USD.\n\nWhen adding an order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%",
         "in": "query",
         "schema": {
           "type": "number"
@@ -19795,7 +19795,7 @@
       },
       "linked_order_type": {
         "name": "linked_order_type",
-        "description": "The type of the linked order. - `\"one_triggers_other\"` - Execution of primary order triggers the placement of one or more secondary orders. - `\"one_cancels_other\"` - The execution of one order in a pair automatically cancels the other, typically used to set a stop-loss and take-profit simultaneously. - `\"one_triggers_one_cancels_other\"` - The execution of a primary order triggers two secondary orders (a stop-loss and take-profit pair), where the execution of one secondary order cancels the other.",
+        "description": "The type of the linked order.\n\n - `\"one_triggers_other\"` - Execution of primary order triggers the placement of one or more secondary orders.\n - `\"one_cancels_other\"` - The execution of one order in a pair automatically cancels the other, typically used to set a stop-loss and take-profit simultaneously.\n - `\"one_triggers_one_cancels_other\"` - The execution of a primary order triggers two secondary orders (a stop-loss and take-profit pair), where the execution of one secondary order cancels the other.",
         "in": "query",
         "schema": {
           "type": "string",
@@ -19823,7 +19823,7 @@
       },
       "trigger_fill_condition": {
         "name": "trigger_fill_condition",
-        "description": "The fill condition of the linked order (Only for linked order types), default: `first_hit`. - `\"first_hit\"` - any execution of the primary order will fully cancel/place all secondary orders. - `\"complete_fill\"` - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders. - `\"incremental\"` - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.",
+        "description": "The fill condition of the linked order (Only for linked order types), default: `first_hit`.\n\n - `\"first_hit\"` - any execution of the primary order will fully cancel/place all secondary orders.\n - `\"complete_fill\"` - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders.\n - `\"incremental\"` - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.",
         "in": "query",
         "schema": {
           "type": "string",
@@ -19848,7 +19848,7 @@
       },
       "time_in_force": {
         "name": "time_in_force",
-        "description": "Specifies how long the order remains in effect. Default `\"good_til_cancelled\"` - `\"good_til_cancelled\"` - unfilled order remains in order book until cancelled - `\"good_til_day\"` - unfilled order remains in order book till the end of the trading session - `\"fill_or_kill\"` - execute a transaction immediately and completely or not at all - `\"immediate_or_cancel\"` - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled",
+        "description": "Specifies how long the order remains in effect. Default `\"good_til_cancelled\"`\n\n - `\"good_til_cancelled\"` - unfilled order remains in order book until cancelled\n - `\"good_til_day\"` - unfilled order remains in order book till the end of the trading session\n - `\"fill_or_kill\"` - execute a transaction immediately and completely or not at all\n - `\"immediate_or_cancel\"` - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled",
         "in": "query",
         "schema": {
           "type": "string",
@@ -19898,7 +19898,7 @@
       },
       "post_only_buy": {
         "name": "post_only",
-        "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below the spread. Only valid in combination with time_in_force=`\"good_til_cancelled\"`",
+        "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below the spread.\n\nOnly valid in combination with time_in_force=`\"good_til_cancelled\"`",
         "in": "query",
         "schema": {
           "type": "boolean",
@@ -19908,7 +19908,7 @@
       },
       "post_only_sell": {
         "name": "post_only",
-        "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just above the spread. Only valid in combination with time_in_force=`\"good_til_cancelled\"`",
+        "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just above the spread.\n\nOnly valid in combination with time_in_force=`\"good_til_cancelled\"`",
         "in": "query",
         "schema": {
           "type": "boolean",
@@ -19918,7 +19918,7 @@
       },
       "post_only_edit": {
         "name": "post_only",
-        "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below or above the spread (accordingly to the original order type). Only valid in combination with time_in_force=`\"good_til_cancelled\"`",
+        "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below or above the spread (accordingly to the original order type).\n\nOnly valid in combination with time_in_force=`\"good_til_cancelled\"`",
         "in": "query",
         "schema": {
           "type": "boolean",
@@ -19928,7 +19928,7 @@
       },
       "post_only_secondary": {
         "name": "post_only",
-        "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below or above the spread (according to the direction of the order). Only valid in combination with time_in_force=`\"good_til_cancelled\"`",
+        "description": "If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below or above the spread (according to the direction of the order).\n\nOnly valid in combination with time_in_force=`\"good_til_cancelled\"`",
         "in": "query",
         "schema": {
           "type": "boolean",
@@ -19938,7 +19938,7 @@
       },
       "reject_post_only": {
         "name": "reject_post_only",
-        "description": "If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected. Only valid in combination with `\"post_only\"` set to true",
+        "description": "If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected.\n\nOnly valid in combination with `\"post_only\"` set to true",
         "in": "query",
         "schema": {
           "type": "boolean",
@@ -20559,7 +20559,7 @@
         "name": "enabled_features",
         "in": "query",
         "required": false,
-        "description": "List of enabled advanced on-key features. Available options: - `restricted_block_trades`: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key - `block_trade_approval`: Block trades created using this API key require additional user approval. Methods that use `block_rfq` scope are not affected by Block Trade approval feature",
+        "description": "List of enabled advanced on-key features. Available options:\n\n - `restricted_block_trades`: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key\n - `block_trade_approval`: Block trades created using this API key require additional user approval. Methods that use `block_rfq` scope are not affected by Block Trade approval feature",
         "schema": {
           "type": "array",
           "items": {
@@ -20596,10 +20596,10 @@
         "name": "public_key",
         "in": "query",
         "required": false,
-        "description": "ED25519 or RSA PEM Encoded public key that should be used to create asymmetric API Key for signing requests/authentication requests with user's private key. **📖 Related Support Article:** [Asymmetric API keys](https://support.deribit.com/hc/en-us/articles/25944616699165-Asymmetric-API-keys)",
+        "description": "ED25519 or RSA PEM Encoded public key that should be used to create asymmetric API Key for signing requests/authentication requests with user's private key.\n **📖 Related Support Article:** [Asymmetric API keys](https://support.deribit.com/hc/en-us/articles/25944616699165-Asymmetric-API-keys)",
         "schema": {
           "type": "string",
-          "example": "-----BEGIN PUBLIC KEY----- MCowBQYDK2VwAyEAM7FWhKquNqLmTOV4hfYT5r3AjrYiORTT6Tn5HIfFNV8= -----END PUBLIC KEY-----"
+          "example": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAM7FWhKquNqLmTOV4hfYT5r3AjrYiORTT6Tn5HIfFNV8=\n-----END PUBLIC KEY-----"
         }
       },
       "optional_query": {
@@ -20642,7 +20642,7 @@
       },
       "cod_scope": {
         "name": "scope",
-        "description": "Specifies if Cancel On Disconnect change should be applied/checked for the current connection or the account (default - `connection`) **NOTICE:** Scope `connection` can be used only when working via Websocket.",
+        "description": "Specifies if Cancel On Disconnect change should be applied/checked for the current connection or the account (default - `connection`)\n\n **NOTICE:** Scope `connection` can be used only when working via Websocket.",
         "in": "query",
         "required": false,
         "schema": {
@@ -21066,7 +21066,7 @@
         "name": "execution_instruction",
         "required": false,
         "in": "query",
-        "description": "Execution instruction of the quote. Default - `any_part_of` - `\"all_or_none (AON)\"` - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, 'all_or_none' quotes have priority over 'any_part_of' quotes at the same price level. - `\"any_part_of (APO)\"` - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount.",
+        "description": "Execution instruction of the quote. Default - `any_part_of`\n\n - `\"all_or_none (AON)\"` - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, 'all_or_none' quotes have priority over 'any_part_of' quotes at the same price level.\n - `\"any_part_of (APO)\"` - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount.",
         "schema": {
           "type": "string",
           "enum": [
@@ -21286,7 +21286,7 @@
       },
       "historical": {
         "name": "historical",
-        "description": "Determines whether historical trade and order records should be retrieved. - `false` (default): Returns recent records: orders for 30 min, trades for 24h. - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included. **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
+        "description": "Determines whether historical trade and order records should be retrieved.\n\n - `false` (default): Returns recent records: orders for 30 min, trades for 24h.\n - `true`: Fetches historical records, available after a short delay due to indexing. Recent data is not included.\n\n **📖 Related Support Article:** [Accessing historical trades and orders using API](https://support.deribit.com/hc/en-us/articles/25973087226909-Accessing-historical-trades-and-orders-using-API)",
         "in": "query",
         "required": false,
         "schema": {
@@ -26274,7 +26274,7 @@
                   "partially_eligible",
                   "non_eligible"
                 ],
-                "description": "- `eligible`: User can get reward for specific currency for all its equity - `partially_eligible`: User can get reward for specific currency, but custody balance is excluded - `non_eligible`: User can not get reward for specific currency",
+                "description": "- `eligible`: User can get reward for specific currency for all its equity\n - `partially_eligible`: User can get reward for specific currency, but custody balance is excluded\n - `non_eligible`: User can not get reward for specific currency",
                 "type": "string"
               },
               "apr_sma7": {
@@ -30045,7 +30045,7 @@
         "type": "boolean"
       },
       "block_trade_signature": {
-        "description": "Signature of block trade It is valid only for 5 minutes around given timestamp",
+        "description": "Signature of block trade\nIt is valid only for 5 minutes around given timestamp",
         "example": "1565173369982.1M9tO0Q-.z9n9WyZUU5op9pEz6Jtd2CI71QxQMMsCZAexnIfK9HQRT1pKH3clxeIbY7Bqm-yMcWIoE3IfCDPW5VEdiN-6oS0YkKUyXPD500MUf3ULKhfkmH81EZs",
         "type": "string"
       },
@@ -30539,7 +30539,7 @@
         "type": "boolean"
       },
       "deposit_state": {
-        "description": "Deposit state. Allowed values: - `pending`: deposit detected on blockchain/system, compliance not yet finished - `completed`: compliance check finished successfully - `rejected`: deposit failed compliance and must be handled manually - `replaced`: deposit transaction was replaced on the blockchain and should have a new transaction hash",
+        "description": "Deposit state. Allowed values: - `pending`: deposit detected on blockchain/system, compliance not yet finished\n\n - `completed`: compliance check finished successfully\n - `rejected`: deposit failed compliance and must be handled manually\n - `replaced`: deposit transaction was replaced on the blockchain and should have a new transaction hash",
         "enum": [
           "pending",
           "completed",
@@ -30561,7 +30561,7 @@
         "type": "string"
       },
       "clearance_state": {
-        "description": "Clearance state indicating the current status of the transaction clearance process. Allowed values: - `in_progress`: clearance process is in progress - `pending_admin_decision`: transaction is under manual review by Deribit admin - `pending_user_input`: user should provide additional information regarding the transaction - `success`: clearance process completed successfully - `failed`: clearance process failed, transaction is rejected - `cancelled`: transaction is cancelled (currently used only for withdrawals, meaning the withdrawal is cancelled) - `refund_initiated`: clearance process failed, transaction refund is initiated, funds are removed from Deribit balance (valid for deposits only) - `refunded`: clearance process failed, deposit amount is refunded back to the client (valid for deposits only)",
+        "description": "Clearance state indicating the current status of the transaction clearance process. Allowed values: - `in_progress`: clearance process is in progress\n\n - `pending_admin_decision`: transaction is under manual review by Deribit admin\n - `pending_user_input`: user should provide additional information regarding the transaction\n - `success`: clearance process completed successfully\n - `failed`: clearance process failed, transaction is rejected\n - `cancelled`: transaction is cancelled (currently used only for withdrawals, meaning the withdrawal is cancelled)\n - `refund_initiated`: clearance process failed, transaction refund is initiated, funds are removed from Deribit balance (valid for deposits only)\n - `refunded`: clearance process failed, deposit amount is refunded back to the client (valid for deposits only)",
         "enum": [
           "in_progress",
           "pending_admin_decision",
@@ -30918,7 +30918,7 @@
         "type": "string"
       },
       "api_key_features": {
-        "description": "List of enabled advanced on-key features. Available options: - `restricted_block_trades`: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key - `block_trade_approval`: Block trades created using this API key require additional user approval. Methods that use `block_rfq` scope are not affected by Block Trade approval feature",
+        "description": "List of enabled advanced on-key features. Available options:\n\n - `restricted_block_trades`: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key\n - `block_trade_approval`: Block trades created using this API key require additional user approval. Methods that use `block_rfq` scope are not affected by Block Trade approval feature",
         "items": {
           "description": "Name of the feature",
           "type": "string"
@@ -31171,7 +31171,7 @@
         "type": "string"
       },
       "trigger_fill_condition": {
-        "description": "The fill condition of the linked order (Only for linked order types), default: `first_hit`. - `\"first_hit\"` - any execution of the primary order will fully cancel/place all secondary orders. - `\"complete_fill\"` - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders. - `\"incremental\"` - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.",
+        "description": "The fill condition of the linked order (Only for linked order types), default: `first_hit`.\n\n - `\"first_hit\"` - any execution of the primary order will fully cancel/place all secondary orders.\n - `\"complete_fill\"` - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders.\n - `\"incremental\"` - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.",
         "enum": [
           "first_hit",
           "complete_fill",
@@ -31661,7 +31661,7 @@
         "type": "array"
       },
       "execution_instruction": {
-        "description": "Execution instruction of the quote. Default - `any_part_of` - `\"all_or_none (AON)\"` - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, 'all_or_none' quotes have priority over 'any_part_of' quotes at the same price level. - `\"any_part_of (APO)\"` - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount.",
+        "description": "Execution instruction of the quote. Default - `any_part_of`\n\n- `\"all_or_none (AON)\"` - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, 'all_or_none' quotes have priority over 'any_part_of' quotes at the same price level.\n- `\"any_part_of (APO)\"` - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount.",
         "type": "string"
       },
       "custody_settlement": {
@@ -31710,7 +31710,7 @@
                   "type": "string"
                 },
                 "amount": {
-                  "description": "- Positive value means that since the previous settlement, the client has earned/bought the asset in the exchange and settlement direction is from exchange to the client. - Negative value means, since the previous settlement, the client has lost/sold the asset in the exchange and settlement direction is from client to deribit.",
+                  "description": "- Positive value means that since the previous settlement, the client has earned/bought the asset in the exchange and settlement direction is from exchange to the client.\n- Negative value means, since the previous settlement, the client has lost/sold the asset in the exchange and settlement direction is from client to deribit.",
                   "example": 1.3141,
                   "type": "number"
                 },
