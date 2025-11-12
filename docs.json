@@ -1,874 +1,205 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "Deribit API - Combo Books",
-    "version": "2.1.1",
-    "description": "Deribit API specification for Combo Books endpoints"
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Mint Starter Kit",
+  "colors": {
+    "primary": "#0052FF",
+    "light": "#FFFFFF",
+    "dark": "#0A0B0D"
   },
-  "servers": [
+  "customCss": [
+    "/public/style.css"
+  ],
+  "headTags": [
     {
-      "url": "http://localhost:8082/api/v2",
-      "description": "local test server"
-    },
-    {
-      "url": "https://test.deribit.com/api/v2"
+      "tag": "script",
+      "attributes": {
+        "src": "/public/replace-query-params.js",
+        "type": "text/javascript"
+      }
     }
   ],
-  "tags": [
-    {
-      "name": "Combo Books"
-    }
-  ],
-  "paths": {
-    "/public/get_combos": {
-      "get": {
-        "description": "Retrieves information about active combos",
-        "tags": [
-          "Combo Books",
-          "Public"
-        ],
-        "parameters": [
-          {
-            "name": "currency",
-            "description": "The currency symbol or `\"any\"` for all",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/currency_with_any"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/PublicGetCombosResponse",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "response": {
-                    "description": "Response example",
-                    "value": {
-                      "jsonrpc": "2.0",
-                      "id": 2,
-                      "result": [
-                        {
-                          "state_timestamp": 1650636265101,
-                          "state": "active",
-                          "legs": [
-                            {
-                              "instrument_name": "BTC-29APR22-39300-C",
-                              "amount": 1
-                            },
-                            {
-                              "instrument_name": "BTC-29APR22-39600-C",
-                              "amount": -1
-                            }
-                          ],
-                          "id": "BTC-CS-29APR22-39300_39600",
-                          "instrument_id": 28,
-                          "creation_timestamp": 1650636235000
-                        },
-                        {
-                          "state_timestamp": 1650620605150,
-                          "state": "active",
-                          "legs": [
-                            {
-                              "instrument_name": "BTC-PERPETUAL",
-                              "amount": -1
-                            },
-                            {
-                              "instrument_name": "BTC-29APR22",
-                              "amount": 1
-                            }
-                          ],
-                          "id": "BTC-FS-29APR22_PERP",
-                          "instrument_id": 27,
-                          "creation_timestamp": 1650620575000
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "description": "JSON-RPC request body",
-          "content": {
-            "application/json": {
-              "examples": {
-                "request": {
-                  "description": "JSON-RPC Request Example",
-                  "value": {
-                    "jsonrpc": "2.0",
-                    "id": 2,
-                    "method": "public/get_combos",
-                    "params": {
-                      "currency": "BTC"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "x-mint": {
-          "metadata": {
-            "title": "public/get_combos",
-            "og:title": "public/get_combos"
-          },
-          "href": "/api-reference/combo-books/public-get_combos"
-        }
-      }
-    },
-    "/public/get_combo_ids": {
-      "get": {
-        "description": "Retrieves available combos. This method can be used to get the list of all combos, or only the list of combos in the given state.",
-        "tags": [
-          "Combo Books",
-          "Public"
-        ],
-        "parameters": [
-          {
-            "name": "currency",
-            "description": "The currency symbol",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/currency"
-            }
-          },
-          {
-            "name": "state",
-            "description": "Combo state, if not provided combos of all states are considered",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/combo_state"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/PublicGetComboIdsResponse",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "response": {
-                    "description": "Response example",
-                    "value": {
-                      "jsonrpc": "2.0",
-                      "id": 1,
-                      "result": [
-                        "BTC-CS-29APR22-39300_39600",
-                        "BTC-FS-29APR22_PERP"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "description": "JSON-RPC request body",
-          "content": {
-            "application/json": {
-              "examples": {
-                "request": {
-                  "description": "JSON-RPC Request Example",
-                  "value": {
-                    "jsonrpc": "2.0",
-                    "id": 1,
-                    "method": "public/get_combo_ids",
-                    "params": {
-                      "currency": "BTC",
-                      "state": "active"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "x-mint": {
-          "metadata": {
-            "title": "public/get_combo_ids",
-            "og:title": "public/get_combo_ids"
-          },
-          "href": "/api-reference/combo-books/public-get_combo_ids"
-        }
-      }
-    },
-    "/public/get_combo_details": {
-      "get": {
-        "description": "Retrieves information about a combo",
-        "tags": [
-          "Combo Books",
-          "Public"
-        ],
-        "parameters": [
-          {
-            "name": "combo_id",
-            "description": "Combo ID",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/combo_id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/PublicGetComboDetailsResponse",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "response": {
-                    "description": "Response example",
-                    "value": {
-                      "jsonrpc": "2.0",
-                      "id": 3,
-                      "result": {
-                        "state_timestamp": 1650620605150,
-                        "state": "active",
-                        "legs": [
-                          {
-                            "instrument_name": "BTC-PERPETUAL",
-                            "amount": -1
-                          },
-                          {
-                            "instrument_name": "BTC-29APR22",
-                            "amount": 1
-                          }
-                        ],
-                        "id": "BTC-FS-29APR22_PERP",
-                        "instrument_id": 27,
-                        "creation_timestamp": 1650620575000
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "description": "JSON-RPC request body",
-          "content": {
-            "application/json": {
-              "examples": {
-                "request": {
-                  "description": "JSON-RPC Request Example",
-                  "value": {
-                    "jsonrpc": "2.0",
-                    "id": 3,
-                    "method": "public/get_combo_details",
-                    "params": {
-                      "combo_id": "BTC-FS-29APR22_PERP"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "x-mint": {
-          "metadata": {
-            "title": "public/get_combo_details",
-            "og:title": "public/get_combo_details"
-          },
-          "href": "/api-reference/combo-books/public-get_combo_details"
-        }
-      }
-    },
-    "/private/create_combo": {
-      "get": {
-        "parameters": [
-          {
-            "description": "List of trades used to create a combo",
-            "in": "query",
-            "name": "trades",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "JSON string containing array of objects"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/PrivateCreateComboResponse",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "response": {
-                    "description": "Response example",
-                    "value": {
-                      "jsonrpc": "2.0",
-                      "id": 6,
-                      "result": {
-                        "state_timestamp": 1650960943922,
-                        "state": "active",
-                        "legs": [
-                          {
-                            "instrument_name": "BTC-29APR22-37500-C",
-                            "amount": 1
-                          },
-                          {
-                            "instrument_name": "BTC-29APR22-37500-P",
-                            "amount": -1
-                          }
-                        ],
-                        "id": "BTC-REV-29APR22-37500",
-                        "instrument_id": 52,
-                        "creation_timestamp": 1650960943000
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "description": "Verifies and creates a combo book or returns an existing combo matching given trades",
-        "tags": [
-          "Combo Books",
-          "Matching Engine",
-          "Private"
-        ],
-        "requestBody": {
-          "description": "JSON-RPC request body",
-          "content": {
-            "application/json": {
-              "examples": {
-                "request": {
-                  "description": "JSON-RPC Request Example",
-                  "value": {
-                    "jsonrpc": "2.0",
-                    "id": 6,
-                    "method": "private/create_combo",
-                    "params": {
-                      "trades": [
-                        {
-                          "instrument_name": "BTC-29APR22-37500-C",
-                          "amount": "1",
-                          "direction": "buy"
-                        },
-                        {
-                          "instrument_name": "BTC-29APR22-37500-P",
-                          "amount": "1",
-                          "direction": "sell"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "x-mint": {
-          "metadata": {
-            "title": "private/create_combo",
-            "og:title": "private/create_combo"
-          },
-          "href": "/api-reference/combo-books/private-create_combo"
-        }
-      }
-    },
-    "/private/get_leg_prices": {
-      "get": {
-        "parameters": [
-          {
-            "description": "List of legs for which the prices will be calculated",
-            "in": "query",
-            "name": "legs",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "JSON string containing array of objects"
-            }
-          },
-          {
-            "name": "price",
-            "description": "Price for the whole leg structure",
-            "in": "query",
-            "schema": {
-              "type": "number"
-            },
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/PrivateGetLegPricesResponse",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "response": {
-                    "description": "Response example",
-                    "value": {
-                      "jsonrpc": "2.0",
-                      "id": 1,
-                      "result": {
-                        "legs": [
-                          {
-                            "ratio": 1,
-                            "instrument_name": "BTC-1NOV24-67000-C",
-                            "price": 0.6001,
-                            "direction": "buy"
-                          },
-                          {
-                            "ratio": 1,
-                            "instrument_name": "BTC-1NOV24-66000-C",
-                            "price": 0.0001,
-                            "direction": "sell"
-                          }
-                        ],
-                        "amount": 2
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "description": "This method returns individual leg prices for a given combo structure based on an aggregated price of the strategy and the mark prices of the individual legs. Please note that leg prices change dynamically with mark price fluctuations, and the algorithm is calibrated only for conventional option structures and future spreads. This method supports both inverse strategies and known linear structures within a single currency pair.",
-        "tags": [
-          "Combo Books",
-          "Private"
-        ],
-        "requestBody": {
-          "description": "JSON-RPC request body",
-          "content": {
-            "application/json": {
-              "examples": {
-                "request": {
-                  "description": "JSON-RPC Request Example",
-                  "value": {
-                    "jsonrpc": "2.0",
-                    "id": 1,
-                    "method": "private/get_leg_prices",
-                    "params": {
-                      "price": 0.6,
-                      "legs": [
-                        {
-                          "instrument_name": "BTC-1NOV24-67000-C",
-                          "direction": "buy",
-                          "amount": 2
-                        },
-                        {
-                          "instrument_name": "BTC-1NOV24-66000-C",
-                          "direction": "sell",
-                          "amount": 2
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "x-mint": {
-          "metadata": {
-            "title": "private/get_leg_prices",
-            "og:title": "private/get_leg_prices"
-          },
-          "href": "/api-reference/combo-books/private-get_leg_prices"
-        }
-      }
+  "api": {
+    "playground": {
+      "display": "none"
     }
   },
-  "components": {
-    "schemas": {
-      "currency": {
-        "description": "Currency, i.e `\"BTC\"`, `\"ETH\"`, `\"USDC\"`",
-        "enum": [
-          "BTC",
-          "ETH",
-          "USDC",
-          "USDT",
-          "EURR"
-        ],
-        "type": "string"
-      },
-      "combo_state": {
-        "description": "Combo state: `\"active\"`, \"`inactive`\"",
-        "enum": [
-          "active",
-          "inactive"
-        ],
-        "type": "string"
-      },
-      "currency_with_any": {
-        "description": "Currency name or `\"any\"` if don't care",
-        "enum": [
-          "BTC",
-          "ETH",
-          "USDC",
-          "USDT",
-          "EURR",
-          "any"
-        ],
-        "type": "string"
-      },
-      "combo_id": {
-        "description": "Unique combo identifier",
-        "example": "BTC-FS-31DEC21-PERP",
-        "type": "string"
-      },
-      "PrivateCreateComboResponse": {
-        "properties": {
-          "jsonrpc": {
-            "description": "The JSON-RPC version (2.0)",
-            "enum": [
-              "2.0"
-            ],
-            "type": "string"
-          },
-          "id": {
-            "description": "The id that was sent in the request",
-            "type": "integer"
-          },
-          "result": {
-            "$ref": "#/components/schemas/combo"
-          }
-        },
-        "required": [
-          "result",
-          "jsonrpc"
-        ],
-        "type": "object"
-      },
-      "PrivateGetLegPricesResponse": {
-        "properties": {
-          "jsonrpc": {
-            "description": "The JSON-RPC version (2.0)",
-            "enum": [
-              "2.0"
-            ],
-            "type": "string"
-          },
-          "id": {
-            "description": "The id that was sent in the request",
-            "type": "integer"
-          },
-          "result": {
-            "properties": {
-              "legs": {
-                "$ref": "#/components/schemas/leg_structure"
-              },
-              "amount": {
-                "description": "This value multiplied by the ratio of a leg gives trade size on that leg.",
-                "type": "number"
-              }
-            },
-            "type": "object"
-          }
-        },
-        "required": [
-          "result",
-          "jsonrpc"
-        ],
-        "type": "object"
-      },
-      "PublicGetCombosResponse": {
-        "properties": {
-          "jsonrpc": {
-            "description": "The JSON-RPC version (2.0)",
-            "enum": [
-              "2.0"
-            ],
-            "type": "string"
-          },
-          "id": {
-            "description": "The id that was sent in the request",
-            "type": "integer"
-          },
-          "result": {
-            "items": {
-              "$ref": "#/components/schemas/combo"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "result",
-          "jsonrpc"
-        ],
-        "type": "object"
-      },
-      "PublicGetComboIdsResponse": {
-        "properties": {
-          "jsonrpc": {
-            "description": "The JSON-RPC version (2.0)",
-            "enum": [
-              "2.0"
-            ],
-            "type": "string"
-          },
-          "id": {
-            "description": "The id that was sent in the request",
-            "type": "integer"
-          },
-          "result": {
-            "items": {
-              "$ref": "#/components/schemas/combo_id"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "result",
-          "jsonrpc"
-        ],
-        "type": "object"
-      },
-      "PublicGetComboDetailsResponse": {
-        "properties": {
-          "jsonrpc": {
-            "description": "The JSON-RPC version (2.0)",
-            "enum": [
-              "2.0"
-            ],
-            "type": "string"
-          },
-          "id": {
-            "description": "The id that was sent in the request",
-            "type": "integer"
-          },
-          "result": {
-            "$ref": "#/components/schemas/combo"
-          }
-        },
-        "required": [
-          "result",
-          "jsonrpc"
-        ],
-        "type": "object"
-      },
-      "combo": {
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/combo_id"
-          },
-          "instrument_id": {
-            "$ref": "#/components/schemas/instrument_id"
-          },
-          "state": {
-            "$ref": "#/components/schemas/combo_state"
-          },
-          "state_timestamp": {
-            "$ref": "#/components/schemas/timestamp"
-          },
-          "creation_timestamp": {
-            "$ref": "#/components/schemas/timestamp"
-          },
-          "legs": {
-            "items": {
-              "$ref": "#/components/schemas/combo_leg"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "leg_structure": {
-        "items": {
-          "properties": {
-            "ratio": {
-              "description": "Ratio of amount between legs",
-              "type": "integer"
-            },
-            "instrument_name": {
-              "$ref": "#/components/schemas/instrument_name"
-            },
-            "direction": {
-              "$ref": "#/components/schemas/direction"
-            },
-            "price": {
-              "description": "Price for a leg",
-              "type": "number"
-            }
-          },
-          "type": "object"
-        },
-        "type": "array"
-      },
-      "instrument_id": {
-        "description": "Instrument ID",
-        "type": "integer"
-      },
-      "direction": {
-        "description": "Direction: `buy`, or `sell`",
-        "enum": [
-          "buy",
-          "sell"
-        ],
-        "type": "string"
-      },
-      "timestamp": {
-        "example": 1536569522277,
-        "description": "The timestamp (milliseconds since the Unix epoch)",
-        "type": "integer"
-      },
-      "combo_leg": {
-        "properties": {
-          "instrument_name": {
-            "$ref": "#/components/schemas/instrument_name"
-          },
-          "amount": {
-            "$ref": "#/components/schemas/combo_leg_amount"
-          }
-        },
-        "type": "object"
-      },
-      "instrument_name": {
-        "description": "Unique instrument identifier",
-        "example": "BTC-PERPETUAL",
-        "type": "string"
-      },
-      "combo_leg_amount": {
-        "description": "Size multiplier of a leg. A negative value indicates that the trades on given leg are in opposite direction to the combo trades they originate from",
-        "example": -1,
-        "type": "integer"
-      },
-      "ErrorResponse": {
-        "type": "object",
-        "description": "Generic error response for broken references",
-        "properties": {
-          "jsonrpc": {
-            "type": "string",
-            "enum": [
-              "2.0"
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "API Overview",
+        "groups": [
+          {
+            "group": "Introduction",
+            "expanded": false,
+            "pages": [
+              "mdfx_files/welcome",
+              "mdfx_files/deribit-quickstart"
             ]
           },
-          "error": {
-            "type": "object",
-            "properties": {
-              "code": {
-                "type": "integer",
-                "description": "Error code"
-              },
-              "message": {
-                "type": "string",
-                "description": "Error message"
-              }
-            },
-            "required": [
-              "code",
-              "message"
+          {
+            "group": "Authentication",
+            "pages": [
+              "mdfx_files/api-keys",
+              "mdfx_files/oauth"
+            ]
+          },
+          {
+            "group": "JSON-RPC Protocol",
+            "pages": [
+              "mdfx_files/overview",
+              "mdfx_files/request-format",
+              "mdfx_files/response-format",
+              "mdfx_files/errors"
             ]
           }
-        },
-        "required": [
-          "jsonrpc",
-          "error"
         ]
       },
-      "OkResponse": {
-        "properties": {
-          "jsonrpc": {
-            "description": "The JSON-RPC version (2.0)",
-            "enum": [
-              "2.0"
-            ],
-            "type": "string"
+      {
+        "tab": "Methods",
+        "groups": [
+          {
+            "group": "Authentication",
+            "openapi": {
+              "source": "specifications/split/authentication_openapi.json",
+              "directory": "api-reference"
+            }
           },
-          "id": {
-            "description": "The id that was sent in the request",
-            "type": "integer"
+          {
+            "group": "Trading",
+            "openapi": {
+              "source": "specifications/split/trading_openapi.json",
+              "directory": "api-reference"
+            }
           },
-          "result": {
-            "description": "Result of method execution. `ok` in case of success",
-            "enum": [
-              "ok"
-            ],
-            "type": "string"
+          {
+            "group": "Market Data",
+            "openapi": {
+              "source": "specifications/split/market_data_openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Account Management",
+            "openapi": {
+              "source": "specifications/split/account_management_openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Wallet",
+            "openapi": {
+              "source": "specifications/split/wallet_openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Session Management",
+            "openapi": {
+              "source": "specifications/split/session_management_openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Subscription Management",
+            "openapi": {
+              "source": "specifications/split/subscription_management_openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Block RFQ",
+            "openapi": {
+              "source": "specifications/split/block_rfq_openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Block Trade",
+            "openapi": {
+              "source": "specifications/split/block_trade_openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Combo Books",
+            "openapi": {
+              "source": "specifications/split/combo_books_openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Supporting",
+            "openapi": {
+              "source": "specifications/split/supporting_openapi.json",
+              "directory": "api-reference"
+            }
           }
-        },
-        "required": [
-          "result",
-          "jsonrpc"
-        ],
-        "type": "object"
+        ]
+      },
+      {
+        "tab": "Subscription Channels",
+        "asyncapi": "specifications/deribit_asyncapi.json"
+      },
+      {
+        "tab": "FIX API",
+        "groups": [
+          {
+            "group": "FIX API Documentation",
+            "pages": [
+              "mdfx_files/fix-api"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Best Practices",
+        "groups": [
+          {
+            "group": "Connection Management",
+            "expanded": true,
+            "pages": [
+              "mdfx_files/connection-management-best-practices"
+            ]
+          }
+        ]
       }
-    },
-    "parameters": {},
-    "responses": {
-      "PrivateGetLegPricesResponse": {
-        "description": "Success response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/PrivateGetLegPricesResponse"
-            }
-          }
-        }
-      },
-      "PublicGetComboDetailsResponse": {
-        "description": "Success response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/PublicGetComboDetailsResponse"
-            }
-          }
-        }
-      },
-      "PrivateCreateComboResponse": {
-        "description": "Success response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/PrivateCreateComboResponse"
-            }
-          }
-        }
-      },
-      "PublicGetComboIdsResponse": {
-        "description": "Success response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/PublicGetComboIdsResponse"
-            }
-          }
-        }
-      },
-      "PublicGetCombosResponse": {
-        "description": "Success response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/PublicGetCombosResponse"
-            }
-          }
-        }
-      },
-      "ErrorResponse": {
-        "description": "Error response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorResponse"
-            }
-          }
-        }
-      },
-      "OkResponse": {
-        "description": "Success response",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/OkResponse"
-            }
-          }
-        }
+    ]
+  },
+  "logo": {
+    "light": "/logos/deribit_cb_logo_main_black_rgb.svg",
+    "dark": "/logos/deribit_cb_logo_main_white_rgb.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:hi@mintlify.com"
       }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://dashboard.mintlify.com"
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/mintlify",
+      "github": "https://github.com/mintlify",
+      "linkedin": "https://linkedin.com/company/mintlify"
     }
   }
 }
