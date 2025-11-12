@@ -1,0 +1,674 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Deribit API - Subscription Management",
+    "version": "2.1.1",
+    "description": "Deribit API specification for Subscription Management endpoints"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8082/api/v2",
+      "description": "local test server"
+    },
+    {
+      "url": "https://test.deribit.com/api/v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Subscription Management",
+      "description": "Subscription works as [notifications](#notifications), so users will automatically (after subscribing) receive messages from the server. Overview for each channel response format is described in [subscriptions](#subscriptions) section."
+    }
+  ],
+  "paths": {
+    "/public/subscribe": {
+      "get": {
+        "tags": [
+          "Subscription Management",
+          "Public",
+          "WebSocket Only"
+        ],
+        "description": "Subscribe to one or more channels. This is the same method as [/private/subscribe](#private_subscribe), but it can only be used for 'public' channels. **📖 Related Support Article:** [Market Data Collection Best Practices](https://support.deribit.com/hc/en-us/articles/29592500256669-Market-Data-Collection-Best-Practices)",
+        "parameters": [
+          {
+            "name": "channels",
+            "description": "A list of channels to subscribe to.",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "deribit_price_index.btc_usd"
+              },
+              "example": [
+                "deribit_price_index.btc_usd"
+              ]
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateSubscribeResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 3600,
+                      "result": [
+                        "deribit_price_index.btc_usd"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorMessageResponse"
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 3600,
+                    "method": "public/subscribe",
+                    "params": {
+                      "channels": [
+                        "deribit_price_index.btc_usd"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/subscribe",
+            "og:title": "public/subscribe"
+          },
+          "href": "/api-reference/subscription-management/public-subscribe"
+        }
+      }
+    },
+    "/public/unsubscribe": {
+      "get": {
+        "description": "Unsubscribe from one or more channels. The response contains only the channels that were successfully unsubscribed in this request. **Note:** The `result` field in the response contains only the channels that were successfully processed and unsubscribed from this specific request. It does not include all previously subscribed topics. If a channel in the request is invalid, not subscribed, or fails validation, it will not appear in the result.",
+        "tags": [
+          "Subscription Management",
+          "Public",
+          "WebSocket Only"
+        ],
+        "parameters": [
+          {
+            "name": "channels",
+            "description": "A list of channels to unsubscribe from. Only successfully unsubscribed channels will be returned in the result.",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "deribit_price_index.btc_usd"
+              },
+              "example": [
+                "deribit_price_index.btc_usd"
+              ]
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Getunsubscribe200response",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 8691,
+                      "result": [
+                        "deribit_price_index.btc_usd"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorMessageResponse"
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 8691,
+                    "method": "public/unsubscribe",
+                    "params": {
+                      "channels": [
+                        "deribit_price_index.btc_usd"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/unsubscribe",
+            "og:title": "public/unsubscribe"
+          },
+          "href": "/api-reference/subscription-management/public-unsubscribe"
+        }
+      }
+    },
+    "/public/unsubscribe_all": {
+      "get": {
+        "description": "Unsubscribe from all the channels subscribed so far.",
+        "tags": [
+          "Subscription Management",
+          "WebSocket Only",
+          "Public"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OkResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 153,
+                      "result": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 153,
+                    "method": "public/unsubscribe_all",
+                    "params": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/unsubscribe_all",
+            "og:title": "public/unsubscribe_all"
+          },
+          "href": "/api-reference/subscription-management/public-unsubscribe_all"
+        }
+      }
+    },
+    "/private/subscribe": {
+      "get": {
+        "description": "Subscribe to one or more channels. The name of the channel determines what information will be provided, and in what form. **📖 Related Support Article:** [Market Data Collection Best Practices](https://support.deribit.com/hc/en-us/articles/29592500256669-Market-Data-Collection-Best-Practices)",
+        "tags": [
+          "Subscription Management",
+          "Private",
+          "WebSocket Only"
+        ],
+        "parameters": [
+          {
+            "name": "channels",
+            "description": "A list of channels to subscribe to.",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "deribit_price_index.btc_usd"
+              },
+              "example": [
+                "deribit_price_index.btc_usd"
+              ]
+            },
+            "required": true
+          },
+          {
+            "name": "label",
+            "description": "Optional label which will be added to notifications of private channels (max 16 characters).",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "TestLabel1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateSubscribeResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 4235,
+                      "result": [
+                        "deribit_price_index.btc_usd"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorMessageResponse"
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 4235,
+                    "method": "private/subscribe",
+                    "params": {
+                      "channels": [
+                        "deribit_price_index.btc_usd"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/subscribe",
+            "og:title": "private/subscribe"
+          },
+          "href": "/api-reference/subscription-management/private-subscribe"
+        }
+      }
+    },
+    "/private/unsubscribe": {
+      "get": {
+        "description": "Unsubscribe from one or more channels.",
+        "tags": [
+          "Subscription Management",
+          "Private",
+          "WebSocket Only"
+        ],
+        "parameters": [
+          {
+            "name": "channels",
+            "description": "A list of channels to unsubscribe from.",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "deribit_price_index.btc_usd"
+              },
+              "example": [
+                "deribit_price_index.btc_usd"
+              ]
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateSubscribeResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 3370,
+                      "result": [
+                        "deribit_price_index.btc_usd"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorMessageResponse"
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 3370,
+                    "method": "private/unsubscribe",
+                    "params": {
+                      "channels": [
+                        "deribit_price_index.btc_usd"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/unsubscribe",
+            "og:title": "private/unsubscribe"
+          },
+          "href": "/api-reference/subscription-management/private-unsubscribe"
+        }
+      }
+    },
+    "/private/unsubscribe_all": {
+      "get": {
+        "description": "Unsubscribe from all the channels subscribed so far.",
+        "tags": [
+          "Subscription Management",
+          "WebSocket Only",
+          "Private"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OkResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 154,
+                      "result": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 154,
+                    "method": "private/unsubscribe_all",
+                    "params": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/unsubscribe_all",
+            "og:title": "private/unsubscribe_all"
+          },
+          "href": "/api-reference/subscription-management/private-unsubscribe_all"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PrivateSubscribeResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "description": "A list of subscribed channels.",
+            "items": {
+              "example": "deribit_price_index.btc_usd",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "Getunsubscribe200response": {
+        "type": "object",
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "example": "2.0"
+          },
+          "id": {
+            "type": "integer",
+            "example": 8691
+          },
+          "result": {
+            "type": "array",
+            "description": "List of channels that were successfully unsubscribed in this request",
+            "items": {
+              "type": "string",
+              "x-deribit-type": "channel"
+            },
+            "example": [
+              "deribit_price_index.btc_usd"
+            ]
+          }
+        }
+      },
+      "OkResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "description": "Result of method execution. `ok` in case of success",
+            "enum": [
+              "ok"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "ErrorMessageResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "message",
+          "jsonrpc",
+          "error"
+        ],
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Generic error response for broken references",
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "enum": [
+              "2.0"
+            ]
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "description": "Error code"
+              },
+              "message": {
+                "type": "string",
+                "description": "Error message"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          }
+        },
+        "required": [
+          "jsonrpc",
+          "error"
+        ]
+      }
+    },
+    "parameters": {},
+    "responses": {
+      "PrivateSubscribeResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateSubscribeResponse"
+            }
+          }
+        }
+      },
+      "OkResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/OkResponse"
+            }
+          }
+        }
+      },
+      "ErrorMessageResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorMessageResponse"
+            }
+          }
+        }
+      },
+      "Getunsubscribe200response": {
+        "description": "Successfully unsubscribed from channels",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Getunsubscribe200response"
+            },
+            "examples": {
+              "jsonObject": {
+                "value": {
+                  "jsonrpc": "2.0",
+                  "id": 8691,
+                  "result": [
+                    "deribit_price_index.btc_usd"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "description": "Error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

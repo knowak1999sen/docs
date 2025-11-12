@@ -85,6 +85,27 @@
               "source": "specifications/split/account_management_openapi.json",
               "directory": "api-reference"
             }
+          },
+          {
+            "group": "Wallet",
+            "openapi": {
+              "source": "specifications/split/wallet_openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Session Management",
+            "openapi": {
+              "source": "specifications/split/session_management_openapi.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Subscription Management",
+            "openapi": {
+              "source": "specifications/split/subscription_management_openapi.json",
+              "directory": "api-reference"
+            }
           }
         ]
       },
