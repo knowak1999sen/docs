@@ -1,0 +1,2309 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Deribit API - Block Trade",
+    "version": "2.1.1",
+    "description": "Deribit API specification for Block Trade endpoints"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8082/api/v2",
+      "description": "local test server"
+    },
+    {
+      "url": "https://test.deribit.com/api/v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Block Trade"
+    }
+  ],
+  "paths": {
+    "/private/simulate_block_trade": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Describes if user wants to be maker or taker of trades",
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/role"
+            }
+          },
+          {
+            "description": "List of trades for block trade",
+            "in": "query",
+            "name": "trades",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "JSON string containing array of objects"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateSimulateBlockTradeResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "result": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Checks if a block trade can be executed",
+        "tags": [
+          "Block Trade",
+          "Matching Engine",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/simulate_block_trade",
+                    "params": {
+                      "role": "maker",
+                      "trades": [
+                        {
+                          "instrument_name": "BTC-PERPETUAL",
+                          "direction": "buy",
+                          "price": 11624,
+                          "amount": 40
+                        },
+                        {
+                          "instrument_name": "BTC-9AUG19-10250-P",
+                          "direction": "buy",
+                          "amount": 1.2,
+                          "price": 0.0707
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/simulate_block_trade",
+            "og:title": "private/simulate_block_trade"
+          },
+          "href": "/api-reference/block-trade/private-simulate_block_trade"
+        }
+      }
+    },
+    "/private/verify_block_trade": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Timestamp, shared with other party (milliseconds since the UNIX epoch)",
+            "in": "query",
+            "name": "timestamp",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "description": "Nonce, shared with other party",
+            "in": "query",
+            "name": "nonce",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/nonce"
+            }
+          },
+          {
+            "description": "Describes if user wants to be maker or taker of trades",
+            "in": "query",
+            "name": "role",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/role"
+            }
+          },
+          {
+            "description": "List of trades for block trade",
+            "in": "query",
+            "name": "trades",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "JSON string containing array of objects"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateVerifyBlockTradeResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "result": {
+                        "signature": "1565172710935.1ESE83qh.g6fbgRd4VWagaJz7xdi2WaV-q-d3J0njoz1jZavuRudZJZif9uH8XdUAx1LHsu0E3e0ZG_xe1UPYlwo41xRVrkWU6OMgygDRafUkEmBuk9iLqjc9rh4"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Verifies and creates block trade signature **Note:** In the API, the `direction` field is always expressed from the maker's perspective. This means that when you accept a block trade as a taker, the direction shown in the API represents the opposite side of your trade. For example, if you are buying puts as a taker, the API will show the operation as a \"sell put\" (maker's perspective), and you will be verifying and accepting a \"sell put\" block trade. **📖 Related Support Article:** [Block Trading](https://support.deribit.com/hc/en-us/articles/25944688627229-Block-Trading)",
+        "tags": [
+          "Block Trade",
+          "Matching Engine",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/verify_block_trade",
+                    "params": {
+                      "nonce": "okpdjkdo",
+                      "timestamp": 1565172650935,
+                      "role": "maker",
+                      "trades": [
+                        {
+                          "instrument_name": "BTC-PERPETUAL",
+                          "direction": "buy",
+                          "price": 11624,
+                          "amount": 40
+                        },
+                        {
+                          "instrument_name": "BTC-9AUG19-10250-P",
+                          "direction": "buy",
+                          "amount": 1.2,
+                          "price": 0.0707
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/verify_block_trade",
+            "og:title": "private/verify_block_trade"
+          },
+          "href": "/api-reference/block-trade/private-verify_block_trade"
+        }
+      }
+    },
+    "/private/execute_block_trade": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Timestamp, shared with other party (milliseconds since the UNIX epoch)",
+            "in": "query",
+            "name": "timestamp",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "description": "Nonce, shared with other party",
+            "in": "query",
+            "name": "nonce",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/nonce"
+            }
+          },
+          {
+            "description": "Describes if user wants to be maker or taker of trades",
+            "in": "query",
+            "name": "role",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/role"
+            }
+          },
+          {
+            "description": "List of trades for block trade",
+            "in": "query",
+            "name": "trades",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "JSON string containing array of objects"
+            }
+          },
+          {
+            "description": "Signature of block trade generated by `private/verify_block_trade_method`",
+            "in": "query",
+            "name": "counterparty_signature",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/block_trade_signature"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateGetBlockTradeResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "result": {
+                        "trades": [
+                          {
+                            "trade_seq": 30289730,
+                            "trade_id": "48079573",
+                            "timestamp": 1590485535978,
+                            "tick_direction": 0,
+                            "state": "filled",
+                            "reduce_only": false,
+                            "price": 8900.0,
+                            "post_only": false,
+                            "order_type": "limit",
+                            "order_id": "4009043192",
+                            "matching_id": "None",
+                            "mark_price": 8895.19,
+                            "liquidity": "M",
+                            "instrument_name": "BTC-PERPETUAL",
+                            "index_price": 8900.45,
+                            "fee_currency": "BTC",
+                            "fee": -0.00561798,
+                            "direction": "sell",
+                            "block_trade_id": "6165",
+                            "amount": 200000.0
+                          },
+                          {
+                            "underlying_price": 8902.86,
+                            "trade_seq": 1,
+                            "trade_id": "48079574",
+                            "timestamp": 1590485535979,
+                            "tick_direction": 1,
+                            "state": "filled",
+                            "reduce_only": false,
+                            "price": 0.0133,
+                            "post_only": false,
+                            "order_type": "limit",
+                            "order_id": "4009043194",
+                            "matching_id": "None",
+                            "mark_price": 0.01831619,
+                            "liquidity": "M",
+                            "iv": 62.44,
+                            "instrument_name": "BTC-28MAY20-9000-C",
+                            "index_price": 8900.45,
+                            "fee_currency": "BTC",
+                            "fee": 0.002,
+                            "direction": "sell",
+                            "block_trade_id": "6165",
+                            "amount": 5.0
+                          }
+                        ],
+                        "timestamp": 1590485535980,
+                        "id": "6165"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Creates block trade The whole request have to be exact the same as in `private/verify_block_trade`, only `role` field should be set appropriately - it basically means that both sides have to agree on the same `timestamp`, `nonce`, `trades` fields and server will assure that `role` field is different between sides (each party accepted own role). Using the same `timestamp` and `nonce` by both sides in `private/verify_block_trade` assures that even if unintentionally both sides execute given block trade with valid `counterparty_signature`, the given block trade will be executed only once. **Note:** In the API, the `direction` field is always expressed from the maker's perspective. This means that when you accept a block trade as a taker, the direction shown in the API represents the opposite side of your trade. For example, if you are buying puts as a taker, the API will show the operation as a \"sell put\" (maker's perspective), and you will be verifying and accepting a \"sell put\" block trade. **📖 Related Support Article:** [Block Trading](https://support.deribit.com/hc/en-us/articles/25944688627229-Block-Trading)",
+        "tags": [
+          "Block Trade",
+          "Matching Engine",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/execute_block_trade",
+                    "params": {
+                      "nonce": "bszyprbq",
+                      "timestamp": 1590485535899,
+                      "role": "maker",
+                      "trades": [
+                        {
+                          "instrument_name": "BTC-PERPETUAL",
+                          "direction": "sell",
+                          "price": 8900.0,
+                          "amount": 200000
+                        },
+                        {
+                          "instrument_name": "BTC-28MAY20-9000-C",
+                          "direction": "sell",
+                          "amount": 5.0,
+                          "price": 0.0133
+                        }
+                      ],
+                      "counterparty_signature": "1590485595899.1Mn52L_Q.lNyNBzXXo-_QBT_wDuMgnhA7uS9tBqdQ5TLN6rxbuoAiQhyaJYGJrm5IV_9enp9niY_x8D60AJLm3yEKPUY1Dv3T0TW0n5-ADPpJF7Fpj0eVDZpZ6QCdX8snBWrSJ0TtqevnO64RCBlN1dIm2T70PP9dlhiqPDAUYI4fpB1vLYI"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/execute_block_trade",
+            "og:title": "private/execute_block_trade"
+          },
+          "href": "/api-reference/block-trade/private-execute_block_trade"
+        }
+      }
+    },
+    "/private/invalidate_block_trade_signature": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Signature of block trade that will be invalidated",
+            "in": "query",
+            "name": "signature",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/block_trade_signature"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OkResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "result": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "User at any time (before the private/execute_block_trade is called) can invalidate its own signature effectively cancelling block trade",
+        "tags": [
+          "Block Trade",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/invalidate_block_trade_signature",
+                    "params": {
+                      "signature": "1565173369982.1M9tO0Q-.z9n9WyZUU5op9pEz6Jtd2CI71QxQMMsCZAexnIfK9HQRT1pKH3clxeIbY7Bqm-yMcWIoE3IfCDPW5VEdiN-6oS0YkKUyXPD500MUf3ULKhfkmH81EZs"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/invalidate_block_trade_signature",
+            "og:title": "private/invalidate_block_trade_signature"
+          },
+          "href": "/api-reference/block-trade/private-invalidate_block_trade_signature"
+        }
+      }
+    },
+    "/private/get_block_trade": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Block trade id",
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/block_trade_id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateGetBlockTradeResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "result": {
+                        "trades": [
+                          {
+                            "trade_seq": 37,
+                            "trade_id": "92437",
+                            "timestamp": 1565089523719,
+                            "tick_direction": 3,
+                            "state": "filled",
+                            "price": 0.0001,
+                            "order_type": "limit",
+                            "order_id": "343062",
+                            "matching_id": null,
+                            "liquidity": "T",
+                            "iv": 0,
+                            "instrument_name": "BTC-9AUG19-10250-C",
+                            "index_price": 11738,
+                            "fee_currency": "BTC",
+                            "fee": 0.00025,
+                            "direction": "sell",
+                            "block_trade_id": "61",
+                            "amount": 10
+                          },
+                          {
+                            "trade_seq": 25350,
+                            "trade_id": "92435",
+                            "timestamp": 1565089523719,
+                            "tick_direction": 3,
+                            "state": "filled",
+                            "price": 11590,
+                            "order_type": "limit",
+                            "order_id": "343058",
+                            "matching_id": null,
+                            "liquidity": "T",
+                            "instrument_name": "BTC-PERPETUAL",
+                            "index_price": 11737.98,
+                            "fee_currency": "BTC",
+                            "fee": 1.64e-06,
+                            "direction": "buy",
+                            "block_trade_id": "61",
+                            "amount": 190
+                          }
+                        ],
+                        "timestamp": 1565089523720,
+                        "id": "61"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Returns information about the users block trade",
+        "tags": [
+          "Block Trade",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/get_block_trade",
+                    "params": {
+                      "id": "61"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/get_block_trade",
+            "og:title": "private/get_block_trade"
+          },
+          "href": "/api-reference/block-trade/private-get_block_trade"
+        }
+      }
+    },
+    "/private/get_block_trades": {
+      "get": {
+        "parameters": [
+          {
+            "description": "The currency symbol",
+            "in": "query",
+            "name": "currency",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/currency"
+            }
+          },
+          {
+            "name": "count",
+            "description": "Count of Block Trades returned, maximum - `101`",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 101,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "start_id",
+            "description": "Response will contain block trades older than the one provided in this field",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/block_trade_id"
+            }
+          },
+          {
+            "name": "end_id",
+            "description": "The id of the oldest block trade to be returned, `start_id` is required with `end_id`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/block_trade_id"
+            }
+          },
+          {
+            "name": "block_rfq_id",
+            "required": false,
+            "in": "query",
+            "description": "ID of the Block RFQ",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "broker_code",
+            "in": "query",
+            "description": "Broker code to filter block trades. Only broker clients can use `broker_code` to filter broker block trades. Use `any` for all block trades.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "2krM7sJsx"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateGetBlockTradesResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "result": [
+                        {
+                          "trades": [
+                            {
+                              "trade_seq": 4,
+                              "trade_id": "92462",
+                              "timestamp": 1565093070164,
+                              "tick_direction": 2,
+                              "state": "filled",
+                              "price": 0.0151,
+                              "order_type": "limit",
+                              "order_id": "343121",
+                              "matching_id": null,
+                              "liquidity": "M",
+                              "iv": 72.38,
+                              "instrument_name": "BTC-9AUG19-11500-P",
+                              "index_price": 11758.65,
+                              "fee_currency": "BTC",
+                              "fee": 0,
+                              "direction": "sell",
+                              "block_trade_id": "66",
+                              "amount": 2.3
+                            },
+                            {
+                              "trade_seq": 41,
+                              "trade_id": "92460",
+                              "timestamp": 1565093070164,
+                              "tick_direction": 2,
+                              "state": "filled",
+                              "price": 11753,
+                              "order_type": "limit",
+                              "order_id": "343117",
+                              "matching_id": null,
+                              "liquidity": "M",
+                              "instrument_name": "BTC-9AUG19",
+                              "index_price": 11758.65,
+                              "fee_currency": "BTC",
+                              "fee": 0,
+                              "direction": "sell",
+                              "block_trade_id": "66",
+                              "amount": 50
+                            }
+                          ],
+                          "timestamp": 1565093070165,
+                          "id": "66"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Returns list of users block trades. If currency is not provided, returns block trades for all currencies. `block_rfq_id` can be provided to receive block trades related to that particular Block RFQ.",
+        "tags": [
+          "Block Trade",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/get_block_trades",
+                    "params": {
+                      "currency": "BTC",
+                      "count": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/get_block_trades",
+            "og:title": "private/get_block_trades"
+          },
+          "href": "/api-reference/block-trade/private-get_block_trades"
+        }
+      }
+    },
+    "/private/get_pending_block_trades": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateGetPendingBlockTradesResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 6,
+                      "result": [
+                        {
+                          "nonce": "bt-468nha",
+                          "app_name": "test",
+                          "trades": [
+                            {
+                              "instrument_name": "BTC-PERPETUAL",
+                              "price": 70246.66,
+                              "direction": "buy",
+                              "amount": 10
+                            }
+                          ],
+                          "role": "maker",
+                          "user_id": 7,
+                          "state": {
+                            "value": "initial",
+                            "timestamp": 1711468813552
+                          },
+                          "timestamp": 1711468813551
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "**DEPRECATED**: This method is deprecated. Please use `private/get_block_trade_requests` instead. Provides a list of pending block trade approvals. `timestamp` and `nonce` received in response can be used to approve or reject the pending block trade. To use a block trade approval feature the additional API key setting feature called: `enabled_features: block_trade_approval` is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn't have this feature enabled.",
+        "tags": [
+          "Block Trade",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 6,
+                    "method": "private/get_pending_block_trades",
+                    "params": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/get_pending_block_trades",
+            "og:title": "private/get_pending_block_trades"
+          },
+          "href": "/api-reference/block-trade/private-get_pending_block_trades"
+        }
+      }
+    },
+    "/private/get_block_trade_requests": {
+      "get": {
+        "parameters": [
+          {
+            "name": "broker_code",
+            "in": "query",
+            "description": "Broker code to filter block trade requests. Only broker clients can use `broker_code` to query for their executed broker block trades.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "jpqYKgg1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateGetBlockTradeRequestsResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": [
+                        {
+                          "timestamp": 1742824052538,
+                          "state": {
+                            "timestamp": 1742824052539,
+                            "value": "initial"
+                          },
+                          "username": "Trader",
+                          "user_id": 8,
+                          "role": "taker",
+                          "trades": [
+                            {
+                              "amount": 100000,
+                              "direction": "buy",
+                              "price": 87516.83,
+                              "instrument_name": "BTC-PERPETUAL"
+                            }
+                          ],
+                          "broker_code": "jpqYKgg1",
+                          "broker_name": "Test Broker",
+                          "counterparty_state": {
+                            "timestamp": 1742824052538,
+                            "value": "approved"
+                          },
+                          "nonce": "29rKkuD3NSBPet4njrpNWEuHBm9s"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Provides a list of block trade requests including pending approvals, declined trades, and expired trades. `timestamp` and `nonce` received in response can be used to approve or reject the pending block trade. To use a block trade approval feature the additional API key setting feature called: `enabled_features: block_trade_approval` is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn't have this feature enabled. Only broker clients can use `broker_code` to query for their broker block trade requests.",
+        "tags": [
+          "Block Trade",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/get_block_trade_requests",
+                    "params": {
+                      "broker_code": "jpqYKgg1"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/get_block_trade_requests",
+            "og:title": "private/get_block_trade_requests"
+          },
+          "href": "/api-reference/block-trade/private-get_block_trade_requests"
+        }
+      }
+    },
+    "/private/approve_block_trade": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Timestamp, shared with other party (milliseconds since the UNIX epoch)",
+            "in": "query",
+            "name": "timestamp",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "description": "Nonce, shared with other party",
+            "in": "query",
+            "name": "nonce",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/nonce"
+            }
+          },
+          {
+            "description": "Describes if user wants to be maker or taker of trades",
+            "in": "query",
+            "name": "role",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/role"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OkResponse"
+          }
+        },
+        "description": "Used to approve a pending block trade. `nonce` and `timestamp` are used to identify the block trade while `role` should be opposite to the trading counterparty. To use a block trade approval feature the additional API key setting feature called: `enabled_features: block_trade_approval` is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn't have this feature enabled.",
+        "tags": [
+          "Block Trade",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/approve_block_trade",
+                    "params": {
+                      "timestamp": 1711468813551,
+                      "nonce": "bt-468nha",
+                      "role": "maker"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/approve_block_trade",
+            "og:title": "private/approve_block_trade"
+          },
+          "href": "/api-reference/block-trade/private-approve_block_trade"
+        }
+      }
+    },
+    "/private/reject_block_trade": {
+      "get": {
+        "parameters": [
+          {
+            "description": "Timestamp, shared with other party (milliseconds since the UNIX epoch)",
+            "in": "query",
+            "name": "timestamp",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            }
+          },
+          {
+            "description": "Nonce, shared with other party",
+            "in": "query",
+            "name": "nonce",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/nonce"
+            }
+          },
+          {
+            "description": "Describes if user wants to be maker or taker of trades",
+            "in": "query",
+            "name": "role",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/role"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/OkResponse"
+          }
+        },
+        "description": "Used to reject a pending block trade. `nonce` and `timestamp` are used to identify the block trade while `role` should be opposite to the trading counterparty. To use a block trade approval feature the additional API key setting feature called: `enabled_features: block_trade_approval` is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn't have this feature enabled.",
+        "tags": [
+          "Block Trade",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/reject_block_trade",
+                    "params": {
+                      "timestamp": 1711468813551,
+                      "nonce": "bt-468nha",
+                      "role": "maker"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/reject_block_trade",
+            "og:title": "private/reject_block_trade"
+          },
+          "href": "/api-reference/block-trade/private-reject_block_trade"
+        }
+      }
+    },
+    "/private/get_broker_trades": {
+      "get": {
+        "parameters": [
+          {
+            "description": "The currency symbol",
+            "in": "query",
+            "name": "currency",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/currency"
+            }
+          },
+          {
+            "name": "count",
+            "description": "Number of requested items, default - `20`, maximum - `1000`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "start_id",
+            "description": "Response will contain block trades older than the one provided in this field",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/block_trade_id"
+            }
+          },
+          {
+            "name": "end_id",
+            "description": "The id of the oldest block trade to be returned, `start_id` is required with `end_id`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/block_trade_id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateGetBrokerTradesResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "history": [
+                          {
+                            "id": "BLOCK-7",
+                            "timestamp": 1747239767111,
+                            "trades": [
+                              {
+                                "timestamp": 1747239767111,
+                                "amount": 100000,
+                                "direction": "buy",
+                                "price": 102079.75,
+                                "index_price": 102079.75,
+                                "instrument_name": "BTC-PERPETUAL",
+                                "trade_seq": 7,
+                                "mark_price": 102079.75,
+                                "tick_direction": 1,
+                                "contracts": 10000,
+                                "trade_id": "7",
+                                "block_trade_id": "BLOCK-7",
+                                "block_trade_leg_count": 1
+                              }
+                            ],
+                            "maker": {
+                              "user_id": "****009",
+                              "client_id": 2,
+                              "client_name": "Test Client 2",
+                              "client_link_name": "Test Client 2 l",
+                              "client_link_id": 2
+                            },
+                            "taker": {
+                              "user_id": "****008",
+                              "client_id": 1,
+                              "client_name": "Test Client 1",
+                              "client_link_name": "Test Client 1 l",
+                              "client_link_id": 1
+                            }
+                          }
+                        ],
+                        "next_start_id": 6
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "**Broker Method** Returns list of broker block trades. If currency is not provided, returns broker block trades for all currencies.",
+        "tags": [
+          "Block Trade",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/get_broker_trades",
+                    "params": {
+                      "currency": "BTC",
+                      "count": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/get_broker_trades",
+            "og:title": "private/get_broker_trades"
+          },
+          "href": "/api-reference/block-trade/private-get_broker_trades"
+        }
+      }
+    },
+    "/private/get_broker_trade_requests": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateGetBrokerTradeRequestsResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 7,
+                      "result": [
+                        {
+                          "timestamp": 1742824052547,
+                          "state": "activated",
+                          "trades": [
+                            {
+                              "amount": 100000,
+                              "direction": "buy",
+                              "price": 87516.83,
+                              "instrument_name": "BTC-PERPETUAL"
+                            }
+                          ],
+                          "maker": {
+                            "state": "initial",
+                            "client_id": 1,
+                            "user_id": "***009",
+                            "client_name": "Test Client",
+                            "client_link_name": "Test Client 2",
+                            "client_link_id": 2
+                          },
+                          "taker": {
+                            "state": "initial",
+                            "client_id": 1,
+                            "user_id": "***008",
+                            "client_name": "Test Client",
+                            "client_link_name": "Test Client 1",
+                            "client_link_id": 1
+                          },
+                          "nonce": "3WqPoAsmde9aXCSEBVUmi2XxGkgA"
+                        },
+                        {
+                          "timestamp": 1742824052538,
+                          "state": "activated",
+                          "trades": [
+                            {
+                              "amount": 100000,
+                              "direction": "buy",
+                              "price": 87516.83,
+                              "instrument_name": "BTC-PERPETUAL"
+                            }
+                          ],
+                          "maker": {
+                            "state": "approved",
+                            "client_id": 1,
+                            "user_id": "***009",
+                            "client_name": "Test Client",
+                            "client_link_name": "Test Client 2",
+                            "client_link_id": 2
+                          },
+                          "taker": {
+                            "state": "initial",
+                            "client_id": 1,
+                            "user_id": "***008",
+                            "client_name": "Test Client",
+                            "client_link_name": "Test Client 1",
+                            "client_link_id": 1
+                          },
+                          "nonce": "29rKkuD3NSBPet4njrpNWEuHBm9s"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "**Broker Method** Provides a list of broker block trade requests including pending approvals, declined trades, and expired trades. `timestamp` and `nonce` received in response can be used to approve or reject the pending broker block trade.",
+        "tags": [
+          "Block Trade",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 7,
+                    "method": "private/get_broker_trade_requests",
+                    "params": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/get_broker_trade_requests",
+            "og:title": "private/get_broker_trade_requests"
+          },
+          "href": "/api-reference/block-trade/private-get_broker_trade_requests"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "nonce": {
+        "description": "Nonce",
+        "example": "bF1_gfgcsd",
+        "type": "string"
+      },
+      "timestamp": {
+        "example": 1536569522277,
+        "description": "The timestamp (milliseconds since the Unix epoch)",
+        "type": "integer"
+      },
+      "currency": {
+        "description": "Currency, i.e `\"BTC\"`, `\"ETH\"`, `\"USDC\"`",
+        "enum": [
+          "BTC",
+          "ETH",
+          "USDC",
+          "USDT",
+          "EURR"
+        ],
+        "type": "string"
+      },
+      "block_trade_signature": {
+        "description": "Signature of block trade It is valid only for 5 minutes around given timestamp",
+        "example": "1565173369982.1M9tO0Q-.z9n9WyZUU5op9pEz6Jtd2CI71QxQMMsCZAexnIfK9HQRT1pKH3clxeIbY7Bqm-yMcWIoE3IfCDPW5VEdiN-6oS0YkKUyXPD500MUf3ULKhfkmH81EZs",
+        "type": "string"
+      },
+      "block_trade_id": {
+        "description": "Block trade id",
+        "example": "154",
+        "type": "string"
+      },
+      "role": {
+        "description": "Trade role of the user: `maker` or `taker`",
+        "enum": [
+          "maker",
+          "taker"
+        ],
+        "type": "string"
+      },
+      "PrivateGetBlockTradeResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "$ref": "#/components/schemas/block_trade"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateGetBrokerTradesResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "history": {
+                "items": {
+                  "properties": {
+                    "id": {
+                      "description": "Unique identifier of the block trade history entry.",
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "description": "Timestamp of the block trade history entry (milliseconds since the UNIX epoch).",
+                      "type": "integer"
+                    },
+                    "trades": {
+                      "items": {
+                        "$ref": "#/components/schemas/block_trade"
+                      },
+                      "type": "array"
+                    },
+                    "maker": {
+                      "properties": {
+                        "user_id": {
+                          "description": "Obscured user id of the maker.",
+                          "type": "integer"
+                        },
+                        "client_id": {
+                          "description": "ID of a client; available to broker. Represents a group of users under a common name.",
+                          "type": "integer"
+                        },
+                        "client_name": {
+                          "description": "Name of the client; available to broker.",
+                          "type": "string"
+                        },
+                        "client_link_name": {
+                          "description": "Name of the linked user within the client; available to broker.",
+                          "type": "string"
+                        },
+                        "client_link_id": {
+                          "description": "ID assigned to a single user in a client; available to broker.",
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "taker": {
+                      "properties": {
+                        "user_id": {
+                          "description": "Obscured user id of the taker.",
+                          "type": "integer"
+                        },
+                        "client_id": {
+                          "description": "ID of a client; available to broker. Represents a group of users under a common name.",
+                          "type": "integer"
+                        },
+                        "client_name": {
+                          "description": "Name of the client; available to broker.",
+                          "type": "string"
+                        },
+                        "client_link_name": {
+                          "description": "Name of the linked user within the client; available to broker.",
+                          "type": "string"
+                        },
+                        "client_link_id": {
+                          "description": "ID assigned to a single user in a client; available to broker.",
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "next_start_id": {
+                "description": "The next start ID for pagination.",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateGetBlockTradeRequestsResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "$ref": "#/components/schemas/pending_block_trade"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateGetBrokerTradeRequestsResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "properties": {
+                "timestamp": {
+                  "description": "Timestamp of the broker block trade request (milliseconds since the UNIX epoch).",
+                  "type": "integer"
+                },
+                "state": {
+                  "description": "State of the broker block trade request.",
+                  "type": "string"
+                },
+                "trades": {
+                  "items": {
+                    "properties": {
+                      "amount": {
+                        "description": "Trade amount.",
+                        "type": "number"
+                      },
+                      "direction": {
+                        "description": "Trade direction (buy or sell).",
+                        "type": "string"
+                      },
+                      "price": {
+                        "description": "Trade price.",
+                        "type": "number"
+                      },
+                      "instrument_name": {
+                        "description": "Name of the traded instrument.",
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "maker": {
+                  "properties": {
+                    "state": {
+                      "description": "State of the request from the maker side: `initial`, `approved`, or `rejected`.",
+                      "type": "string"
+                    },
+                    "client_id": {
+                      "description": "ID of a client; available to broker. Represents a group of users under a common name.",
+                      "type": "integer"
+                    },
+                    "user_id": {
+                      "description": "Obscured user id of the maker.",
+                      "type": "string"
+                    },
+                    "client_name": {
+                      "description": "Name of the client; available to broker.",
+                      "type": "string"
+                    },
+                    "client_link_name": {
+                      "description": "Name of the linked user within the client; available to broker.",
+                      "type": "string"
+                    },
+                    "client_link_id": {
+                      "description": "ID assigned to a single user in a client; available to broker.",
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                },
+                "taker": {
+                  "properties": {
+                    "state": {
+                      "description": "State of the request from the taker side: `initial`, `approved`, or `rejected`.",
+                      "type": "string"
+                    },
+                    "client_id": {
+                      "description": "ID of a client; available to broker. Represents a group of users under a common name.",
+                      "type": "integer"
+                    },
+                    "user_id": {
+                      "description": "Obscured user id of the taker.",
+                      "type": "string"
+                    },
+                    "client_name": {
+                      "description": "Name of the client; available to broker.",
+                      "type": "string"
+                    },
+                    "client_link_name": {
+                      "description": "Name of the linked user within the client; available to broker.",
+                      "type": "string"
+                    },
+                    "client_link_id": {
+                      "description": "ID assigned to a single user in a client; available to broker.",
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                },
+                "nonce": {
+                  "description": "Nonce for approving or rejecting the broker block trade request.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateSimulateBlockTradeResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "description": "`true` if block trade can be executed, `false` otherwise",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "OkResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "description": "Result of method execution. `ok` in case of success",
+            "enum": [
+              "ok"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateGetBlockTradesResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "$ref": "#/components/schemas/block_trade"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateGetPendingBlockTradesResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "$ref": "#/components/schemas/pending_block_trade"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateVerifyBlockTradeResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "signature": {
+                "$ref": "#/components/schemas/block_trade_signature"
+              }
+            },
+            "required": [
+              "signature"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "block_trade": {
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/block_trade_id"
+          },
+          "timestamp": {
+            "$ref": "#/components/schemas/timestamp"
+          },
+          "trades": {
+            "items": {
+              "$ref": "#/components/schemas/user_trade"
+            },
+            "type": "array"
+          },
+          "app_name": {
+            "description": "The name of the application that executed the block trade on behalf of the user (optional).",
+            "example": "Example Application",
+            "type": "string"
+          },
+          "broker_code": {
+            "description": "Broker code associated with the broker block trade.",
+            "example": "2krM7sJsx",
+            "type": "string"
+          },
+          "broker_name": {
+            "description": "Name of the broker associated with the block trade.",
+            "example": "Test Broker",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "timestamp",
+          "trades"
+        ],
+        "type": "object"
+      },
+      "pending_block_trade": {
+        "properties": {
+          "nonce": {
+            "description": "Nonce that can be used to approve or reject pending block trade.",
+            "example": "bF1_gfgcsd",
+            "type": "string"
+          },
+          "timestamp": {
+            "description": "Timestamp that can be used to approve or reject pending block trade.",
+            "type": "integer"
+          },
+          "trades": {
+            "items": {
+              "$ref": "#/components/schemas/pending_block_trade"
+            },
+            "type": "array"
+          },
+          "app_name": {
+            "description": "The name of the application that executed the block trade on behalf of the user (optional).",
+            "example": "Example Application",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username of the user who initiated the block trade.",
+            "example": "Trader",
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/role"
+          },
+          "user_id": {
+            "$ref": "#/components/schemas/user_id"
+          },
+          "broker_code": {
+            "description": "Broker code associated with the broker block trade.",
+            "example": "jpqYKgg1",
+            "type": "string"
+          },
+          "broker_name": {
+            "description": "Name of the broker associated with the block trade.",
+            "example": "Test Broker",
+            "type": "string"
+          },
+          "state": {
+            "description": "State of the pending block trade for current user.",
+            "properties": {
+              "value": {
+                "description": "State value.",
+                "enum": [
+                  "initial",
+                  "accepted",
+                  "rejected",
+                  "executed"
+                ],
+                "type": "string"
+              },
+              "timestamp": {
+                "description": "State timestamp.",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "value",
+              "timestamp"
+            ],
+            "type": "object"
+          },
+          "counterparty_state": {
+            "description": "State of the pending block trade for the other party (optional).",
+            "properties": {
+              "value": {
+                "description": "State value.",
+                "enum": [
+                  "initial",
+                  "accepted",
+                  "rejected",
+                  "executed"
+                ],
+                "type": "string"
+              },
+              "timestamp": {
+                "description": "State timestamp.",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "value",
+              "timestamp"
+            ],
+            "type": "object"
+          },
+          "combo_id": {
+            "description": "Combo instrument identifier",
+            "example": "BTC-CS-27JUN25-80000_85000",
+            "type": "string"
+          }
+        },
+        "required": [
+          "nonce",
+          "timestamp",
+          "trades",
+          "app_name",
+          "role",
+          "user_id",
+          "state"
+        ],
+        "type": "object"
+      },
+      "user_trade": {
+        "properties": {
+          "trade_id": {
+            "$ref": "#/components/schemas/trade_id"
+          },
+          "trade_seq": {
+            "$ref": "#/components/schemas/trade_seq"
+          },
+          "instrument_name": {
+            "$ref": "#/components/schemas/instrument_name"
+          },
+          "timestamp": {
+            "$ref": "#/components/schemas/trade_timestamp"
+          },
+          "order_type": {
+            "description": "Order type: `\"limit`, `\"market\"`, or `\"liquidation\"`",
+            "enum": [
+              "limit",
+              "market",
+              "liquidation"
+            ],
+            "type": "string"
+          },
+          "advanced": {
+            "description": "Advanced type of user order: `\"usd\"` or `\"implv\"` (only for options; omitted if not applicable)",
+            "enum": [
+              "usd",
+              "implv"
+            ],
+            "type": "string"
+          },
+          "order_id": {
+            "description": "Id of the user order (maker or taker), i.e. subscriber's order id that took part in the trade",
+            "type": "string"
+          },
+          "matching_id": {
+            "description": "Always `null`",
+            "type": "string"
+          },
+          "direction": {
+            "description": "Trade direction of the taker",
+            "$ref": "#/components/schemas/direction"
+          },
+          "tick_direction": {
+            "$ref": "#/components/schemas/tick_direction"
+          },
+          "index_price": {
+            "description": "Index Price at the moment of trade",
+            "type": "number"
+          },
+          "price": {
+            "description": "The price of the trade",
+            "$ref": "#/components/schemas/price"
+          },
+          "amount": {
+            "description": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+            "type": "number"
+          },
+          "contracts": {
+            "description": "Trade size in contract units (optional, may be absent in historical trades)",
+            "type": "number"
+          },
+          "iv": {
+            "description": "Option implied volatility for the price (Option only)",
+            "type": "number"
+          },
+          "underlying_price": {
+            "description": "Underlying price for implied volatility calculations (Options only)",
+            "type": "number"
+          },
+          "liquidation": {
+            "description": "Optional field (only for trades caused by liquidation): `\"M\"` when maker side of trade was under liquidation, `\"T\"` when taker side was under liquidation, `\"MT\"` when both sides of trade were under liquidation",
+            "enum": [
+              "M",
+              "T",
+              "MT"
+            ],
+            "type": "string"
+          },
+          "liquidity": {
+            "description": "Describes what was role of users order: `\"M\"` when it was maker order, `\"T\"` when it was taker order",
+            "enum": [
+              "M",
+              "T"
+            ],
+            "type": "string"
+          },
+          "fee": {
+            "description": "User's fee in units of the specified `fee_currency`",
+            "type": "number"
+          },
+          "fee_currency": {
+            "$ref": "#/components/schemas/currency"
+          },
+          "label": {
+            "$ref": "#/components/schemas/label_presentation"
+          },
+          "state": {
+            "$ref": "#/components/schemas/order_state_in_user_trade"
+          },
+          "block_trade_id": {
+            "$ref": "#/components/schemas/block_trade_id_in_result"
+          },
+          "block_rfq_id": {
+            "description": "ID of the Block RFQ - when trade was part of the Block RFQ",
+            "type": "integer"
+          },
+          "block_rfq_quote_id": {
+            "description": "ID of the Block RFQ quote - when trade was part of the Block RFQ",
+            "type": "integer"
+          },
+          "reduce_only": {
+            "description": "`true` if user order is reduce-only",
+            "type": "string"
+          },
+          "post_only": {
+            "description": "`true` if user order is post-only",
+            "type": "string"
+          },
+          "mmp": {
+            "description": "`true` if user order is MMP",
+            "type": "boolean"
+          },
+          "risk_reducing": {
+            "description": "`true` if user order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users)",
+            "type": "boolean"
+          },
+          "api": {
+            "description": "`true` if user order was created with API",
+            "type": "boolean"
+          },
+          "profit_loss": {
+            "$ref": "#/components/schemas/profit_loss"
+          },
+          "mark_price": {
+            "description": "Mark Price at the moment of trade",
+            "type": "number"
+          },
+          "legs": {
+            "description": "Optional field containing leg trades if trade is a combo trade (present when querying for **only** combo trades and in `combo_trades` events)",
+            "type": "array"
+          },
+          "combo_id": {
+            "description": "Optional field containing combo instrument name if the trade is a combo trade",
+            "type": "string"
+          },
+          "combo_trade_id": {
+            "description": "Optional field containing combo trade identifier if the trade is a combo trade",
+            "type": "number"
+          },
+          "quote_set_id": {
+            "description": "QuoteSet of the user order (optional, present only for orders placed with `private/mass_quote`)",
+            "type": "string"
+          },
+          "quote_id": {
+            "description": "QuoteID of the user order (optional, present only for orders placed with `private/mass_quote`)",
+            "type": "string"
+          },
+          "trade_allocations": {
+            "description": "List of allocations for Block RFQ pre-allocation. Each allocation specifies `user_id`, `amount`, and `fee` for the allocated part of the trade. For broker client allocations, a `client_info` object will be included.",
+            "items": {
+              "properties": {
+                "user_id": {
+                  "description": "User ID to which part of the trade is allocated. For brokers the User ID is obstructed.",
+                  "type": "integer"
+                },
+                "amount": {
+                  "description": "Amount allocated to this user.",
+                  "type": "number"
+                },
+                "fee": {
+                  "description": "Fee for the allocated part of the trade.",
+                  "type": "number"
+                },
+                "client_info": {
+                  "description": "Optional client allocation info for brokers.",
+                  "properties": {
+                    "client_id": {
+                      "description": "ID of a client; available to broker. Represents a group of users under a common name.",
+                      "type": "integer"
+                    },
+                    "client_link_id": {
+                      "description": "ID assigned to a single user in a client; available to broker.",
+                      "type": "integer"
+                    },
+                    "name": {
+                      "description": "Name of the linked user within the client; available to broker.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "required": [
+                "amount",
+                "fee"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "trade_id",
+          "trade_seq",
+          "instrument_name",
+          "timestamp",
+          "order_id",
+          "matching_id",
+          "direction",
+          "tick_direction",
+          "index_price",
+          "price",
+          "amount",
+          "fee",
+          "fee_currency",
+          "state",
+          "mark_price"
+        ],
+        "type": "object"
+      },
+      "user_id": {
+        "description": "Unique user identifier",
+        "example": 57874,
+        "type": "integer"
+      },
+      "trade_timestamp": {
+        "description": "The timestamp of the trade (milliseconds since the UNIX epoch)",
+        "example": 1517329113791,
+        "type": "integer"
+      },
+      "trade_seq": {
+        "description": "The sequence number of the trade within instrument",
+        "type": "integer"
+      },
+      "block_trade_id_in_result": {
+        "description": "Block trade id - when trade was part of a block trade",
+        "example": "154",
+        "type": "string"
+      },
+      "label_presentation": {
+        "description": "User defined label (presented only when previously set for order by user)",
+        "type": "string"
+      },
+      "tick_direction": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "description": "Direction of the \"tick\" (`0` = Plus Tick, `1` = Zero-Plus Tick, `2` = Minus Tick, `3` = Zero-Minus Tick).",
+        "type": "integer"
+      },
+      "trade_id": {
+        "description": "Unique (per currency) trade identifier",
+        "type": "string"
+      },
+      "direction": {
+        "description": "Direction: `buy`, or `sell`",
+        "enum": [
+          "buy",
+          "sell"
+        ],
+        "type": "string"
+      },
+      "profit_loss": {
+        "description": "Profit and loss in base currency.",
+        "type": "number"
+      },
+      "price": {
+        "description": "Price in base currency",
+        "type": "number"
+      },
+      "instrument_name": {
+        "description": "Unique instrument identifier",
+        "example": "BTC-PERPETUAL",
+        "type": "string"
+      },
+      "order_state_in_user_trade": {
+        "description": "Order state: `\"open\"`, `\"filled\"`, `\"rejected\"`, `\"cancelled\"`, `\"untriggered\"` or `\"archive\"` (if order was archived)",
+        "enum": [
+          "open",
+          "filled",
+          "rejected",
+          "cancelled",
+          "untriggered",
+          "archive"
+        ],
+        "type": "string"
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Generic error response for broken references",
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "enum": [
+              "2.0"
+            ]
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "description": "Error code"
+              },
+              "message": {
+                "type": "string",
+                "description": "Error message"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          }
+        },
+        "required": [
+          "jsonrpc",
+          "error"
+        ]
+      }
+    },
+    "parameters": {},
+    "responses": {
+      "PrivateSimulateBlockTradeResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateSimulateBlockTradeResponse"
+            }
+          }
+        }
+      },
+      "PrivateGetPendingBlockTradesResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateGetPendingBlockTradesResponse"
+            }
+          }
+        }
+      },
+      "PrivateVerifyBlockTradeResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateVerifyBlockTradeResponse"
+            }
+          }
+        }
+      },
+      "PrivateGetBlockTradeResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateGetBlockTradeResponse"
+            }
+          }
+        }
+      },
+      "PrivateGetBlockTradesResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateGetBlockTradesResponse"
+            }
+          }
+        }
+      },
+      "PrivateGetBrokerTradesResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateGetBrokerTradesResponse"
+            }
+          }
+        }
+      },
+      "PrivateGetBrokerTradeRequestsResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateGetBrokerTradeRequestsResponse"
+            }
+          }
+        }
+      },
+      "OkResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/OkResponse"
+            }
+          }
+        }
+      },
+      "PrivateGetBlockTradeRequestsResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateGetBlockTradeRequestsResponse"
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "description": "Error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,3178 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Deribit API - Block Rfq",
+    "version": "2.1.1",
+    "description": "Deribit API specification for Block Rfq endpoints"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8082/api/v2",
+      "description": "local test server"
+    },
+    {
+      "url": "https://test.deribit.com/api/v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Block Rfq"
+    }
+  ],
+  "paths": {
+    "/private/get_block_rfqs": {
+      "get": {
+        "parameters": [
+          {
+            "name": "count",
+            "description": "Count of Block RFQs returned, maximum - `1000`",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "state",
+            "description": "State of Block RFQ",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "open",
+                "filled",
+                "traded",
+                "cancelled",
+                "expired",
+                "closed"
+              ]
+            }
+          },
+          {
+            "name": "role",
+            "description": "Role of the user in Block RFQ. When the `any` role is selected, the method returns all Block RFQs in which the user has participated, either as the `taker` or as a `maker`",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "any",
+                "taker",
+                "maker"
+              ]
+            }
+          },
+          {
+            "name": "continuation",
+            "description": "The continuation parameter specifies the starting point for fetching historical Block RFQs. When provided, the endpoint returns Block RFQs, starting from the specified ID and continuing backward (e.g., if `continuation` is 50, results will include Block RFQs of ID 49, 48, etc.)",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "block_rfq_id",
+            "required": false,
+            "in": "query",
+            "description": "ID of the Block RFQ",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The currency symbol",
+            "in": "query",
+            "name": "currency",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/block_rfq_currency"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateGetBlockRfqsResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "continuation": null,
+                        "block_rfqs": [
+                          {
+                            "state": "open",
+                            "amount": 40000,
+                            "role": "maker",
+                            "combo_id": "BTC-15NOV24",
+                            "legs": [
+                              {
+                                "direction": "sell",
+                                "instrument_name": "BTC-15NOV24",
+                                "ratio": 1
+                              }
+                            ],
+                            "creation_timestamp": 1731062457741,
+                            "block_rfq_id": 508,
+                            "expiration_timestamp": 1731062757741,
+                            "hedge": {
+                              "amount": 10,
+                              "direction": "buy",
+                              "price": 70000,
+                              "instrument_name": "BTC-PERPETUAL"
+                            },
+                            "taker_rating": "1-2"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "This method returns a list of Block RFQs that were either created by the user or assigned to them as a maker, sorted in descending order. `trades` and `mark_price` are only visible for the filled Block RFQ. When a `block_rfq_id` is specified, only that particular Block RFQ will be returned. If called by a `taker`, response will additionally include `makers` list and `label` if previously provided. If called by the `maker`, the `trades` will include the maker's alias, but only for trades in which this maker participated. Can be optionally filtered by currency.",
+        "tags": [
+          "Block RFQ",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/get_block_rfqs",
+                    "params": {
+                      "count": 20,
+                      "state": "open",
+                      "role": "maker"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/get_block_rfqs",
+            "og:title": "private/get_block_rfqs"
+          },
+          "href": "/api-reference/block-rfq/private-get_block_rfqs"
+        }
+      }
+    },
+    "/private/create_block_rfq": {
+      "get": {
+        "parameters": [
+          {
+            "description": "List of legs used to create Block RFQ",
+            "in": "query",
+            "name": "legs",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "JSON string containing array of objects"
+            }
+          },
+          {
+            "name": "trade_allocations",
+            "description": "List of allocations for Block RFQ pre-allocation. Allows to split amount between different (sub)accounts or broker clients. Each allocation must specify either `user_id` (for direct allocation) or `client_info` object (for broker allocation), and amount.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "JSON string containing array of objects"
+            }
+          },
+          {
+            "description": "Hedge leg of the Block RFQ. There is only one hedge leg allowed per Block RFQ",
+            "in": "query",
+            "name": "hedge",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "JSON string containing: object data"
+            }
+          },
+          {
+            "name": "label",
+            "description": "User defined label for the Block RFQ (maximum 64 characters)",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "makers",
+            "description": "List of targeted Block RFQ makers. Only those makers will be notified about created Block RFQ. If the list is empty, all available makers will be targeted.",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "required": false
+          },
+          {
+            "name": "disclosed",
+            "description": "Determines whether the RFQ is non-anonymous, revealing both taker and maker aliases. It can be set to `false` (anonymous mode) only when at least 5 makers are targeted. Default value is `true`.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateCreateBlockRfqResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "label": "example",
+                        "state": "created",
+                        "amount": 20000,
+                        "role": "taker",
+                        "bids": [],
+                        "asks": [],
+                        "combo_id": "BTC-15NOV24",
+                        "legs": [
+                          {
+                            "direction": "sell",
+                            "instrument_name": "BTC-15NOV24",
+                            "ratio": 1
+                          }
+                        ],
+                        "creation_timestamp": 1731062187555,
+                        "block_rfq_id": 507,
+                        "expiration_timestamp": 1731062487555,
+                        "hedge": {
+                          "amount": 10,
+                          "direction": "buy",
+                          "price": 70000,
+                          "instrument_name": "BTC-PERPETUAL"
+                        },
+                        "makers": [
+                          "MAKER1"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "**Taker method** This method creates a new Block RFQ. **Block RFQ pre-allocation:** The taker can split the total amount between different (sub)accounts using the `trade_allocations` parameter. The taker can also allocate to himself. Each allocation must specify either `user_id` (for direct allocation) or `client_info` object (for broker allocation), and `amount`. **📖 Related Support Article:** [Deribit Block RFQ API walkthrough](https://support.deribit.com/hc/en-us/articles/25951393746589-Deribit-Block-RFQ-API-walkthrough)",
+        "tags": [
+          "Block RFQ",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/create_block_rfq",
+                    "params": {
+                      "legs": [
+                        {
+                          "instrument_name": "BTC-15NOV24",
+                          "amount": 20000,
+                          "direction": "sell"
+                        }
+                      ],
+                      "hedge": {
+                        "amount": 10,
+                        "direction": "buy",
+                        "price": 70000,
+                        "instrument_name": "BTC-PERPETUAL"
+                      },
+                      "label": "example",
+                      "makers": [
+                        "MAKER1"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/create_block_rfq",
+            "og:title": "private/create_block_rfq"
+          },
+          "href": "/api-reference/block-rfq/private-create_block_rfq"
+        }
+      }
+    },
+    "/private/cancel_block_rfq": {
+      "get": {
+        "parameters": [
+          {
+            "name": "block_rfq_id",
+            "required": true,
+            "in": "query",
+            "description": "ID of the Block RFQ",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateCancelBlockRfqResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "creation_timestamp": 1729855159611,
+                        "block_rfq_id": 366,
+                        "expiration_timestamp": 1729855459611,
+                        "role": "taker",
+                        "asks": [],
+                        "bids": [],
+                        "makers": [],
+                        "amount": 100000,
+                        "legs": [
+                          {
+                            "ratio": 1,
+                            "instrument_name": "BTC-1NOV24",
+                            "direction": "sell"
+                          },
+                          {
+                            "ratio": 1,
+                            "instrument_name": "BTC-PERPETUAL",
+                            "direction": "buy"
+                          }
+                        ],
+                        "combo_id": "BTC-FS-1NOV24_PERP",
+                        "state": "cancelled",
+                        "label": "example"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "**Taker method** This method cancels a Block RFQ using the specified `block_rfq_id`.",
+        "tags": [
+          "Block RFQ",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/cancel_block_rfq",
+                    "params": {
+                      "block_rfq_id": 366
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/cancel_block_rfq",
+            "og:title": "private/cancel_block_rfq"
+          },
+          "href": "/api-reference/block-rfq/private-cancel_block_rfq"
+        }
+      }
+    },
+    "/private/accept_block_rfq": {
+      "get": {
+        "parameters": [
+          {
+            "name": "block_rfq_id",
+            "required": true,
+            "in": "query",
+            "description": "ID of the Block RFQ",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Maximum acceptable price for execution",
+            "in": "query",
+            "name": "price",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "description": "This value multiplied by the ratio of a leg gives trade size on that leg.",
+            "in": "query",
+            "name": "amount",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/amount"
+            }
+          },
+          {
+            "description": "Direction of the trade from the taker perspective",
+            "in": "query",
+            "name": "direction",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/direction"
+            }
+          },
+          {
+            "description": "Hedge leg of the Block RFQ. There is only one hedge leg allowed per Block RFQ",
+            "in": "query",
+            "name": "hedge",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "JSON string containing: object data"
+            }
+          },
+          {
+            "description": "List of legs used to trade Block RFQ",
+            "in": "query",
+            "name": "legs",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "JSON string containing array of objects"
+            }
+          },
+          {
+            "name": "time_in_force",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "fill_or_kill",
+                "good_til_cancelled"
+              ],
+              "example": "fill_or_kill"
+            },
+            "description": "Specifies how long the order should remain active"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateAcceptBlockRfqResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "block_trades": [
+                          {
+                            "id": "BLOCK-423",
+                            "timestamp": 1730798381504,
+                            "trades": [
+                              {
+                                "timestamp": 1730798381502,
+                                "state": "filled",
+                                "fee": 1.5e-07,
+                                "amount": 100,
+                                "direction": "buy",
+                                "price": 69696.8,
+                                "index_price": 70000,
+                                "profit_loss": 0,
+                                "instrument_name": "BTC-8NOV24-70000-C",
+                                "trade_seq": 113,
+                                "mark_price": 0.03,
+                                "order_id": "2899",
+                                "matching_id": null,
+                                "tick_direction": 2,
+                                "combo_id": "BTC-CS-8NOV24-70000_72000",
+                                "block_rfq_id": 1,
+                                "api": true,
+                                "contracts": 100,
+                                "post_only": false,
+                                "block_trade_id": "BLOCK-423",
+                                "trade_id": "771",
+                                "order_type": "limit",
+                                "mmp": false,
+                                "risk_reducing": false,
+                                "reduce_only": false,
+                                "block_trade_leg_count": 2,
+                                "self_trade": false,
+                                "fee_currency": "BTC",
+                                "liquidity": "T"
+                              },
+                              {
+                                "timestamp": 1730798381502,
+                                "state": "filled",
+                                "fee": 1.5e-07,
+                                "amount": 100,
+                                "direction": "sell",
+                                "price": 69677.4,
+                                "index_price": 70000,
+                                "profit_loss": 0,
+                                "instrument_name": "BTC-8NOV24-72000-C",
+                                "trade_seq": 113,
+                                "mark_price": 0.02,
+                                "order_id": "2900",
+                                "matching_id": null,
+                                "tick_direction": 2,
+                                "combo_id": "BTC-CS-8NOV24-70000_72000",
+                                "block_rfq_id": 1,
+                                "api": true,
+                                "contracts": 100,
+                                "post_only": false,
+                                "block_trade_id": "BLOCK-423",
+                                "trade_id": "772",
+                                "order_type": "limit",
+                                "mmp": false,
+                                "risk_reducing": false,
+                                "reduce_only": false,
+                                "block_trade_leg_count": 2,
+                                "self_trade": false,
+                                "fee_currency": "BTC",
+                                "liquidity": "T"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "**Taker method** This method allows Block RFQ taker to accept the response by sending a single crossing price. The order can be either filled immediately (`fill_or_kill`) or remain active until cancelled (`good_til_cancelled`). Please note that after Block RFQ creation, a grace period of 5 seconds begins, during which the taker cannot see quotes or trade the Block RFQ.",
+        "tags": [
+          "Block RFQ",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/accept_block_rfq",
+                    "params": {
+                      "block_rfq_id": 1,
+                      "legs": [
+                        {
+                          "instrument_name": "BTC-8NOV24-70000-C",
+                          "ratio": 1,
+                          "direction": "buy"
+                        },
+                        {
+                          "instrument_name": "BTC-8NOV24-72000-C",
+                          "ratio": 1,
+                          "direction": "sell"
+                        }
+                      ],
+                      "price": 0.01,
+                      "direction": "buy",
+                      "amount": 100,
+                      "time_in_force": "fill_or_kill"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/accept_block_rfq",
+            "og:title": "private/accept_block_rfq"
+          },
+          "href": "/api-reference/block-rfq/private-accept_block_rfq"
+        }
+      }
+    },
+    "/private/cancel_block_rfq_trigger": {
+      "get": {
+        "parameters": [
+          {
+            "name": "block_rfq_id",
+            "required": true,
+            "in": "query",
+            "description": "ID of the Block RFQ",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateCancelBlockRfqTriggerResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "creation_timestamp": 1730798381504,
+                        "expiration_timestamp": 1730798481504,
+                        "block_rfq_id": 123,
+                        "role": "taker",
+                        "state": "open",
+                        "taker_rating": "1-2",
+                        "makers": [
+                          "maker1",
+                          "maker2"
+                        ],
+                        "amount": 100,
+                        "min_trade_amount": 10,
+                        "legs": [
+                          {
+                            "instrument_name": "BTC-8NOV24-70000-C",
+                            "ratio": 1
+                          },
+                          {
+                            "instrument_name": "BTC-8NOV24-72000-C",
+                            "ratio": 1
+                          }
+                        ],
+                        "combo_id": "BTC-CS-8NOV24-70000_72000",
+                        "label": "My Block RFQ",
+                        "app_name": "Example Application",
+                        "mark_price": 0.025,
+                        "disclosed": false,
+                        "trade_trigger": {
+                          "state": "cancelled",
+                          "price": 0.01,
+                          "direction": "buy",
+                          "cancel_reason": "User cancelled"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "**Taker method** This method allows Block RFQ taker to cancel an active trigger for a Block RFQ. The response includes the full Block RFQ object with the trade trigger state set to cancelled.",
+        "tags": [
+          "Block RFQ",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/cancel_block_rfq_trigger",
+                    "params": {
+                      "block_rfq_id": 123
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/cancel_block_rfq_trigger",
+            "og:title": "private/cancel_block_rfq_trigger"
+          },
+          "href": "/api-reference/block-rfq/private-cancel_block_rfq_trigger"
+        }
+      }
+    },
+    "/private/get_block_rfq_quotes": {
+      "get": {
+        "parameters": [
+          {
+            "name": "block_rfq_id",
+            "required": false,
+            "in": "query",
+            "description": "ID of the Block RFQ",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "label",
+            "description": "User defined label for the Block RFQ quote (maximum 64 characters). Used to identify quotes of a selected Block RFQ",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "block_rfq_quote_id",
+            "required": false,
+            "in": "query",
+            "description": "ID of the Block RFQ quote",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateGetBlockRfqQuotesResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "label": "example_quote",
+                        "amount": 20000,
+                        "direction": "buy",
+                        "price": 74600,
+                        "legs": [
+                          {
+                            "direction": "buy",
+                            "price": 74600,
+                            "instrument_name": "BTC-15NOV24",
+                            "ratio": 1
+                          }
+                        ],
+                        "creation_timestamp": 1731076586371,
+                        "block_rfq_id": 1,
+                        "replaced": false,
+                        "filled_amount": 0,
+                        "last_update_timestamp": 1731076638591,
+                        "hedge": {
+                          "amount": 10,
+                          "direction": "buy",
+                          "price": 70000,
+                          "instrument_name": "BTC-PERPETUAL"
+                        },
+                        "block_rfq_quote_id": 8,
+                        "quote_state": "open",
+                        "execution_instruction": "all_or_none"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "**Maker method** This method retrieves all open quotes for Block RFQs. When a `block_rfq_id` is specified, only the open quotes for that particular Block RFQ will be returned. When a `label` is specified, all quotes with this label are returned. `block_rfq_quote_id` returns one specific quote.",
+        "tags": [
+          "Block RFQ",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/get_block_rfq_quotes",
+                    "params": {
+                      "block_rfq_id": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/get_block_rfq_quotes",
+            "og:title": "private/get_block_rfq_quotes"
+          },
+          "href": "/api-reference/block-rfq/private-get_block_rfq_quotes"
+        }
+      }
+    },
+    "/private/add_block_rfq_quote": {
+      "get": {
+        "parameters": [
+          {
+            "name": "label",
+            "description": "User defined label for the Block RFQ quote (maximum 64 characters). Used to identify quotes of a selected Block RFQ",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "block_rfq_id",
+            "required": true,
+            "in": "query",
+            "description": "ID of the Block RFQ",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "This value multiplied by the ratio of a leg gives trade size on that leg.",
+            "in": "query",
+            "name": "amount",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/amount"
+            }
+          },
+          {
+            "description": "Direction of trade from the maker perspective",
+            "in": "query",
+            "name": "direction",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/direction"
+            }
+          },
+          {
+            "description": "List of legs used for Block RFQ quote",
+            "in": "query",
+            "name": "legs",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "JSON string containing array of objects"
+            }
+          },
+          {
+            "description": "Hedge leg of the Block RFQ. There is only one hedge leg allowed per Block RFQ",
+            "in": "query",
+            "name": "hedge",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "JSON string containing: object data"
+            }
+          },
+          {
+            "name": "execution_instruction",
+            "required": false,
+            "in": "query",
+            "description": "Execution instruction of the quote. Default - `any_part_of` - `\"all_or_none (AON)\"` - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, 'all_or_none' quotes have priority over 'any_part_of' quotes at the same price level. - `\"any_part_of (APO)\"` - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all_or_none",
+                "any_part_of"
+              ]
+            }
+          },
+          {
+            "description": "Aggregated price used for quoting future spreads.",
+            "in": "query",
+            "name": "price",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "expires_at",
+            "description": "The timestamp when the quote expires (milliseconds since the Unix epoch)",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "example": 1745312540321
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateAddBlockRfqQuoteResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "label": "example_quote",
+                        "amount": 10000,
+                        "direction": "buy",
+                        "price": 69600,
+                        "legs": [
+                          {
+                            "direction": "buy",
+                            "price": 69600,
+                            "instrument_name": "BTC-15NOV24",
+                            "ratio": 1
+                          }
+                        ],
+                        "creation_timestamp": 1731076586371,
+                        "block_rfq_id": 3,
+                        "replaced": false,
+                        "filled_amount": 0,
+                        "hedge": {
+                          "amount": 10,
+                          "direction": "buy",
+                          "price": 70000,
+                          "instrument_name": "BTC-PERPETUAL"
+                        },
+                        "last_update_timestamp": 1731076586371,
+                        "block_rfq_quote_id": 8,
+                        "quote_state": "open"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "**Maker method** This method adds quote to the existing Block RFQ. To calculate individual leg prices, the `private/get_leg_prices` endpoint can be utilized.",
+        "tags": [
+          "Block RFQ",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/add_block_rfq_quote",
+                    "params": {
+                      "label": "example_quote",
+                      "block_rfq_id": 3,
+                      "amount": 10000,
+                      "direction": "buy",
+                      "legs": [
+                        {
+                          "instrument_name": "BTC-15NOV24",
+                          "price": 69600,
+                          "ratio": "1",
+                          "direction": "buy"
+                        }
+                      ],
+                      "hedge": {
+                        "amount": 10,
+                        "direction": "buy",
+                        "price": 70000,
+                        "instrument_name": "BTC-PERPETUAL"
+                      },
+                      "execution_instruction": "any_part_of",
+                      "expires_at": 1745312540321
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/add_block_rfq_quote",
+            "og:title": "private/add_block_rfq_quote"
+          },
+          "href": "/api-reference/block-rfq/private-add_block_rfq_quote"
+        }
+      }
+    },
+    "/private/edit_block_rfq_quote": {
+      "get": {
+        "parameters": [
+          {
+            "description": "List of legs used for Block RFQ quote",
+            "in": "query",
+            "name": "legs",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "JSON string containing array of objects"
+            }
+          },
+          {
+            "description": "This value multiplied by the ratio of a leg gives trade size on that leg.",
+            "in": "query",
+            "name": "amount",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/amount"
+            }
+          },
+          {
+            "name": "block_rfq_quote_id",
+            "required": false,
+            "in": "query",
+            "description": "ID of the Block RFQ quote",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "label",
+            "description": "User defined label for the Block RFQ quote (maximum 64 characters). Used to identify quotes of a selected Block RFQ",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "description": "Hedge leg of the Block RFQ. There is only one hedge leg allowed per Block RFQ",
+            "in": "query",
+            "name": "hedge",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "JSON string containing: object data"
+            }
+          },
+          {
+            "name": "block_rfq_id",
+            "required": false,
+            "in": "query",
+            "description": "ID of the Block RFQ",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Aggregated price used for quoting future spreads.",
+            "in": "query",
+            "name": "price",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateEditBlockRfqQuoteResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "label": "example_quote",
+                        "amount": 20000,
+                        "direction": "buy",
+                        "price": 74600,
+                        "legs": [
+                          {
+                            "direction": "buy",
+                            "price": 74600,
+                            "instrument_name": "BTC-15NOV24",
+                            "ratio": 1
+                          }
+                        ],
+                        "creation_timestamp": 1731076586371,
+                        "block_rfq_id": 3,
+                        "replaced": true,
+                        "filled_amount": 0,
+                        "last_update_timestamp": 1731076638591,
+                        "hedge": {
+                          "amount": 10,
+                          "direction": "buy",
+                          "price": 70000,
+                          "instrument_name": "BTC-PERPETUAL"
+                        },
+                        "block_rfq_quote_id": 8,
+                        "quote_state": "open"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "**Maker method** This method edits a Block RFQ quote using the specified `block_rfq_quote_id`. Alternatively, user can use a combination of `block_rfq_id` and `label` to edit the quote.",
+        "tags": [
+          "Block RFQ",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/edit_block_rfq_quote",
+                    "params": {
+                      "label": "example_quote",
+                      "block_rfq_id": 3,
+                      "amount": 20000,
+                      "direction": "buy",
+                      "legs": [
+                        {
+                          "instrument_name": "BTC-15NOV24",
+                          "price": 74600,
+                          "ratio": "1",
+                          "direction": "buy"
+                        }
+                      ],
+                      "hedge": {
+                        "amount": 10,
+                        "direction": "buy",
+                        "price": 70000,
+                        "instrument_name": "BTC-PERPETUAL"
+                      },
+                      "execution_instruction": "any_part_of"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/edit_block_rfq_quote",
+            "og:title": "private/edit_block_rfq_quote"
+          },
+          "href": "/api-reference/block-rfq/private-edit_block_rfq_quote"
+        }
+      }
+    },
+    "/private/cancel_block_rfq_quote": {
+      "get": {
+        "parameters": [
+          {
+            "name": "block_rfq_quote_id",
+            "required": false,
+            "in": "query",
+            "description": "ID of the Block RFQ quote",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "label",
+            "description": "User defined label for the Block RFQ quote (maximum 64 characters). Used to identify quotes of a selected Block RFQ",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "block_rfq_id",
+            "required": false,
+            "in": "query",
+            "description": "ID of the Block RFQ",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateCancelBlockRfqQuoteResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "label": "example_quote",
+                        "amount": 20000,
+                        "direction": "buy",
+                        "price": 74600,
+                        "legs": [
+                          {
+                            "direction": "buy",
+                            "price": 74600,
+                            "instrument_name": "BTC-15NOV24",
+                            "ratio": 1
+                          }
+                        ],
+                        "creation_timestamp": 1731076586371,
+                        "block_rfq_id": 3,
+                        "replaced": false,
+                        "filled_amount": 0,
+                        "last_update_timestamp": 1731076655746,
+                        "hedge": {
+                          "amount": 10,
+                          "direction": "buy",
+                          "price": 70000,
+                          "instrument_name": "BTC-PERPETUAL"
+                        },
+                        "block_rfq_quote_id": 8,
+                        "quote_state": "cancelled"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "**Maker method** This method cancels a single Block RFQ quote. You can identify the quote to cancel using either: - `block_rfq_quote_id` - the unique ID of the quote - `block_rfq_id` + `label` - the Block RFQ ID and the quote label **Note:** Mass cancellation by label is not supported. This method cancels only one quote at a time.",
+        "tags": [
+          "Block RFQ",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/cancel_block_rfq_quote",
+                    "params": {
+                      "label": "example_quote",
+                      "block_rfq_id": 3
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/cancel_block_rfq_quote",
+            "og:title": "private/cancel_block_rfq_quote"
+          },
+          "href": "/api-reference/block-rfq/private-cancel_block_rfq_quote"
+        }
+      }
+    },
+    "/private/cancel_all_block_rfq_quotes": {
+      "get": {
+        "parameters": [
+          {
+            "name": "block_rfq_id",
+            "required": false,
+            "in": "query",
+            "description": "ID of the Block RFQ",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "detailed",
+            "description": "When detailed is set to `true` output format is changed. See [description](#detailed-response-for-private-cancel_all-and-private-cancel_by_label-methods). Default: `false`",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateCancelAllBlockRfqQuotesResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "result": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "**Maker method** This method cancels all user quotes in all Block RFQs. Optionally cancels all quotes in a specific RFQ if the `block_rfq_id` is provided. **Note:** Mass cancellation by label is not supported. This method will cancel all quotes regardless of their labels.",
+        "tags": [
+          "Block RFQ",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 24,
+                    "method": "private/cancel_all_block_rfq_quotes",
+                    "params": {
+                      "block_rfq_id": 154
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/cancel_all_block_rfq_quotes",
+            "og:title": "private/cancel_all_block_rfq_quotes"
+          },
+          "href": "/api-reference/block-rfq/private-cancel_all_block_rfq_quotes"
+        }
+      }
+    },
+    "/private/get_block_rfq_makers": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateGetBlockRfqMakersResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": [
+                        "MAKER1",
+                        "MAKER2",
+                        "MAKER3"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "This method returns a list of all available Block RFQ makers.",
+        "tags": [
+          "Block RFQ",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/get_block_rfq_makers",
+                    "params": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/get_block_rfq_makers",
+            "og:title": "private/get_block_rfq_makers"
+          },
+          "href": "/api-reference/block-rfq/private-get_block_rfq_makers"
+        }
+      }
+    },
+    "/public/get_block_rfq_trades": {
+      "get": {
+        "parameters": [
+          {
+            "name": "currency",
+            "description": "The currency symbol or `\"any\"` for all",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/currency_with_any"
+            }
+          },
+          {
+            "name": "continuation",
+            "description": "Continuation token for pagination. Consists of `timestamp` and `block_rfq_id`.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "1738050297271:103"
+            }
+          },
+          {
+            "name": "count",
+            "description": "Count of Block RFQs returned, maximum - `1000`",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PublicGetBlockRfqTradesResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "continuation": "1739739009234:6570",
+                        "block_rfqs": [
+                          {
+                            "id": 6611,
+                            "timestamp": 1739803305362,
+                            "combo_id": "BTC-CS-28FEB25-100000_106000",
+                            "legs": [
+                              {
+                                "price": 0.1,
+                                "direction": "buy",
+                                "instrument_name": "BTC-28FEB25-100000-C",
+                                "ratio": 1
+                              },
+                              {
+                                "price": 0.05,
+                                "direction": "sell",
+                                "instrument_name": "BTC-28FEB25-106000-C",
+                                "ratio": 1
+                              }
+                            ],
+                            "amount": 12.5,
+                            "direction": "sell",
+                            "mark_price": 0.010356754,
+                            "trades": [
+                              {
+                                "price": 0.05,
+                                "amount": 12.5,
+                                "direction": "sell",
+                                "hedge_amount": 50
+                              }
+                            ],
+                            "hedge": {
+                              "price": 96000,
+                              "amount": 50,
+                              "direction": "sell",
+                              "instrument_name": "BTC-PERPETUAL"
+                            },
+                            "index_prices": {
+                              "btc_usd": 96000,
+                              "btc_usdc": 95950
+                            }
+                          },
+                          {
+                            "id": 6600,
+                            "timestamp": 1739774397766,
+                            "combo_id": "BTC-CS-28FEB25-100000_106000",
+                            "legs": [
+                              {
+                                "price": 0.1,
+                                "direction": "buy",
+                                "instrument_name": "BTC-28FEB25-100000-C",
+                                "ratio": 1
+                              },
+                              {
+                                "price": 0.05,
+                                "direction": "sell",
+                                "instrument_name": "BTC-28FEB25-106000-C",
+                                "ratio": 1
+                              }
+                            ],
+                            "amount": 12.5,
+                            "direction": "sell",
+                            "mark_price": 0.007458089,
+                            "trades": [
+                              {
+                                "price": 0.05,
+                                "amount": 12.5,
+                                "direction": "sell",
+                                "hedge_amount": 50
+                              }
+                            ],
+                            "hedge": {
+                              "price": 96000,
+                              "amount": 50,
+                              "direction": "sell",
+                              "instrument_name": "BTC-PERPETUAL"
+                            },
+                            "index_prices": {
+                              "btc_usd": 96000,
+                              "btc_usdc": 95950
+                            }
+                          },
+                          {
+                            "id": 6579,
+                            "timestamp": 1739743922308,
+                            "combo_id": "BTC-CS-17FEB25-89000_90000",
+                            "legs": [
+                              {
+                                "price": 0.08,
+                                "direction": "buy",
+                                "instrument_name": "BTC-17FEB25-89000-C",
+                                "ratio": 1
+                              },
+                              {
+                                "price": 0.075,
+                                "direction": "sell",
+                                "instrument_name": "BTC-17FEB25-90000-C",
+                                "ratio": 1
+                              }
+                            ],
+                            "amount": 12.5,
+                            "direction": "sell",
+                            "mark_price": 0.010314468,
+                            "trades": [
+                              {
+                                "price": 0.005,
+                                "amount": 12.5,
+                                "direction": "sell"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "This method returns a list of recent Block RFQs trades. Can be optionally filtered by currency.",
+        "tags": [
+          "Block RFQ",
+          "Public"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "public/get_block_rfq_trades",
+                    "params": {
+                      "currency": "BTC"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "public/get_block_rfq_trades",
+            "og:title": "public/get_block_rfq_trades"
+          },
+          "href": "/api-reference/block-rfq/public-get_block_rfq_trades"
+        }
+      }
+    },
+    "/private/get_block_rfq_user_info": {
+      "get": {
+        "parameters": [],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PrivateGetBlockRfqUserInfoResponse",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "description": "Response example",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "parent": {
+                          "identity": "MAKER1",
+                          "is_maker": true
+                        },
+                        "users": [
+                          {
+                            "user_id": 1,
+                            "taker_rating": 98.5,
+                            "identity": "TAKER1",
+                            "is_maker": false
+                          },
+                          {
+                            "user_id": 2,
+                            "taker_rating": 97.0
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Returns identity and rating information for the requesting account and its subaccounts. Includes both group-level and individual user-level alias data, if available.",
+        "tags": [
+          "Block RFQ",
+          "Private"
+        ],
+        "requestBody": {
+          "description": "JSON-RPC request body",
+          "content": {
+            "application/json": {
+              "examples": {
+                "request": {
+                  "description": "JSON-RPC Request Example",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "private/get_block_rfq_user_info",
+                    "params": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "title": "private/get_block_rfq_user_info",
+            "og:title": "private/get_block_rfq_user_info"
+          },
+          "href": "/api-reference/block-rfq/private-get_block_rfq_user_info"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "block_rfq_currency": {
+        "description": "Currency, i.e `\"BTC\"`, `\"ETH\"`, `\"USDC\"`",
+        "enum": [
+          "BTC",
+          "ETH",
+          "USDC",
+          "USDT",
+          "any"
+        ],
+        "type": "string"
+      },
+      "currency_with_any": {
+        "description": "Currency name or `\"any\"` if don't care",
+        "enum": [
+          "BTC",
+          "ETH",
+          "USDC",
+          "USDT",
+          "EURR",
+          "any"
+        ],
+        "type": "string"
+      },
+      "amount": {
+        "description": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+        "type": "number"
+      },
+      "direction": {
+        "description": "Direction: `buy`, or `sell`",
+        "enum": [
+          "buy",
+          "sell"
+        ],
+        "type": "string"
+      },
+      "PrivateAcceptBlockRfqResponse": {
+        "properties": {
+          "trade_trigger": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "untriggered"
+                ],
+                "type": "string"
+              },
+              "price": {
+                "type": "number"
+              },
+              "direction": {
+                "enum": [
+                  "buy",
+                  "sell"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "block_trades": {
+            "items": {
+              "$ref": "#/components/schemas/block_trade"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "trade_trigger",
+          "block_trades"
+        ],
+        "type": "object"
+      },
+      "PrivateAddBlockRfqQuoteResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "$ref": "#/components/schemas/block_rfq_quote"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateGetBlockRfqUserInfoResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "parent": {
+                "description": "Parent Identity (group alias), representing the overall account group (main + subaccounts).",
+                "properties": {
+                  "identity": {
+                    "description": "Group-level alias identifying the account group as a whole.",
+                    "type": "string"
+                  },
+                  "is_maker": {
+                    "description": "Indicates whether the Parent Identity has maker scope.",
+                    "type": "boolean"
+                  }
+                },
+                "type": "object"
+              },
+              "users": {
+                "items": {
+                  "properties": {
+                    "user_id": {
+                      "$ref": "#/components/schemas/user_id"
+                    },
+                    "taker_rating": {
+                      "description": "Taker rating associated with this account, if available.",
+                      "type": "number"
+                    },
+                    "identity": {
+                      "description": "Specific alias identifying this account individually.",
+                      "type": "string"
+                    },
+                    "is_maker": {
+                      "description": "Indicates whether this account has maker scope.",
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateGetBlockRfqQuotesResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "items": {
+              "$ref": "#/components/schemas/block_rfq_quote"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateCancelBlockRfqTriggerResponse": {
+        "$ref": "#/components/schemas/block_rfq"
+      },
+      "PrivateCancelBlockRfqResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "$ref": "#/components/schemas/block_rfq"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateCancelBlockRfqQuoteResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "$ref": "#/components/schemas/block_rfq_quote"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateGetBlockRfqMakersResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "description": "A list of available makers.",
+            "type": "array"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateCancelAllBlockRfqQuotesResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "description": "Total number of successfully cancelled quotes",
+            "example": 7,
+            "type": "number"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateEditBlockRfqQuoteResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "$ref": "#/components/schemas/block_rfq_quote"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateGetBlockRfqsResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "block_rfqs": {
+                "items": {
+                  "$ref": "#/components/schemas/block_rfq"
+                },
+                "type": "array"
+              },
+              "continuation": {
+                "$ref": "#/components/schemas/continuation"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PublicGetBlockRfqTradesResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "properties": {
+              "block_rfqs": {
+                "items": {
+                  "properties": {
+                    "id": {
+                      "description": "ID of the Block RFQ",
+                      "type": "integer"
+                    },
+                    "timestamp": {
+                      "$ref": "#/components/schemas/trade_timestamp"
+                    },
+                    "direction": {
+                      "description": "Trade direction of the taker",
+                      "$ref": "#/components/schemas/direction"
+                    },
+                    "amount": {
+                      "description": "This value multiplied by the ratio of a leg gives trade size on that leg.",
+                      "type": "number"
+                    },
+                    "mark_price": {
+                      "description": "Mark Price at the moment of trade",
+                      "type": "number"
+                    },
+                    "legs": {
+                      "$ref": "#/components/schemas/leg_structure"
+                    },
+                    "combo_id": {
+                      "$ref": "#/components/schemas/combo_id"
+                    },
+                    "hedge": {
+                      "$ref": "#/components/schemas/block_rfq_hedge_leg"
+                    },
+                    "index_prices": {
+                      "description": "A map of index prices for the underlying instrument(s) at the time of trade execution, where keys are price index names and values are prices.",
+                      "type": "object"
+                    },
+                    "trades": {
+                      "items": {
+                        "properties": {
+                          "direction": {
+                            "$ref": "#/components/schemas/direction"
+                          },
+                          "price": {
+                            "$ref": "#/components/schemas/price"
+                          },
+                          "amount": {
+                            "description": "Trade amount. For options, linear futures, linear perpetuals and spots the amount is denominated in the underlying base currency coin. The inverse perpetuals and inverse futures are denominated in USD units.",
+                            "type": "number"
+                          },
+                          "hedge_amount": {
+                            "description": "Amount of the hedge leg. For linear futures, linear perpetuals and spots the amount is denominated in the underlying base currency coin. The inverse perpetuals and inverse futures are denominated in USD units.",
+                            "type": "number"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "continuation": {
+                "$ref": "#/components/schemas/block_rfq_trade_tape_continuation"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "PrivateCreateBlockRfqResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "$ref": "#/components/schemas/block_rfq"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      },
+      "trade_timestamp": {
+        "description": "The timestamp of the trade (milliseconds since the UNIX epoch)",
+        "example": 1517329113791,
+        "type": "integer"
+      },
+      "block_rfq_trade_tape_continuation": {
+        "description": "Continuation token for pagination. `NULL` when no continuation. Consists of `timestamp` and `block_rfq_id`.",
+        "example": "1738050297271:103",
+        "type": "string"
+      },
+      "leg_structure": {
+        "items": {
+          "properties": {
+            "ratio": {
+              "description": "Ratio of amount between legs",
+              "type": "integer"
+            },
+            "instrument_name": {
+              "$ref": "#/components/schemas/instrument_name"
+            },
+            "direction": {
+              "$ref": "#/components/schemas/direction"
+            },
+            "price": {
+              "description": "Price for a leg",
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "continuation": {
+        "description": "Continuation token for pagination.",
+        "example": "xY7T6cutS3t2B9YtaDkE6TS379oKnkzTvmEDUnEUP2Msa9xKWNNaT",
+        "type": "string"
+      },
+      "block_rfq_quote": {
+        "properties": {
+          "creation_timestamp": {
+            "description": "The timestamp when quote was created (milliseconds since the Unix epoch)",
+            "example": 1536569522277,
+            "type": "integer"
+          },
+          "last_update_timestamp": {
+            "example": 1536569522277,
+            "description": "Timestamp of the last update of the quote (milliseconds since the UNIX epoch)",
+            "type": "integer"
+          },
+          "block_rfq_id": {
+            "description": "ID of the Block RFQ",
+            "type": "integer"
+          },
+          "block_rfq_quote_id": {
+            "description": "ID of the Block RFQ quote",
+            "type": "integer"
+          },
+          "quote_state": {
+            "description": "State of the quote",
+            "type": "string"
+          },
+          "execution_instruction": {
+            "$ref": "#/components/schemas/execution_instruction"
+          },
+          "price": {
+            "description": "Price of a quote",
+            "type": "number"
+          },
+          "amount": {
+            "description": "This value multiplied by the ratio of a leg gives trade size on that leg.",
+            "type": "number"
+          },
+          "direction": {
+            "$ref": "#/components/schemas/quote_direction"
+          },
+          "filled_amount": {
+            "$ref": "#/components/schemas/filled_amount_quote"
+          },
+          "legs": {
+            "$ref": "#/components/schemas/leg_structure"
+          },
+          "hedge": {
+            "$ref": "#/components/schemas/block_rfq_hedge_leg"
+          },
+          "replaced": {
+            "$ref": "#/components/schemas/replaced_quote"
+          },
+          "label": {
+            "description": "User defined label for the quote (maximum 64 characters)",
+            "type": "string"
+          },
+          "app_name": {
+            "description": "The name of the application that placed the quote on behalf of the user (optional).",
+            "example": "Example Application",
+            "type": "string"
+          },
+          "quote_state_reason": {
+            "description": "Reason of quote cancellation",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "block_rfq": {
+        "properties": {
+          "creation_timestamp": {
+            "description": "The timestamp when Block RFQ was created (milliseconds since the Unix epoch)",
+            "example": 1536569522277,
+            "type": "integer"
+          },
+          "expiration_timestamp": {
+            "example": 1536569522277,
+            "description": "The timestamp when the Block RFQ will expire (milliseconds since the UNIX epoch)",
+            "type": "integer"
+          },
+          "block_rfq_id": {
+            "description": "ID of the Block RFQ",
+            "type": "integer"
+          },
+          "role": {
+            "description": "Role of the user in Block RFQ",
+            "enum": [
+              "taker",
+              "maker"
+            ],
+            "type": "string"
+          },
+          "state": {
+            "description": "State of the Block RFQ",
+            "enum": [
+              "open",
+              "filled",
+              "cancelled",
+              "expired"
+            ],
+            "type": "string"
+          },
+          "taker_rating": {
+            "description": "Rating of the taker",
+            "type": "string"
+          },
+          "makers": {
+            "items": {
+              "description": "List of targeted Block RFQ makers",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "amount": {
+            "description": "This value multiplied by the ratio of a leg gives trade size on that leg.",
+            "type": "number"
+          },
+          "min_trade_amount": {
+            "description": "Minimum amount for trading",
+            "type": "number"
+          },
+          "asks": {
+            "$ref": "#/components/schemas/quote_asks"
+          },
+          "bids": {
+            "$ref": "#/components/schemas/quote_bids"
+          },
+          "legs": {
+            "$ref": "#/components/schemas/block_rfq_legs"
+          },
+          "hedge": {
+            "$ref": "#/components/schemas/block_rfq_hedge_leg"
+          },
+          "combo_id": {
+            "$ref": "#/components/schemas/combo_id"
+          },
+          "label": {
+            "description": "User defined label for the Block RFQ (maximum 64 characters)",
+            "type": "string"
+          },
+          "app_name": {
+            "description": "The name of the application that created the Block RFQ on behalf of the user (optional, visible only to taker).",
+            "example": "Example Application",
+            "type": "string"
+          },
+          "mark_price": {
+            "$ref": "#/components/schemas/mark_price"
+          },
+          "disclosed": {
+            "description": "Indicates whether the RFQ was created as non-anonymous, meaning taker and maker aliases are visible to counterparties.",
+            "type": "boolean"
+          },
+          "taker": {
+            "description": "Taker alias. Present only when `disclosed` is `true`.",
+            "example": "TAKER1",
+            "type": "string"
+          },
+          "index_prices": {
+            "items": {
+              "description": "A list of index prices for the underlying instrument(s) at the time of trade execution.",
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "included_in_taker_rating": {
+            "description": "Indicates whether the RFQ is included in the taker's rating calculation. Present only for closed RFQs created by the requesting taker.",
+            "type": "boolean"
+          },
+          "trades": {
+            "items": {
+              "properties": {
+                "direction": {
+                  "$ref": "#/components/schemas/direction"
+                },
+                "price": {
+                  "$ref": "#/components/schemas/price"
+                },
+                "amount": {
+                  "description": "Trade amount. For options, linear futures, linear perpetuals and spots the amount is denominated in the underlying base currency coin. The inverse perpetuals and inverse futures are denominated in USD units.",
+                  "type": "number"
+                },
+                "maker": {
+                  "description": "Alias of the maker (optional)",
+                  "type": "string"
+                },
+                "hedge_amount": {
+                  "description": "Amount of the hedge leg. For linear futures, linear perpetuals and spots the amount is denominated in the underlying base currency coin. The inverse perpetuals and inverse futures are denominated in USD units.",
+                  "type": "number"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "trade_trigger": {
+            "$ref": "#/components/schemas/trade_trigger",
+            "description": "Present only if a trade trigger was placed by the taker and only visible to taker. Only for cases: `cancelled` (contains the reason for cancellation) and `untriggered` (contains the information about the trade trigger)."
+          },
+          "trade_allocations": {
+            "$ref": "#/components/schemas/trade_allocations",
+            "description": "List of allocations for Block RFQ pre-allocation. Allows to split amount between different (sub)accounts. The taker can also allocate to himself. Visible only to the taker."
+          }
+        },
+        "type": "object"
+      },
+      "block_rfq_hedge_leg": {
+        "properties": {
+          "amount": {
+            "description": "It represents the requested hedge leg size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+            "type": "integer"
+          },
+          "instrument_name": {
+            "$ref": "#/components/schemas/instrument_name"
+          },
+          "direction": {
+            "$ref": "#/components/schemas/direction"
+          },
+          "price": {
+            "description": "Price for a hedge leg",
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "combo_id": {
+        "description": "Unique combo identifier",
+        "example": "BTC-FS-31DEC21-PERP",
+        "type": "string"
+      },
+      "block_trade": {
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/block_trade_id"
+          },
+          "timestamp": {
+            "$ref": "#/components/schemas/timestamp"
+          },
+          "trades": {
+            "items": {
+              "$ref": "#/components/schemas/user_trade"
+            },
+            "type": "array"
+          },
+          "app_name": {
+            "description": "The name of the application that executed the block trade on behalf of the user (optional).",
+            "example": "Example Application",
+            "type": "string"
+          },
+          "broker_code": {
+            "description": "Broker code associated with the broker block trade.",
+            "example": "2krM7sJsx",
+            "type": "string"
+          },
+          "broker_name": {
+            "description": "Name of the broker associated with the block trade.",
+            "example": "Test Broker",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "timestamp",
+          "trades"
+        ],
+        "type": "object"
+      },
+      "price": {
+        "description": "Price in base currency",
+        "type": "number"
+      },
+      "user_id": {
+        "description": "Unique user identifier",
+        "example": 57874,
+        "type": "integer"
+      },
+      "replaced_quote": {
+        "description": "`true` if the quote was edited, otherwise `false`.",
+        "type": "boolean"
+      },
+      "execution_instruction": {
+        "description": "Execution instruction of the quote. Default - `any_part_of` - `\"all_or_none (AON)\"` - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, 'all_or_none' quotes have priority over 'any_part_of' quotes at the same price level. - `\"any_part_of (APO)\"` - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount.",
+        "type": "string"
+      },
+      "quote_asks": {
+        "items": {
+          "properties": {
+            "makers": {
+              "items": {
+                "description": "Maker of the quote",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "price": {
+              "description": "Price of a quote",
+              "type": "number"
+            },
+            "last_update_timestamp": {
+              "example": 1536569522277,
+              "description": "Timestamp of the last update of the quote (milliseconds since the UNIX epoch)",
+              "type": "integer"
+            },
+            "execution_instruction": {
+              "$ref": "#/components/schemas/execution_instruction"
+            },
+            "amount": {
+              "description": "This value multiplied by the ratio of a leg gives trade size on that leg.",
+              "type": "number"
+            },
+            "expires_at": {
+              "example": 1745312540321,
+              "description": "The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "block_rfq_legs": {
+        "items": {
+          "properties": {
+            "ratio": {
+              "description": "Ratio of amount between legs",
+              "type": "integer"
+            },
+            "instrument_name": {
+              "$ref": "#/components/schemas/instrument_name"
+            },
+            "direction": {
+              "$ref": "#/components/schemas/direction"
+            }
+          },
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "trade_allocations": {
+        "description": "List of allocations for Block RFQ pre-allocation. Allows to split amount between different (sub)accounts or broker clients. Each allocation must specify either `user_id` (for direct allocation) or `client_info` object (for broker allocation), and amount. Visible only to the taker.",
+        "items": {
+          "properties": {
+            "user_id": {
+              "description": "User ID to allocate part of the RFQ amount. For brokers the User ID is obstructed.",
+              "type": "integer"
+            },
+            "client_info": {
+              "description": "Client allocation info for brokers.",
+              "properties": {
+                "client_id": {
+                  "description": "ID of a client; available to broker. Represents a group of users under a common name.",
+                  "type": "integer"
+                },
+                "client_link_id": {
+                  "description": "ID assigned to a single user in a client; available to broker.",
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Name of the linked user within the client; available to broker.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "amount": {
+              "description": "Amount allocated to this user or client.",
+              "type": "number"
+            }
+          },
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "timestamp": {
+        "example": 1536569522277,
+        "description": "The timestamp (milliseconds since the Unix epoch)",
+        "type": "integer"
+      },
+      "quote_direction": {
+        "description": "Direction of trade from the maker perspective",
+        "enum": [
+          "buy",
+          "sell"
+        ],
+        "type": "string"
+      },
+      "filled_amount_quote": {
+        "description": "Filled amount of the quote. For perpetual and futures the filled_amount is in USD units, for options - in units or corresponding cryptocurrency contracts, e.g., BTC or ETH.",
+        "type": "number"
+      },
+      "trade_trigger": {
+        "description": "Contains information about the trade trigger state",
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/trade_trigger_state"
+          },
+          "price": {
+            "description": "Price of the trade trigger",
+            "type": "number"
+          },
+          "direction": {
+            "description": "Direction of the trade trigger",
+            "enum": [
+              "buy",
+              "sell"
+            ],
+            "type": "string"
+          },
+          "cancel_reason": {
+            "description": "Reason for cancellation, present only when state is cancelled",
+            "type": "string"
+          }
+        },
+        "required": [
+          "state",
+          "price",
+          "direction"
+        ],
+        "type": "object"
+      },
+      "quote_bids": {
+        "items": {
+          "properties": {
+            "makers": {
+              "items": {
+                "description": "Maker of the quote",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "price": {
+              "description": "Price of a quote",
+              "type": "number"
+            },
+            "last_update_timestamp": {
+              "example": 1536569522277,
+              "description": "Timestamp of the last update of the quote (milliseconds since the UNIX epoch)",
+              "type": "integer"
+            },
+            "execution_instruction": {
+              "$ref": "#/components/schemas/execution_instruction"
+            },
+            "amount": {
+              "description": "This value multiplied by the ratio of a leg gives trade size on that leg.",
+              "type": "number"
+            },
+            "expires_at": {
+              "example": 1745312540321,
+              "description": "The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "type": "array"
+      },
+      "instrument_name": {
+        "description": "Unique instrument identifier",
+        "example": "BTC-PERPETUAL",
+        "type": "string"
+      },
+      "user_trade": {
+        "properties": {
+          "trade_id": {
+            "$ref": "#/components/schemas/trade_id"
+          },
+          "trade_seq": {
+            "$ref": "#/components/schemas/trade_seq"
+          },
+          "instrument_name": {
+            "$ref": "#/components/schemas/instrument_name"
+          },
+          "timestamp": {
+            "$ref": "#/components/schemas/trade_timestamp"
+          },
+          "order_type": {
+            "description": "Order type: `\"limit`, `\"market\"`, or `\"liquidation\"`",
+            "enum": [
+              "limit",
+              "market",
+              "liquidation"
+            ],
+            "type": "string"
+          },
+          "advanced": {
+            "description": "Advanced type of user order: `\"usd\"` or `\"implv\"` (only for options; omitted if not applicable)",
+            "enum": [
+              "usd",
+              "implv"
+            ],
+            "type": "string"
+          },
+          "order_id": {
+            "description": "Id of the user order (maker or taker), i.e. subscriber's order id that took part in the trade",
+            "type": "string"
+          },
+          "matching_id": {
+            "description": "Always `null`",
+            "type": "string"
+          },
+          "direction": {
+            "description": "Trade direction of the taker",
+            "$ref": "#/components/schemas/direction"
+          },
+          "tick_direction": {
+            "$ref": "#/components/schemas/tick_direction"
+          },
+          "index_price": {
+            "description": "Index Price at the moment of trade",
+            "type": "number"
+          },
+          "price": {
+            "description": "The price of the trade",
+            "$ref": "#/components/schemas/price"
+          },
+          "amount": {
+            "description": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+            "type": "number"
+          },
+          "contracts": {
+            "description": "Trade size in contract units (optional, may be absent in historical trades)",
+            "type": "number"
+          },
+          "iv": {
+            "description": "Option implied volatility for the price (Option only)",
+            "type": "number"
+          },
+          "underlying_price": {
+            "description": "Underlying price for implied volatility calculations (Options only)",
+            "type": "number"
+          },
+          "liquidation": {
+            "description": "Optional field (only for trades caused by liquidation): `\"M\"` when maker side of trade was under liquidation, `\"T\"` when taker side was under liquidation, `\"MT\"` when both sides of trade were under liquidation",
+            "enum": [
+              "M",
+              "T",
+              "MT"
+            ],
+            "type": "string"
+          },
+          "liquidity": {
+            "description": "Describes what was role of users order: `\"M\"` when it was maker order, `\"T\"` when it was taker order",
+            "enum": [
+              "M",
+              "T"
+            ],
+            "type": "string"
+          },
+          "fee": {
+            "description": "User's fee in units of the specified `fee_currency`",
+            "type": "number"
+          },
+          "fee_currency": {
+            "$ref": "#/components/schemas/currency"
+          },
+          "label": {
+            "$ref": "#/components/schemas/label_presentation"
+          },
+          "state": {
+            "$ref": "#/components/schemas/order_state_in_user_trade"
+          },
+          "block_trade_id": {
+            "$ref": "#/components/schemas/block_trade_id_in_result"
+          },
+          "block_rfq_id": {
+            "description": "ID of the Block RFQ - when trade was part of the Block RFQ",
+            "type": "integer"
+          },
+          "block_rfq_quote_id": {
+            "description": "ID of the Block RFQ quote - when trade was part of the Block RFQ",
+            "type": "integer"
+          },
+          "reduce_only": {
+            "description": "`true` if user order is reduce-only",
+            "type": "string"
+          },
+          "post_only": {
+            "description": "`true` if user order is post-only",
+            "type": "string"
+          },
+          "mmp": {
+            "description": "`true` if user order is MMP",
+            "type": "boolean"
+          },
+          "risk_reducing": {
+            "description": "`true` if user order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users)",
+            "type": "boolean"
+          },
+          "api": {
+            "description": "`true` if user order was created with API",
+            "type": "boolean"
+          },
+          "profit_loss": {
+            "$ref": "#/components/schemas/profit_loss"
+          },
+          "mark_price": {
+            "description": "Mark Price at the moment of trade",
+            "type": "number"
+          },
+          "legs": {
+            "description": "Optional field containing leg trades if trade is a combo trade (present when querying for **only** combo trades and in `combo_trades` events)",
+            "type": "array"
+          },
+          "combo_id": {
+            "description": "Optional field containing combo instrument name if the trade is a combo trade",
+            "type": "string"
+          },
+          "combo_trade_id": {
+            "description": "Optional field containing combo trade identifier if the trade is a combo trade",
+            "type": "number"
+          },
+          "quote_set_id": {
+            "description": "QuoteSet of the user order (optional, present only for orders placed with `private/mass_quote`)",
+            "type": "string"
+          },
+          "quote_id": {
+            "description": "QuoteID of the user order (optional, present only for orders placed with `private/mass_quote`)",
+            "type": "string"
+          },
+          "trade_allocations": {
+            "description": "List of allocations for Block RFQ pre-allocation. Each allocation specifies `user_id`, `amount`, and `fee` for the allocated part of the trade. For broker client allocations, a `client_info` object will be included.",
+            "items": {
+              "properties": {
+                "user_id": {
+                  "description": "User ID to which part of the trade is allocated. For brokers the User ID is obstructed.",
+                  "type": "integer"
+                },
+                "amount": {
+                  "description": "Amount allocated to this user.",
+                  "type": "number"
+                },
+                "fee": {
+                  "description": "Fee for the allocated part of the trade.",
+                  "type": "number"
+                },
+                "client_info": {
+                  "description": "Optional client allocation info for brokers.",
+                  "properties": {
+                    "client_id": {
+                      "description": "ID of a client; available to broker. Represents a group of users under a common name.",
+                      "type": "integer"
+                    },
+                    "client_link_id": {
+                      "description": "ID assigned to a single user in a client; available to broker.",
+                      "type": "integer"
+                    },
+                    "name": {
+                      "description": "Name of the linked user within the client; available to broker.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "required": [
+                "amount",
+                "fee"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "trade_id",
+          "trade_seq",
+          "instrument_name",
+          "timestamp",
+          "order_id",
+          "matching_id",
+          "direction",
+          "tick_direction",
+          "index_price",
+          "price",
+          "amount",
+          "fee",
+          "fee_currency",
+          "state",
+          "mark_price"
+        ],
+        "type": "object"
+      },
+      "mark_price": {
+        "description": "The mark price for the instrument",
+        "type": "number"
+      },
+      "block_trade_id": {
+        "description": "Block trade id",
+        "example": "154",
+        "type": "string"
+      },
+      "trade_trigger_state": {
+        "description": "Trade trigger state: `\"untriggered\"` or `\"cancelled\"`",
+        "enum": [
+          "triggered",
+          "untriggered",
+          "cancelled"
+        ],
+        "type": "string"
+      },
+      "trade_seq": {
+        "description": "The sequence number of the trade within instrument",
+        "type": "integer"
+      },
+      "currency": {
+        "description": "Currency, i.e `\"BTC\"`, `\"ETH\"`, `\"USDC\"`",
+        "enum": [
+          "BTC",
+          "ETH",
+          "USDC",
+          "USDT",
+          "EURR"
+        ],
+        "type": "string"
+      },
+      "block_trade_id_in_result": {
+        "description": "Block trade id - when trade was part of a block trade",
+        "example": "154",
+        "type": "string"
+      },
+      "label_presentation": {
+        "description": "User defined label (presented only when previously set for order by user)",
+        "type": "string"
+      },
+      "tick_direction": {
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "description": "Direction of the \"tick\" (`0` = Plus Tick, `1` = Zero-Plus Tick, `2` = Minus Tick, `3` = Zero-Minus Tick).",
+        "type": "integer"
+      },
+      "trade_id": {
+        "description": "Unique (per currency) trade identifier",
+        "type": "string"
+      },
+      "order_state_in_user_trade": {
+        "description": "Order state: `\"open\"`, `\"filled\"`, `\"rejected\"`, `\"cancelled\"`, `\"untriggered\"` or `\"archive\"` (if order was archived)",
+        "enum": [
+          "open",
+          "filled",
+          "rejected",
+          "cancelled",
+          "untriggered",
+          "archive"
+        ],
+        "type": "string"
+      },
+      "profit_loss": {
+        "description": "Profit and loss in base currency.",
+        "type": "number"
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "description": "Generic error response for broken references",
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "enum": [
+              "2.0"
+            ]
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "description": "Error code"
+              },
+              "message": {
+                "type": "string",
+                "description": "Error message"
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ]
+          }
+        },
+        "required": [
+          "jsonrpc",
+          "error"
+        ]
+      },
+      "OkResponse": {
+        "properties": {
+          "jsonrpc": {
+            "description": "The JSON-RPC version (2.0)",
+            "enum": [
+              "2.0"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The id that was sent in the request",
+            "type": "integer"
+          },
+          "result": {
+            "description": "Result of method execution. `ok` in case of success",
+            "enum": [
+              "ok"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "result",
+          "jsonrpc"
+        ],
+        "type": "object"
+      }
+    },
+    "parameters": {},
+    "responses": {
+      "PrivateEditBlockRfqQuoteResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateEditBlockRfqQuoteResponse"
+            }
+          }
+        }
+      },
+      "PrivateGetBlockRfqQuotesResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateGetBlockRfqQuotesResponse"
+            }
+          }
+        }
+      },
+      "PrivateCancelAllBlockRfqQuotesResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateCancelAllBlockRfqQuotesResponse"
+            }
+          }
+        }
+      },
+      "PrivateAddBlockRfqQuoteResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateAddBlockRfqQuoteResponse"
+            }
+          }
+        }
+      },
+      "PrivateCreateBlockRfqResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateCreateBlockRfqResponse"
+            }
+          }
+        }
+      },
+      "PublicGetBlockRfqTradesResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublicGetBlockRfqTradesResponse"
+            }
+          }
+        }
+      },
+      "PrivateCancelBlockRfqTriggerResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateCancelBlockRfqTriggerResponse"
+            }
+          }
+        }
+      },
+      "PrivateAcceptBlockRfqResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateAcceptBlockRfqResponse"
+            }
+          }
+        }
+      },
+      "PrivateGetBlockRfqUserInfoResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateGetBlockRfqUserInfoResponse"
+            }
+          }
+        }
+      },
+      "PrivateCancelBlockRfqResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateCancelBlockRfqResponse"
+            }
+          }
+        }
+      },
+      "PrivateCancelBlockRfqQuoteResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateCancelBlockRfqQuoteResponse"
+            }
+          }
+        }
+      },
+      "PrivateGetBlockRfqMakersResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateGetBlockRfqMakersResponse"
+            }
+          }
+        }
+      },
+      "PrivateGetBlockRfqsResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PrivateGetBlockRfqsResponse"
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "description": "Error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "OkResponse": {
+        "description": "Success response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/OkResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}
